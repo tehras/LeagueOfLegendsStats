@@ -70,6 +70,8 @@ public class ChampionAdapter extends RecyclerView.Adapter<ChampionAdapter.Holder
         Drawable drawable = getIcon(champ);
         if (drawable != null)
             h.champIcon.setImageDrawable(drawable);
+        else
+            h.champIcon.setImageDrawable(mActivity.getDrawable(R.drawable.ic_wallpaper_black_48dp));
     }
 
     private HashMap<Integer, Drawable> mIconMap = new HashMap<>();
