@@ -1,0 +1,33 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="activity_horizontal_margin_small">8dp</dimen>
+    <dimen name="search_margin_end">60dp</dimen>
+    <dimen name="app_bar_height">60dp</dimen>
+    <dimen name="app_title">18sp</dimen>
+    <dimen name="view_toolbar_search_elevation">4dp</dimen>
+    <dimen name="toolbar_search_small_margin">4dp</dimen>
+    <dimen name="toolbar_search_padding">8dp</dimen>
+
+    <dimen name="profile_icon_size">48dp</dimen>
+    <dimen name="champion_icon_size">48dp</dimen>
+
+    <dimen name="text_size_large">20sp</dimen>
+    <dimen name="text_size_large_med">18sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+
+    <dimen name="summoner_icon_size">48dp</dimen>
+    <dimen name="medium_elevation">4dp</dimen>
+    <dimen name="activity_vertical_margin_small">8dp</dimen>
+    <dimen name="activity_horizontal_margin_xsmall">4dp</dimen>
+    <dimen name="small_elevation">2dp</dimen>
+    <dimen name="activity_vertical_margin_xsmall">4dp</dimen>
+    <dimen name="large_elevation">8dp</dimen>
+    <dimen name="text_size_xsmall">10sp</dimen>
+</resources>

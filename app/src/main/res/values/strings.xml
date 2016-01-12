@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">League Of Legends Stats</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="search_edit_field_hint">Username</string>
+    <string name="welcome_text">Welcome to the App! Please go ahead and search for username to get some cool stats!</string>
+    <string name="wins">Wins</string>
+    <string name="losses">Losses</string>
+    <string name="hyphen"> - </string>
+    <string name="no_user_found_title">No User Found</string>
+    <string name="no_user_found_message"><![CDATA[User <b>%s</b> was not found. Please try a valid user or a different region.]]></string>
+    <string name="general_error_title">Generic Error</string>
+    <string name="general_error_body">A generic error has occured, please try again</string>
+    <string name="accessibility_summary_image_icon">User\'s icon</string>
+    <string name="summary_hint_default">*5v5 ranked stats are shown above</string>
+    <string name="no_record_found_title">No Games Found</string>
+    <string name="no_record_found_body">No games found for this account.</string>
+    <string name="most_played_champs_title">Most Played Champions</string>
+    <string name="most_played_champs_view_more">View Full List</string>
+    <string name="most_played_champs_no_found">No Champion History Found</string>
+</resources>

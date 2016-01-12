@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_bar_height"
+        android:background="@android:color/white"
+        android:elevation="@dimen/view_toolbar_search_elevation"
+        android:padding="@dimen/toolbar_search_padding">
+
+        <ImageView
+            android:id="@+id/toolbar_search_view_back_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/toolbar_search_small_margin"
+            android:src="@drawable/ic_arrow_back_black_24dp"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/toolbar_search_small_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_small"
+            android:layout_toEndOf="@+id/toolbar_search_view_back_image"
+            android:layout_toStartOf="@+id/toolbar_search_view_clear_image">
+
+            <EditText
+                android:id="@+id/search_edit_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="@string/search_edit_field_hint"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:textColor="@android:color/black"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/toolbar_search_view_clear_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/toolbar_search_small_margin"
+            android:src="@drawable/ic_clear_black_24dp"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

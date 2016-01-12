@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#795548</color>
+
+    <color name="success_green">#4CAF50</color>
+    <color name="failed_red">#F44336</color>
+    <color name="neutral_orange">#FF9800</color>
+    <color name="neutral_blue">#1565C0</color>
+
+    <color name="great">#2196F3</color>
+    <color name="good">#4CAF50</color>
+    <color name="average">#FF9800</color>
+    <color name="bad">#F44336</color>
+
+
+</resources>
