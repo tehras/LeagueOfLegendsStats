@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:gravity="center_vertical"
             >
 
             <TextView
@@ -40,12 +41,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/success_green"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" - "
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"/>
 
             <TextView
@@ -53,6 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/failed_red"
+                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"/>
 
         </LinearLayout>
@@ -64,11 +68,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ranked_summoner_container">
 
-        <ImageView
+        <com.github.koshkin.leagueoflegendsstats.views.RoundedImageView
             android:id="@+id/ranked_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_wallpaper_black_48dp"/>
+            android:layout_width="@dimen/profile_icon_size"
+            android:layout_height="@dimen/profile_icon_size"
+            android:src="@drawable/ic_account_circle_black_48dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,8 +84,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_weight="33"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <TextView
@@ -90,7 +95,9 @@
                     android:layout_height="wrap_content"
                     android:text="20"
                     android:textColor="@color/success_green"
-                    android:textStyle="bold"/>
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -102,8 +109,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_weight="33"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <TextView
@@ -112,8 +120,8 @@
                     android:layout_height="wrap_content"
                     android:text="20"
                     android:textColor="@color/failed_red"
+                    android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold"/>
-
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -125,8 +133,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_weight="33"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <TextView
@@ -135,8 +144,8 @@
                     android:layout_height="wrap_content"
                     android:text="20"
                     android:textColor="@color/neutral_orange"
+                    android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold"/>
-
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -148,8 +157,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_weight="33"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <TextView
@@ -158,6 +168,7 @@
                     android:layout_height="wrap_content"
                     android:text="2.24"
                     android:textColor="@color/success_green"
+                    android:textSize="@dimen/text_size_large"
                     android:textStyle="bold"/>
 
 

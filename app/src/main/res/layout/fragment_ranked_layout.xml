@@ -8,4 +8,6 @@
 
     <include layout="@layout/partial_ranked_most_played_champs"/>
 
+    <include layout="@layout/partial_ranked_match_history"/>
+
 </LinearLayout>

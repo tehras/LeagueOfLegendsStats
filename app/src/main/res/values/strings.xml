@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">League Of Legends Stats</string>
+    <string name="app_name">LoL Stats</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -20,4 +20,6 @@
     <string name="most_played_champs_title">Most Played Champions</string>
     <string name="most_played_champs_view_more">View Full List</string>
     <string name="most_played_champs_no_found">No Champion History Found</string>
+    <string name="match_history_title">Recent Match History</string>
+    <string name="match_history_view_more_text">View Full Recent Matches</string>
 </resources>

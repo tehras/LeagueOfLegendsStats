@@ -1,5 +1,6 @@
 package com.github.koshkin.leagueoflegendsstats.networking;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 /**
@@ -10,14 +11,16 @@ import android.os.AsyncTask;
 public class Executor extends AsyncTask<String, Void, Response> {
 
     public Request mRequest;
+    public Context mContext;
 
-    public Executor(Request request) {
+    public Executor(Request request, Context context) {
         mRequest = request;
+        mContext = context;
     }
 
     @Override
     protected Response doInBackground(String... params) {
-        return new Manager(mRequest).executeTask();
+        return new Manager(mRequest, mContext).executeTask();
     }
 
     @Override

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/role_color_jg"/>
+    <stroke
+        android:width="1dp"
+        android:color="@color/role_color_jg_dark"/>
+
+    <padding
+        android:bottom="5dp"
+        android:left="5dp"
+        android:right="5dp"
+        android:top="5dp"/>
+
+    <corners android:radius="6dp"/>
+</shape>

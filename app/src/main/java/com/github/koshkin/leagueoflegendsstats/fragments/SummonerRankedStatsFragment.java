@@ -15,8 +15,13 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.github.koshkin.leagueoflegendsstats.BaseFragment;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
+import com.github.koshkin.leagueoflegendsstats.holders.ChampionHolder;
+import com.github.koshkin.leagueoflegendsstats.holders.GameHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Champion;
+import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
+import com.github.koshkin.leagueoflegendsstats.models.Game;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
+import com.github.koshkin.leagueoflegendsstats.models.RecentGames;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Stats;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
@@ -26,17 +31,7 @@ import com.github.koshkin.leagueoflegendsstats.utils.NumberUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static com.github.koshkin.leagueoflegendsstats.utils.ChampUtils.getCS;
-import static com.github.koshkin.leagueoflegendsstats.utils.ChampUtils.getChampName;
-import static com.github.koshkin.leagueoflegendsstats.utils.ChampUtils.getChampPlayed;
-import static com.github.koshkin.leagueoflegendsstats.utils.ChampUtils.getKDA;
-import static com.github.koshkin.leagueoflegendsstats.utils.ChampUtils.getKDADouble;
-import static com.github.koshkin.leagueoflegendsstats.utils.ChampUtils.getKillsDeathsAssists;
-import static com.github.koshkin.leagueoflegendsstats.utils.ChampUtils.getWinPercentage;
-import static com.github.koshkin.leagueoflegendsstats.utils.ChampUtils.getWinPercentageDouble;
-import static com.github.koshkin.leagueoflegendsstats.utils.Utils.NOT_AVAILABLE;
 import static com.github.koshkin.leagueoflegendsstats.utils.Utils.addToLayout;
-import static com.github.koshkin.leagueoflegendsstats.utils.Utils.assignWinPercentageColor;
 import static com.github.koshkin.leagueoflegendsstats.utils.Utils.getKDAColor;
 
 /**
@@ -54,6 +49,11 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
     private View mRankedHeader, mNoFoundLayout;
     private MaterialRippleLayout mViewAllChamps;
     private LinearLayout mTopChampsLayout;
+    private MaterialRippleLayout mViewAllMatches;
+    private LinearLayout mRecentMatchesLayout;
+    private View mNoMatchesLayout;
+    private RecentGames mRecentGames;
+    private FileHandler mProfFileHandler;
 
     public static SummonerRankedStatsFragment getInstance(int summonerIconId, String summonerId, String summonerName, String wins, String losses) {
         Bundle args = new Bundle();
@@ -74,8 +74,12 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ranked_layout, container, false);
 
+        //Header Layout - Card1
         initializeHeaderLayout(rootView);
+        //Champ Layout - Card2
         initializeTopChampsLayout(rootView);
+        //History Layout - Card3
+        initializeMatchHistoryLayout(rootView);
 
         if (mRankedStats == null)
             showLoading();
@@ -84,9 +88,28 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
             populateTopChampionsLayout();
         }
 
+        if (mRecentGames != null)
+            populateMatchHistory();
+
         return rootView;
     }
 
+    /**
+     * layout for the bottom match history layout
+     *
+     * @param rootView initial root view from onCreateView
+     */
+    private void initializeMatchHistoryLayout(View rootView) {
+        mRecentMatchesLayout = (LinearLayout) rootView.findViewById(R.id.match_history_container);
+        mNoMatchesLayout = rootView.findViewById(R.id.match_history_not_found);
+        mViewAllMatches = (MaterialRippleLayout) rootView.findViewById(R.id.match_history_full_list);
+    }
+
+    /**
+     * layout for the mid card - top 3 champs
+     *
+     * @param rootView initial root view from onCreateView
+     */
     private void initializeTopChampsLayout(View rootView) {
         mTopChampsLayout = (LinearLayout) rootView.findViewById(R.id.champion_list_container);
         mNoFoundLayout = rootView.findViewById(R.id.champion_no_found);
@@ -120,18 +143,34 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         mLosses = getArguments().getString(ARG_SUMMONER_LOSSES);
         mSummonerIconId = getArguments().getInt(ARG_SUMMONER_ICON_ID);
 
+        String name = StaticDataHolder.getInstance(getActivity()).getProfileIconName(mSummonerIconId);
+        if (name != null)
+            executeGetProfileImage(this, name);
+
         executeGetRankedStats(this, summonerId);
+        executeGetRankeGameHistory(this, summonerId);
     }
+
+    private int resultsReturned = 0;
 
     @Override
     public void finished(Response response, Request request) {
         switch (request.getURIHelper()) {
+            case GET_PROFILE_URI:
+                if (response.getStatus() == Response.Status.SUCCESS) {
+                    mProfFileHandler = (FileHandler) response.getReturnedObject();
+
+                    populateHeaderProfImage(mRankedIcon, mProfFileHandler);
+                }
+                break;
             case GET_SUMMONER_RANKED:
+                resultsReturned++;
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     PlayerRanked rankedStats = (PlayerRanked) response.getReturnedObject();
 
                     if (rankedStats != null) {
                         mRankedStats = rankedStats;
+
                         populateRankedHeader();
                         populateTopChampionsLayout();
                     } else {
@@ -140,7 +179,58 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
                 } else {
                     generalException();
                 }
+                break;
+            case GET_SUMMONER_RANKED_GAMES:
+                resultsReturned++;
+                if (response.getStatus() == Response.Status.SUCCESS) {
+                    RecentGames recentGames = (RecentGames) response.getReturnedObject();
+
+                    if (recentGames != null) {
+                        mRecentGames = recentGames;
+                        populateMatchHistory();
+                    } else {
+                        populateMatchHistoryError();
+                    }
+                } else {
+                    populateMatchHistoryError();
+                }
+                break;
         }
+        if (resultsReturned == 2)
+            hideLoading();
+    }
+
+    private void populateMatchHistory() {
+        ArrayList<Game> games = mRecentGames.getGames();
+        if (games != null && games.size() > 0) {
+
+            int matchesShown = 0; //counter - we only want to show top 5??
+            for (Game game : games) {
+                if (game.getChampionId() == 0)
+                    continue;
+
+                if (matchesShown > 2) //only show 3
+                    break;
+
+                addToLayout(mRecentMatchesLayout, getMatchLayout(game));
+                matchesShown++;
+
+                mViewAllMatches.setOnClickListener(getMatchesViewAllOnClickListener(games));
+            }
+
+            mNoMatchesLayout.setVisibility(View.GONE);
+        } else {
+            populateMatchHistoryError();
+        }
+    }
+
+    /**
+     * Shows "No Matches Found"
+     */
+    private void populateMatchHistoryError() {
+        mNoMatchesLayout.setVisibility(View.VISIBLE);
+        mRecentMatchesLayout.setVisibility(View.GONE);
+        mViewAllMatches.setVisibility(View.GONE);
     }
 
     private void populateTopChampionsLayout() {
@@ -171,33 +261,26 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         }
     }
 
+    private View getMatchLayout(Game game) {
+        @SuppressLint("InflateParams") View view = getActivity().getLayoutInflater().inflate(R.layout.partial_match_layout, null, false);
+        //TOP Layout
+
+        GameHolder h = new GameHolder(view);
+        h.populate(game, getActivity(), false);
+
+        return view;
+    }
+
     private View getChampLayout(Champion champ) {
         @SuppressLint("InflateParams") View view = getActivity().getLayoutInflater().inflate(R.layout.partial_champion_layout, null, false);
 
-        ImageView champImage = (ImageView) view.findViewById(R.id.champion_icon);
-        Drawable drawable = StaticDataHolder.getInstance(getActivity()).getChampionIcon(champ.getId());
-        if (drawable != null)
-            champImage.setImageDrawable(drawable);
-
-        TextView champName = (TextView) view.findViewById(R.id.champion_name);
-        TextView champCs = (TextView) view.findViewById(R.id.champion_cs);
-        TextView champKda = (TextView) view.findViewById(R.id.champion_kda);
-        TextView champKillsDeaths = (TextView) view.findViewById(R.id.champion_kills_deaths_assists);
-        TextView champWinPercentage = (TextView) view.findViewById(R.id.champion_win_percentage);
-        TextView champPlayed = (TextView) view.findViewById(R.id.champion_played);
-
-        champName.setText(getChampName(champ, getActivity()));
-        champCs.setText(getCS(champ));
-
-        String kda = getKDA(champ);
-        champKda.setText(kda);
-        if (!kda.equalsIgnoreCase(NOT_AVAILABLE))
-            champKda.setTextColor(getKDAColor(getKDADouble(champ), getActivity()));
-
-        champKillsDeaths.setText(getKillsDeathsAssists(champ));
-        champWinPercentage.setText(getWinPercentage(champ));
-        assignWinPercentageColor(champWinPercentage, getWinPercentageDouble(champ), this.getActivity());
-        champPlayed.setText(getChampPlayed(champ));
+        ChampionHolder championHolder = new ChampionHolder(view) {
+            @Override
+            public Drawable getIcon(Champion champ) {
+                return StaticDataHolder.getInstance(getActivity()).getChampionIcon(champ.getId());
+            }
+        };
+        championHolder.populate(champ, getActivity(), true);
 
         return view;
     }
@@ -218,11 +301,12 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
 
         mRankedSummonerName.setText(mSummonerName);
 
-        Drawable drawable = StaticDataHolder.getInstance(getActivity()).getProfileIcon(mSummonerIconId);
-        if (drawable != null)
-            mRankedIcon.setImageDrawable(drawable);
+        populateHeaderProfImage(mRankedIcon, mProfFileHandler, mSummonerIconId);
 
-        hideLoading();
+        if (resultsReturned == 2)
+
+            hideLoading();
+
     }
 
     private void generalException() {
@@ -268,6 +352,17 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
             public void onClick(View v) {
                 if (getActivity() != null && getActivity() instanceof MainActivity) {
                     ((MainActivity) getActivity()).startFragment(SummonerRankedChampionsFragment.getInstance(champions));
+                }
+            }
+        };
+    }
+
+    public View.OnClickListener getMatchesViewAllOnClickListener(final ArrayList<Game> games) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() != null && getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).startFragment(SummonerRankedGamesFragment.getInstance(games));
                 }
             }
         };

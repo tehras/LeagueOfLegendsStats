@@ -36,7 +36,7 @@ public class ChampUtils {
         if (kdaString.equalsIgnoreCase(NOT_AVAILABLE))
             return NOT_AVAILABLE;
         else
-            return kdaString;
+            return kdaString + ":1 KDA";
     }
 
     public static double getKDADouble(Champion champ) {
@@ -78,7 +78,7 @@ public class ChampUtils {
         if (winPercentage.equalsIgnoreCase(NOT_AVAILABLE))
             return NOT_AVAILABLE;
 
-        return winPercentage + " %";
+        return winPercentage + "%";
     }
 
     public static Double getWinPercentageDouble(Champion champ) {

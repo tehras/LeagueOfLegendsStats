@@ -1,7 +1,6 @@
 package com.github.koshkin.leagueoflegendsstats.fragments;
 
 import android.annotation.SuppressLint;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import com.github.koshkin.leagueoflegendsstats.BaseFragment;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
+import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerStatSummaries;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerSummary;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
@@ -49,6 +49,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
     private View mSummaryLayout;
 
     private String mSummonerName;
+    private FileHandler mProfFileHandler;
 
     public static SummonerStatsFragment getInstance(String summonerName) {
         Bundle args = new Bundle();
@@ -70,7 +71,6 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
         initializeSelectLayout(rootView);
 
         if (mSummonerAggregateObject != null) {
-
             if (mSummonerAggregateObject.getStatus() == Response.Status.SUCCESS) {
                 populateSelectLayout();
                 populateSummaryLayout();
@@ -154,12 +154,25 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
         mSummonerAggregateObject.setStatus(response.getStatus());
 
         switch (request.getURIHelper()) {
+            case GET_PROFILE_URI:
+                if (response.getStatus() == Response.Status.SUCCESS) {
+                    mProfFileHandler = (FileHandler) response.getReturnedObject();
+
+                    populateHeaderProfImage(mSummaryIcon, mProfFileHandler);
+                }
+                break;
             case GET_SUMMONER:
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     Summoner summoner = (Summoner) response.getReturnedObject();
 
                     if (summoner != null && !NullChecker.isNullOrEmpty(summoner.getSummonerId())) {
                         mSummonerAggregateObject.setSummoner(summoner);
+
+                        if (summoner.getSummonerInfo() != null) {
+                            String profileIconName = StaticDataHolder.getInstance(getActivity()).getProfileIconName(summoner.getSummonerInfo().getProfileIconId());
+                            executeGetProfileImage(this, profileIconName);
+                        }
+
                         executeGetStats(this, summoner);
                     } else {
                         generalException();
@@ -221,9 +234,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                 mSummaryWinPercentage.setText(getWinPercentage(summary));
 
                 if (mSummonerAggregateObject.getSummoner() != null && mSummonerAggregateObject.getSummoner().getSummonerInfo() != null) {
-                    Drawable drawable = StaticDataHolder.getInstance(getActivity()).getProfileIcon(mSummonerAggregateObject.getSummoner().getSummonerInfo().getProfileIconId());
-                    if (drawable != null)
-                        mSummaryIcon.setImageDrawable(drawable);
+                    populateHeaderProfImage(mSummaryIcon, mProfFileHandler, mSummonerAggregateObject.getSummoner().getSummonerInfo().getProfileIconId());
                 }
 
                 return;

@@ -37,4 +37,10 @@ public class ProfileIcons implements Request.ParserCallback<ProfileIcons> {
         return new Gson().fromJson(body, ProfileIcons.class);
     }
 
+    public ProfileIcon getProfileIcon(String s) {
+        if (mProfileIcons != null && mProfileIcons.containsKey(s))
+            return mProfileIcons.get(s);
+
+        return null;
+    }
 }

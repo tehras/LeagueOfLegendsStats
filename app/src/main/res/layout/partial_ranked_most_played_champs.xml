@@ -18,6 +18,12 @@
         android:textSize="@dimen/text_size_medium"
         android:textStyle="bold"/>
 
+    <include
+        layout="@layout/partial_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin_small"/>
+
     <LinearLayout
         android:id="@+id/champion_list_container"
         android:layout_width="match_parent"

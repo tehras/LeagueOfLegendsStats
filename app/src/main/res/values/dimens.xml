@@ -15,12 +15,13 @@
     <dimen name="toolbar_search_small_margin">4dp</dimen>
     <dimen name="toolbar_search_padding">8dp</dimen>
 
-    <dimen name="profile_icon_size">48dp</dimen>
+    <dimen name="profile_icon_size">60dp</dimen>
     <dimen name="champion_icon_size">48dp</dimen>
 
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="text_size_large_med">18sp</dimen>
     <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_medium_small">14sp</dimen>
 
     <dimen name="summoner_icon_size">48dp</dimen>
     <dimen name="medium_elevation">4dp</dimen>
@@ -30,4 +31,7 @@
     <dimen name="activity_vertical_margin_xsmall">4dp</dimen>
     <dimen name="large_elevation">8dp</dimen>
     <dimen name="text_size_xsmall">10sp</dimen>
+    <dimen name="small_icon_height">18dp</dimen>
+    <dimen name="rounded_corners_radius">8dp</dimen>
+    <dimen name="ribbon_top_negative_margin">-12dp</dimen>
 </resources>

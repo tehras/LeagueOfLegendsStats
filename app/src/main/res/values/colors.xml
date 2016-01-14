@@ -4,6 +4,20 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#795548</color>
 
+    <color name="achievement_green">#0288D1</color>
+    <color name="achievement_green_dark">#01579B</color>
+
+    <color name="role_color_adc">#F57C00</color>
+    <color name="role_color_adc_dark">#E65100</color>
+    <color name="role_color_mid">#7B1FA2</color>
+    <color name="role_color_mid_dark">#6A1B9A</color>
+    <color name="role_color_supp">#4A148C</color>
+    <color name="role_color_supp_dark">#01579B</color>
+    <color name="role_color_jg">#388E3C</color>
+    <color name="role_color_jg_dark">#1B5E20</color>
+    <color name="role_color_top">#00796B</color>
+    <color name="role_color_top_dark">#004D40</color>
+
     <color name="success_green">#4CAF50</color>
     <color name="failed_red">#F44336</color>
     <color name="neutral_orange">#FF9800</color>

@@ -19,9 +19,11 @@ public class StaticDataHolder {
 
     private ChampionIcons mChampionIcons;
     private ProfileIcons mProfileIcons;
+    private SpellIcons mSpellIcons;
 
     private static final String FILE_NAME_CHAMPIONS = "champion_icons.json";
     private static final String FILE_NAME_PROFILE = "profile_icons.json";
+    private static final String FILE_NAME_SUMMONER = "summoner_icons.json";
 
     private StaticDataHolder(Context context) {
         mContext = context;
@@ -31,7 +33,12 @@ public class StaticDataHolder {
         if (mChampionIcons == null && mProfileIcons == null) {
             mChampionIcons = new ChampionIcons().parse(AssetReaderUtil.read(FILE_NAME_CHAMPIONS, mContext));
             mProfileIcons = new ProfileIcons().parse(AssetReaderUtil.read(FILE_NAME_PROFILE, mContext));
+            mSpellIcons = new SpellIcons().parse(AssetReaderUtil.read(FILE_NAME_SUMMONER, mContext));
         }
+    }
+
+    public Drawable getSpellIcon(int icon) {
+        return getSpellIcon(mSpellIcons.getSpellIcon(String.valueOf(icon)));
     }
 
     public Drawable getProfileIcon(int icon) {
@@ -50,12 +57,38 @@ public class StaticDataHolder {
         return championIcon.getName();
     }
 
+    public String getProfileIconName(int id) {
+        ProfileIcon profileIcon = mProfileIcons.getProfileIcon(String.valueOf(id));
+        if (profileIcon == null)
+            return null;
+
+        return profileIcon.getImage().getFull();
+    }
+
+    public Drawable getSpellIcon(Spell spell) {
+        if (spell == null || spell.getImage() == null)
+            return null;
+
+        int size = mContext.getResources().getDimensionPixelSize(R.dimen.small_icon_height);
+        return loadFromAssets(spell.getImage(), size, size);
+    }
+
     public Drawable getProfileIcon(ProfileIcon profileIcon) {
         if (profileIcon == null || profileIcon.getImage() == null)
             return null;
 
         int size = mContext.getResources().getDimensionPixelSize(R.dimen.profile_icon_size);
         return loadFromAssets(profileIcon.getImage(), size, size);
+    }
+
+    public Drawable getProfileIcon(Bitmap bitmap) {
+        if (bitmap == null)
+            return null;
+
+        int size = mContext.getResources().getDimensionPixelSize(R.dimen.profile_icon_size);
+        bitmap = Bitmap.createScaledBitmap(bitmap, size, size, false);
+
+        return new BitmapDrawable(mContext.getResources(), bitmap);
     }
 
     public Drawable getChampionIcon(ChampionIcon championIcon) {
@@ -72,6 +105,7 @@ public class StaticDataHolder {
         if (bm != null) {
             Bitmap sprite = Bitmap.createBitmap(bm, image.getX(), image.getY(), image.getW(), image.getH());
             sprite = Bitmap.createScaledBitmap(sprite, width, height, false);
+
             drawable = new BitmapDrawable(mContext.getResources(), sprite);
             bm.recycle();
         }

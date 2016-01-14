@@ -14,7 +14,10 @@ import java.util.ArrayList;
 
 /**
  * Created by tehras on 1/10/16.
+ * <p/>
+ * Generic utils class for all the reusable elements
  */
+@SuppressWarnings("deprecation")
 public class Utils {
 
     public static final String NOT_AVAILABLE = "N/A";
@@ -50,9 +53,16 @@ public class Utils {
         linearLayout.addView(selectableView);
     }
 
+    /**
+     * get color(int) for based on KDA
+     *
+     * @param kda     0 - inf
+     * @param context prefer Activity
+     * @return color int
+     */
     public static int getKDAColor(Double kda, Context context) {
         if (kda == null) {
-            return context.getColor(R.color.bad);
+            return context.getResources().getColor(R.color.bad);
         }
 
         int colorInt;
@@ -66,9 +76,16 @@ public class Utils {
             colorInt = R.color.great;
         }
 
-        return context.getColor(colorInt);
+        return context.getResources().getColor(colorInt);
     }
 
+    /**
+     * Assigns color based on win %
+     *
+     * @param textView      win% textView
+     * @param winPercentage win% - 0% to 100%
+     * @param context       prefer Activity
+     */
     public static void assignWinPercentageColor(TextView textView, Double winPercentage, Context context) {
         if (winPercentage == null)
             return;
@@ -86,7 +103,7 @@ public class Utils {
 
         textView.setTextColor(context.getResources().getColor(colorId));
     }
-
+    
     public static void setUpRecyclerView(RecyclerView recyclerView) {
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

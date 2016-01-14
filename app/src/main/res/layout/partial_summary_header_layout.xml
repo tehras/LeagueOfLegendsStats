@@ -18,10 +18,10 @@
         android:layout_height="wrap_content"
         >
 
-        <ImageView
+        <com.github.koshkin.leagueoflegendsstats.views.RoundedImageView
             android:id="@+id/summoner_icon"
-            android:layout_width="@dimen/summoner_icon_size"
-            android:layout_height="@dimen/summoner_icon_size"
+            android:layout_width="@dimen/profile_icon_size"
+            android:layout_height="@dimen/profile_icon_size"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:contentDescription="@string/accessibility_summary_image_icon"

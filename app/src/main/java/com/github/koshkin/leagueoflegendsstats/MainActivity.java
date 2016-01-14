@@ -2,6 +2,7 @@ package com.github.koshkin.leagueoflegendsstats;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
@@ -18,10 +19,13 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.github.koshkin.leagueoflegendsstats.fragments.HomeFragment;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingActionButtonViewHelper;
 import com.github.koshkin.leagueoflegendsstats.views.ToolbarSearchView;
+
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity
     private ContentLoadingProgressBar mProgressBar;
     private RelativeLayout mProgressLayout;
     private View mErrorLayout;
+    private FloatingActionButton mFab;
 
     public void showLoading() {
         if (mProgressLayout != null) {
@@ -66,6 +71,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main); //main content view
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar); //toolbar
         setSupportActionBar(toolbar);
@@ -84,6 +90,8 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             startFragment(HomeFragment.class);
         }
+
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
 
         initStaticData();
 
@@ -197,5 +205,10 @@ public class MainActivity extends AppCompatActivity
     public void hideKeyboard(EditText editText) {
         ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
                 .hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    }
+
+    public void showFab() {
+        if (mFab != null)
+            mFab.show();
     }
 }
