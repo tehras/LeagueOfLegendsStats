@@ -60,24 +60,28 @@ public class GameHolder extends RecyclerView.ViewHolder {
         divider = view.findViewById(R.id.divider);
     }
 
-    public void populate(Game game, Activity activity, boolean t) {
+    public void populate(final Game game, final Activity activity, boolean t) {
         //TOP Layout
         this.gameTypeTv.setText(generateGameType(game));
         this.gameStartedTv.setText(gameStartedDate(game));
         this.gameLengthTv.setText(gameLength(game));
 
-        //Images and Champ name
-        Drawable drawable = StaticDataHolder.getInstance(activity).getChampionIcon(game.getChampionId());
-        if (drawable != null)
-            this.champImage.setImageDrawable(drawable);
+        new Runnable() {
+            @Override
+            public void run() {
+                //Images and Champ name
+                Drawable drawable = StaticDataHolder.getInstance(activity).getChampionIcon(game.getChampionId());
+                if (drawable != null)
+                    GameHolder.this.champImage.setImageDrawable(drawable);
 
-        Drawable icon1Drawable = StaticDataHolder.getInstance(activity).getSpellIcon(game.getSpell1());
-        Drawable icon2Drawable = StaticDataHolder.getInstance(activity).getSpellIcon(game.getSpell2());
-        if (icon1Drawable != null)
-            this.icon1.setImageDrawable(icon1Drawable);
-        if (icon2Drawable != null)
-            this.icon2.setImageDrawable(icon2Drawable);
-
+                Drawable icon1Drawable = StaticDataHolder.getInstance(activity).getSpellIcon(game.getSpell1());
+                Drawable icon2Drawable = StaticDataHolder.getInstance(activity).getSpellIcon(game.getSpell2());
+                if (icon1Drawable != null)
+                    GameHolder.this.icon1.setImageDrawable(icon1Drawable);
+                if (icon2Drawable != null)
+                    GameHolder.this.icon2.setImageDrawable(icon2Drawable);
+            }
+        }.run();
 
         this.champNameTv.setText(StaticDataHolder.getInstance(activity).getChampionName(game.getChampionId()));
 

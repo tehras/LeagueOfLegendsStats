@@ -49,8 +49,8 @@ public abstract class ChampionHolder extends RecyclerView.ViewHolder {
         divider = view.findViewById(R.id.divider);
     }
 
-    public void populate(Champion champ, Activity activity, boolean t) {
-        ChampionHolder h = this;
+    public void populate(final Champion champ, final Activity activity, boolean t) {
+        final ChampionHolder h = this;
         h.champName.setText(getChampName(champ, activity));
         h.champCs.setText(getCS(champ));
 
@@ -64,11 +64,16 @@ public abstract class ChampionHolder extends RecyclerView.ViewHolder {
         assignWinPercentageColor(h.champWinPercentage, getWinPercentageDouble(champ), activity);
         h.champPlayed.setText(getChampPlayed(champ));
 
-        Drawable drawable = getIcon(champ);
-        if (drawable != null)
-            h.champIcon.setImageDrawable(drawable);
-        else
-            h.champIcon.setImageDrawable(activity.getDrawable(R.drawable.ic_wallpaper_black_48dp));
+        new Runnable() {
+            @Override
+            public void run() {
+                Drawable drawable = getIcon(champ);
+                if (drawable != null)
+                    h.champIcon.setImageDrawable(drawable);
+                else
+                    h.champIcon.setImageDrawable(activity.getDrawable(R.drawable.ic_wallpaper_black_48dp));
+            }
+        }.run();
 
         if (!t)
             divider.setVisibility(View.GONE);
