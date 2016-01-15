@@ -37,6 +37,7 @@ public class RoundedImageView extends ImageView {
         init();
     }
 
+
     private Path mClipPath;
 
     private void init() {
@@ -48,7 +49,7 @@ public class RoundedImageView extends ImageView {
 
     private float mRadius;
 
-    private void setRadius(float rad) {
+    public void setRadius(float rad) {
         mRadius = rad;
     }
 

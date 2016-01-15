@@ -4,10 +4,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.utils.AssetReaderUtil;
+import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
+import com.github.koshkin.leagueoflegendsstats.utils.SharedPrefsUtil;
 import com.github.koshkin.leagueoflegendsstats.utils.Utils;
+
+import java.io.File;
 
 /**
  * Created by tehras on 1/11/16.
@@ -21,6 +26,30 @@ public class StaticDataHolder {
     private ProfileIcons mProfileIcons;
     private SpellIcons mSpellIcons;
 
+    public void setChampionIcons(ChampionIcons championIcons) {
+        mChampionIcons = championIcons;
+    }
+
+    public void setProfileIcons(ProfileIcons profileIcons) {
+        mProfileIcons = profileIcons;
+    }
+
+    public void setSpellIcons(SpellIcons spellIcons) {
+        mSpellIcons = spellIcons;
+    }
+
+    public SpellIcons getSpellIcons() {
+        return mSpellIcons;
+    }
+
+    public ProfileIcons getProfileIcons() {
+        return mProfileIcons;
+    }
+
+    public ChampionIcons getChampionIcons() {
+        return mChampionIcons;
+    }
+
     private static final String FILE_NAME_CHAMPIONS = "champion_icons.json";
     private static final String FILE_NAME_PROFILE = "profile_icons.json";
     private static final String FILE_NAME_SUMMONER = "summoner_icons.json";
@@ -30,10 +59,23 @@ public class StaticDataHolder {
     }
 
     public void init() {
-        if (mChampionIcons == null && mProfileIcons == null) {
-            mChampionIcons = new ChampionIcons().parse(AssetReaderUtil.read(FILE_NAME_CHAMPIONS, mContext));
-            mProfileIcons = new ProfileIcons().parse(AssetReaderUtil.read(FILE_NAME_PROFILE, mContext));
-            mSpellIcons = new SpellIcons().parse(AssetReaderUtil.read(FILE_NAME_SUMMONER, mContext));
+        if (mChampionIcons == null && mProfileIcons == null && mSpellIcons == null) {
+            String champResponse = SharedPrefsUtil.getSharedPrefs(AssetReaderUtil.CONSTANT_CHAMPION, mContext);
+            Log.e(getClass().getSimpleName(), "response - " + champResponse);
+            if (NullChecker.isNullOrEmpty(champResponse)) {
+                champResponse = AssetReaderUtil.read(FILE_NAME_CHAMPIONS, mContext);
+            }
+            mChampionIcons = new ChampionIcons().parse(champResponse);
+            String profileRsponse = SharedPrefsUtil.getSharedPrefs(AssetReaderUtil.CONSTANT_PROFILE, mContext);
+            if (NullChecker.isNullOrEmpty(profileRsponse)) {
+                profileRsponse = AssetReaderUtil.read(FILE_NAME_PROFILE, mContext);
+            }
+            mProfileIcons = new ProfileIcons().parse(profileRsponse);
+            String spellResponse = SharedPrefsUtil.getSharedPrefs(AssetReaderUtil.CONSTANT_SUMMONER, mContext);
+            if (NullChecker.isNullOrEmpty(spellResponse)) {
+                spellResponse = AssetReaderUtil.read(FILE_NAME_SUMMONER, mContext);
+            }
+            mSpellIcons = new SpellIcons().parse(spellResponse);
         }
     }
 
@@ -100,7 +142,13 @@ public class StaticDataHolder {
     }
 
     public Drawable loadFromAssets(Image image, int width, int height) {
-        Bitmap bm = AssetReaderUtil.readPng(image.getSprite(), mContext);
+        File file = new File(mContext.getCacheDir(), image.getSprite());
+        Bitmap bm;
+        if (file.exists() && file.length() > 0) {
+            bm = AssetReaderUtil.readPng(image.getSprite(), file);
+        } else {
+            bm = AssetReaderUtil.readPng(image.getSprite(), mContext);
+        }
         Drawable drawable = null;
         if (bm != null) {
             Bitmap sprite = Bitmap.createBitmap(bm, image.getX(), image.getY(), image.getW(), image.getH());

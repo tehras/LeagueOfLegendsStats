@@ -15,6 +15,16 @@ public class FileHandler {
 
     private String mImageName;
     private File mFile;
+    private SpriteHolder mSpriteHolder;
+
+    public FileHandler setSpriteHolder(SpriteHolder spriteHolder) {
+        mSpriteHolder = spriteHolder;
+        return this;
+    }
+
+    public SpriteHolder getSpriteHolder() {
+        return mSpriteHolder;
+    }
 
     public FileHandler(String imageName, File file) {
         mImageName = imageName;

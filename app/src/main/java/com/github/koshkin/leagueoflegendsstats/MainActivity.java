@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,19 +22,25 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.koshkin.leagueoflegendsstats.fragments.HomeFragment;
-import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingActionButtonViewHelper;
+import com.github.koshkin.leagueoflegendsstats.views.RoundedImageView;
 import com.github.koshkin.leagueoflegendsstats.views.ToolbarSearchView;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, FirstInitialize.Callback {
 
     private ContentLoadingProgressBar mProgressBar;
     private RelativeLayout mProgressLayout;
     private View mErrorLayout;
     private FloatingActionButton mFab;
+    private View mMainLoadingLayout;
+    private TextView mLoadingText;
+    private Timer mTimer;
 
     public void showLoading() {
         if (mProgressLayout != null) {
@@ -71,7 +78,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
+        if (!BuildConfig.DEBUG)
+            Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main); //main content view
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar); //toolbar
         setSupportActionBar(toolbar);
@@ -93,21 +101,43 @@ public class MainActivity extends AppCompatActivity
 
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
-        initStaticData();
-
         mProgressBar = (ContentLoadingProgressBar) findViewById(R.id.loading_bar);
         mProgressLayout = (RelativeLayout) findViewById(R.id.loading_layout);
         mErrorLayout = findViewById(R.id.error_layout_layout);
+
+        mMainLoadingLayout = findViewById(R.id.loading_layout_full_screen);
+        mLoadingText = (TextView) findViewById(R.id.loading_text);
+        RoundedImageView loadingImage = (RoundedImageView) findViewById(R.id.main_rounded_image);
+        loadingImage.setRadius(this.getResources().getDimensionPixelSize(R.dimen.main_loading_rounded_size));
+
+        mTimer = new Timer();
+        mTimer.schedule(new MyTimerTask(), 0, 2000);
+
+        new FirstInitialize(this, this, mLoadingText).initialize();
     }
 
-    private void initStaticData() {
-        //TODO some cool checking
-        new Runnable() {
-            @Override
-            public void run() {
-                StaticDataHolder.getInstance(MainActivity.this).init();
-            }
-        }.run();
+    int imageI = 0;
+
+    private void changeName() {
+        if (imageI >= loadingText.length) {
+            imageI = 0;
+        }
+        Log.e(getClass().getSimpleName(), "imageI - " + imageI);
+        mLoadingText.setText(loadingText[imageI]);
+        imageI++;
+    }
+
+    private class MyTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    changeName();
+                }
+            });
+        }
     }
 
     public void startFragment(Class<? extends BaseFragment> fragmentClass) {
@@ -211,4 +241,14 @@ public class MainActivity extends AppCompatActivity
         if (mFab != null)
             mFab.show();
     }
+
+    @Override
+    public void completed() {
+        mTimer.cancel();
+        mMainLoadingLayout.setVisibility(View.GONE);
+    }
+
+    public static String[] loadingText = new String[]{"Loading...", "Please Wait...", "Getting all the images...", "Clearing the table...", "Doing the dishes...", "Back to getting all the images...", "That image is cute...", "Oh wait.. no it's not...", "Please wait..."};
+
+
 }

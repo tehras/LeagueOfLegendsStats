@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
+import com.github.koshkin.leagueoflegendsstats.models.SpriteHolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,7 +63,7 @@ public class Manager {
 
             //if imageName is not default check if already exists
             boolean wasDeleted = true;
-            if (!imageName.equalsIgnoreCase(IMAGE_NAME_DEFAULT) && file.exists() && file.length() != 0) {
+            if (!imageName.equalsIgnoreCase(IMAGE_NAME_DEFAULT) && !(response.getReturnedObject() instanceof SpriteHolder) && file.exists() && file.length() != 0) {
                 response.setStatus(com.github.koshkin.leagueoflegendsstats.networking.Response.Status.SUCCESS);
                 response.setReturnedObject(new FileHandler(imageName, file));
                 return response;
@@ -86,8 +87,12 @@ public class Manager {
 
             if (okResponse.isSuccessful()) {
                 Bitmap bitmap = BitmapFactory.decodeStream(okResponse.body().byteStream());
+                FileHandler fileHandler = new FileHandler(imageName, file, bitmap);
+                if (response.getReturnedObject() instanceof SpriteHolder) {
+                    fileHandler.setSpriteHolder((SpriteHolder) response.getReturnedObject());
+                }
 
-                response.setReturnedObject(new FileHandler(imageName, file, bitmap));
+                response.setReturnedObject(fileHandler);
                 response.setStatus(com.github.koshkin.leagueoflegendsstats.networking.Response.Status.SUCCESS);
             } else {
                 int code = okResponse.code();

@@ -12,7 +12,8 @@ public class URIConstants {
 
     //BASE URI, diff for each region
     public static final String NA_BASE_URI = "https://na.api.pvp.net";
-    public static final String NA_STATIC_URI = "http://ddragon.leagueoflegends.com/cdn/6.1.1/img";
+    public static String NA_STATIC_URI = "http://ddragon.leagueoflegends.com/cdn/6.1.1/img";
+    public static String NA_STATIC_DATA_URI = "http://ddragon.leagueoflegends.com/cdn/6.1.1/data";
 
     //API STATIC
     public static final String PROFILE_ICON = "/profileicon/%s";
@@ -23,6 +24,10 @@ public class URIConstants {
     public static final String SUMMONER_SUMMARY_RANKED = "/api/lol/%s/v1.3/stats/by-summoner/%s/ranked";
     public static final String SUMMONER_RECENT_RANKED = "/api/lol/%s/v1.3/game/by-summoner/%s/recent";
     public static final String SUMMONER_HISTORY_RANKED = "/api/lol/%s/v2.2/matchlist/by-summoner/%s";
+
+    public static final String REALM = "/api/lol/static-data/%s/v1.2/realm";
+    public static final String STATIC_DATA = "/%s/%s";
+    public static final String STATIC_SPRITE = "/sprite/%s";
 
     //URL PARAMETERS
     public static final String URL_PARAM_SUMMONER_GAME_TYPE = "?rankedQueues=%s";

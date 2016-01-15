@@ -5,7 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -29,7 +32,20 @@ public class AssetReaderUtil {
         return null;
     }
 
+    public static Bitmap readPng(String assetName, File file) {
+        return new FileHandler(assetName, file).getBitmapFromFile();
+    }
+
+    public static final String CONSTANT_CHAMPION = "champion_key";
+    public static final String CONSTANT_PROFILE = "item_key";
+    public static final String CONSTANT_SUMMONER = "summoner_key";
+
     public static String read(String assetName, Context context) {
+        File file = new File(context.getCacheDir(), assetName);
+        if (file.exists() && file.length() > 0) {
+
+        }
+
         BufferedReader reader = null;
         String output = "";
 

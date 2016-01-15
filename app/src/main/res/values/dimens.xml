@@ -34,4 +34,5 @@
     <dimen name="small_icon_height">18dp</dimen>
     <dimen name="rounded_corners_radius">8dp</dimen>
     <dimen name="ribbon_top_negative_margin">-12dp</dimen>
+    <dimen name="main_loading_rounded_size">16dp</dimen>
 </resources>
