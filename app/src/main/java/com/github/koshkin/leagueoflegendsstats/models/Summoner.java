@@ -17,6 +17,9 @@ public class Summoner implements Request.ParserCallback<Summoner> {
         mSummonerName = name;
     }
 
+    public Summoner() {
+    }
+
     private String mSummonerName;
     private SummonerInfo mSummonerInfo;
 
@@ -32,7 +35,10 @@ public class Summoner implements Request.ParserCallback<Summoner> {
     public Summoner parse(String body) {
         try {
             JSONObject object = new JSONObject(body);
-            if (object.has(mSummonerName)) {
+            if (mSummonerName == null) {
+                mSummonerInfo = new Gson().fromJson(body, SummonerInfo.class);
+                mSummonerName = mSummonerInfo.getName();
+            } else if (object.has(mSummonerName)) {
                 JSONObject summonerInfoJson = object.getJSONObject(mSummonerName);
 
                 mSummonerInfo = new Gson().fromJson(summonerInfoJson.toString(), SummonerInfo.class);

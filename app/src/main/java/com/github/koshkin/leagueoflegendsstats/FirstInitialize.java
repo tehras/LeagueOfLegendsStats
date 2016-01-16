@@ -30,7 +30,7 @@ public class FirstInitialize implements Request.RequestCallback {
     private final Callback mCallback;
     private final MainActivity mMainActivity;
 
-    public FirstInitialize(MainActivity mainActivity, Callback callback, TextView loadingText) {
+    public FirstInitialize(MainActivity mainActivity, Callback callback) {
         mMainActivity = mainActivity;
         mCallback = callback;
     }

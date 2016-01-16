@@ -23,6 +23,7 @@ import com.github.koshkin.leagueoflegendsstats.models.PlayerSummary;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Summoner;
 import com.github.koshkin.leagueoflegendsstats.models.SummonerAggregateObject;
+import com.github.koshkin.leagueoflegendsstats.models.SummonerInfo;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.networking.Response;
 import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
@@ -50,10 +51,16 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
 
     private String mSummonerName;
     private FileHandler mProfFileHandler;
+    private Summoner mSummoner;
 
-    public static SummonerStatsFragment getInstance(String summonerName) {
+    public void setSummoner(Summoner summoner) {
+        mSummoner = summoner;
+    }
+
+    public static SummonerStatsFragment getInstance(String summonerName, String summonerId) {
         Bundle args = new Bundle();
         args.putString(ARG_SUMMONER_NAME, summonerName);
+        args.putString(ARG_SUMMONER_ID, summonerId);
 
         SummonerStatsFragment fragment = new SummonerStatsFragment();
         fragment.setArguments(args);
@@ -136,14 +143,25 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
         mSummaryLayout = rootView.findViewById(R.id.summoner_header_layout);
     }
 
+    public boolean mFromSummonerId = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mSummonerName = getArguments().getString(ARG_SUMMONER_NAME);
+        mSummonerName = getArguments().getString(ARG_SUMMONER_NAME, null);
+        String summonerId = getArguments().getString(ARG_SUMMONER_ID, null);
 
         if (mSummonerAggregateObject == null) {
-            executeGetSummoner(this, mSummonerName);
+            if (summonerId == null || mSummoner == null)
+                executeGetSummoner(this, mSummonerName);
+            else {
+                if (mSummoner.getSummonerInfo() != null) {
+                    getProfileImage(mSummoner.getSummonerInfo());
+                }
+                mFromSummonerId = true;
+                executeGetStats(this, summonerId);
+            }
         }
     }
 
@@ -169,11 +187,10 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                         mSummonerAggregateObject.setSummoner(summoner);
 
                         if (summoner.getSummonerInfo() != null) {
-                            String profileIconName = StaticDataHolder.getInstance(getActivity()).getProfileIconName(summoner.getSummonerInfo().getProfileIconId());
-                            executeGetProfileImage(this, profileIconName);
+                            getProfileImage(summoner.getSummonerInfo());
                         }
 
-                        executeGetStats(this, summoner);
+                        executeGetStats(this, summoner.getSummonerId());
                     } else {
                         generalException();
                     }
@@ -187,6 +204,10 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     PlayerStatSummaries playerStatSummaries = (PlayerStatSummaries) response.getReturnedObject();
                     if (playerStatSummaries != null) {
+                        if (mFromSummonerId) {
+                            mSummonerAggregateObject = new SummonerAggregateObject(mSummoner);
+                            mSummonerAggregateObject.setStatus(Response.Status.SUCCESS);
+                        }
                         mSummonerAggregateObject.setPlayerStatSummaries(playerStatSummaries);
                         hideLoading();
                         populateSummaryLayout();
@@ -201,6 +222,11 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                 }
                 break;
         }
+    }
+
+    private void getProfileImage(SummonerInfo summonerInfo) {
+        String profileIconName = StaticDataHolder.getInstance(getActivity()).getProfileIconName(summonerInfo.getProfileIconId());
+        executeGetProfileImage(this, profileIconName);
     }
 
     private void generalException() {

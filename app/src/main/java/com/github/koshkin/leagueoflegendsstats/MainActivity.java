@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void hideError() {
-        mErrorLayout.setVisibility(View.GONE);
+        if (mErrorLayout != null)
+            mErrorLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -110,9 +111,15 @@ public class MainActivity extends AppCompatActivity
         mTimer.schedule(new MyTimerTask(), 0, 2000);
 
         //Has to go last
-        if (savedInstanceState == null)
-            new FirstInitialize(this, this, mLoadingText).initialize();
-
+        if (savedInstanceState == null) {
+            mMainLoadingLayout.setVisibility(View.VISIBLE);
+            new Runnable() {
+                @Override
+                public void run() {
+                    new FirstInitialize(MainActivity.this, MainActivity.this).initialize();
+                }
+            }.run();
+        }
     }
 
     int imageI = 0;

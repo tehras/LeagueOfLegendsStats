@@ -19,6 +19,8 @@ import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.networking.URIConstants;
 import com.github.koshkin.leagueoflegendsstats.networking.URIHelper;
 
+import java.util.ArrayList;
+
 /**
  * Created by tehras on 1/9/16.
  * <p/>
@@ -32,6 +34,8 @@ public class BaseFragment extends Fragment {
 
         hideErrorLayout();
     }
+
+
 
     @Override
     public void onResume() {
@@ -52,8 +56,24 @@ public class BaseFragment extends Fragment {
         new Executor(new Request(Request.RequestType.GET, new Summoner(summonerName), requestCallback, URIHelper.GET_SUMMONER, summonerName), getActivity()).execute();
     }
 
-    protected void executeGetStats(Request.RequestCallback requestCallback, Summoner summoner) {
-        new Executor(new Request(Request.RequestType.GET, new PlayerStatSummaries(), requestCallback, URIHelper.GET_SUMMONER_SUMMARY, summoner.getSummonerId()), getActivity()).execute();
+    protected void executeGetSummonersById(Request.RequestCallback requestCallback, ArrayList<String> summonerIds, LeagueStandings leagueStandings) {
+        new Executor(new Request(Request.RequestType.GET, leagueStandings, requestCallback, URIHelper.GET_SUMMONER_BY_IDS, commaSeparatedSummonerIds(summonerIds)), getActivity()).execute();
+    }
+
+    private String commaSeparatedSummonerIds(ArrayList<String> summonerIds) {
+        String s = "" + summonerIds.get(0);
+        if (summonerIds.size() == 1)
+            return s;
+
+        for (int i = 1; i < summonerIds.size(); i++) {
+            s = s + "," + summonerIds.get(i);
+        }
+
+        return s;
+    }
+
+    protected void executeGetStats(Request.RequestCallback requestCallback, String summonerId) {
+        new Executor(new Request(Request.RequestType.GET, new PlayerStatSummaries(), requestCallback, URIHelper.GET_SUMMONER_SUMMARY, summonerId), getActivity()).execute();
     }
 
     protected void executeGetRankedStats(Request.RequestCallback requestCallback, String summonerId) {

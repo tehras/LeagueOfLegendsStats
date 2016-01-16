@@ -20,6 +20,7 @@ public class URIConstants {
 
     //API OPERATIONS
     public static final String SUMMONER = "/api/lol/%s/v1.4/summoner/by-name/%s";
+    public static final String SUMMONER_BY_ID = "/api/lol/%s/v1.4/summoner/%s";
     public static final String SUMMONER_SUMMARY = "/api/lol/%s/v1.3/stats/by-summoner/%s/summary";
     public static final String SUMMONER_SUMMARY_RANKED = "/api/lol/%s/v1.3/stats/by-summoner/%s/ranked";
     public static final String SUMMONER_RECENT_RANKED = "/api/lol/%s/v1.3/game/by-summoner/%s/recent";

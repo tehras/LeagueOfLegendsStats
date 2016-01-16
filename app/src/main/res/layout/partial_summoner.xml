@@ -9,6 +9,36 @@
     android:orientation="vertical"
     >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin_xsmall"
+        android:paddingTop="@dimen/activity_vertical_margin_small">
+
+        <TextView
+            android:id="@+id/summoner_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:maxLength="12"
+            android:maxLines="1"
+            android:text="Tehras"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/ranked_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:text="Rank 1"
+            />
+
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/summoner_header_layout"
         android:layout_width="match_parent"
@@ -16,7 +46,7 @@
         android:baselineAligned="true"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/activity_vertical_margin_small"
-        android:paddingTop="@dimen/activity_vertical_margin_small">
+        >
 
         <LinearLayout
             android:layout_width="0dp"
@@ -26,31 +56,14 @@
             android:orientation="vertical"
             >
 
-            <TextView
-                android:id="@+id/summoner_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
-                android:ellipsize="marquee"
-                android:maxLength="12"
-                android:maxLines="1"
-                android:text="Tehras"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/ranked_rank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rank 1"
-                />
+            <include layout="@layout/layout_summoner_icon_small"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="95"
             android:baselineAligned="false"
             android:orientation="horizontal">
@@ -59,9 +72,9 @@
                 android:id="@+id/wins_losses_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="center"
                 android:layout_weight="70"
-                android:gravity="start"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 tools:ignore="NestedWeights">
 
@@ -140,6 +153,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_small"
                 android:layout_marginStart="@dimen/activity_horizontal_margin_small"
                 android:layout_weight="10"
                 android:gravity="center_horizontal"
@@ -209,6 +223,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="598 Pts"
+                    android:textAlignment="textEnd"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold"/>

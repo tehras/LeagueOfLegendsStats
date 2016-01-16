@@ -69,6 +69,18 @@ public class CustomCardView extends LinearLayout {
         }
     }
 
+    public View getViewHolderChildAt(int i) {
+        int childSize = mViewHolder.getChildCount();
+        if (i + 1 > childSize)
+            return null;
+
+        return mViewHolder.getChildAt(i);
+    }
+
+    public int getViewHolderCountSize() {
+        return mViewHolder.getChildCount();
+    }
+
     public void clearViewsFromHolder() {
         mViewHolder.removeAllViews();
     }

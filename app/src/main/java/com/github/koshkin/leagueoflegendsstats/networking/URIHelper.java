@@ -11,6 +11,7 @@ import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.RE
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.STATIC_DATA;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.STATIC_SPRITE;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.SUMMONER;
+import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.SUMMONER_BY_ID;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.SUMMONER_HISTORY_RANKED;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.SUMMONER_RECENT_RANKED;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.SUMMONER_SUMMARY;
@@ -32,6 +33,7 @@ public enum URIHelper {
     GET_SPRITES(STATIC_SPRITE, NA_STATIC_URI),
     GET_CHALLENGER(LEAGUE_CHALLENGER, NA_BASE_URI),
     GET_MASTER(LEAGUE_MASTER, NA_BASE_URI),
+    GET_SUMMONER_BY_IDS(SUMMONER_BY_ID, NA_BASE_URI),
     GET_REALM(REALM, NA_BASE_URI);
 
     private final String mBaseUri;

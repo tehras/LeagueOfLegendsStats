@@ -11,6 +11,7 @@ import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.models.Game;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.utils.GameUtils;
+import com.github.koshkin.leagueoflegendsstats.viewhelpers.LoaderHelper;
 
 import static com.github.koshkin.leagueoflegendsstats.utils.GameUtils.gameLength;
 import static com.github.koshkin.leagueoflegendsstats.utils.GameUtils.gameStartedDate;
@@ -66,22 +67,32 @@ public class GameHolder extends RecyclerView.ViewHolder {
         this.gameStartedTv.setText(gameStartedDate(game));
         this.gameLengthTv.setText(gameLength(game));
 
-        new Runnable() {
-            @Override
-            public void run() {
-                //Images and Champ name
-                Drawable drawable = StaticDataHolder.getInstance(activity).getChampionIcon(game.getChampionId());
-                if (drawable != null)
-                    GameHolder.this.champImage.setImageDrawable(drawable);
+        new LoaderHelper() {
 
-                Drawable icon1Drawable = StaticDataHolder.getInstance(activity).getSpellIcon(game.getSpell1());
-                Drawable icon2Drawable = StaticDataHolder.getInstance(activity).getSpellIcon(game.getSpell2());
-                if (icon1Drawable != null)
-                    GameHolder.this.icon1.setImageDrawable(icon1Drawable);
-                if (icon2Drawable != null)
-                    GameHolder.this.icon2.setImageDrawable(icon2Drawable);
+            Drawable mDrawable, mIcon1Drawable, mIcon2Drawable;
+
+            @Override
+            protected void postExecute() {
+                if (mDrawable != null)
+                    GameHolder.this.champImage.setImageDrawable(mDrawable);
+                if (mIcon1Drawable != null)
+                    GameHolder.this.icon1.setImageDrawable(mIcon1Drawable);
+                if (mIcon2Drawable != null)
+                    GameHolder.this.icon2.setImageDrawable(mIcon2Drawable);
+
+                mDrawable = StaticDataHolder.getInstance(activity).getChampionIcon(game.getChampionId());
+
+                mIcon1Drawable = StaticDataHolder.getInstance(activity).getSpellIcon(game.getSpell1());
+                mIcon2Drawable = StaticDataHolder.getInstance(activity).getSpellIcon(game.getSpell2());
             }
-        }.run();
+
+            @Override
+            protected void runInBackground() {
+                mDrawable = StaticDataHolder.getInstance(activity).getChampionIcon(game.getChampionId());
+                mIcon1Drawable = StaticDataHolder.getInstance(activity).getSpellIcon(game.getSpell1());
+                mIcon2Drawable = StaticDataHolder.getInstance(activity).getSpellIcon(game.getSpell2());
+            }
+        }.execute();
 
         this.champNameTv.setText(StaticDataHolder.getInstance(activity).getChampionName(game.getChampionId()));
 

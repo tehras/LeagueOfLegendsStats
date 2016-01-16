@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.github.koshkin.leagueoflegendsstats.BaseFragment;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
@@ -19,6 +18,7 @@ import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.networking.Response;
 import com.github.koshkin.leagueoflegendsstats.views.CustomCardView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 
@@ -35,7 +35,6 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //EXECUTE
         executeGetChallengerStandings(this, LeagueQueueType.RANKED_SOLO_5x5);
         showLoading();
@@ -48,9 +47,9 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
 
         initChallengerLayout(view);
 
-        if (mChallengerLayout != null)
+        if (mLeagueStandings != null) {
             populateChallengerLayout();
-        else
+        } else
             challengerLayoutError();
 
         return view;
@@ -65,7 +64,8 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeFragment.this.getActivity(), "Not Yet Implemented", Toast.LENGTH_SHORT).show();
+                if (getActivity() != null && getActivity() instanceof MainActivity)
+                    ((MainActivity) getActivity()).startFragment(LeagueRankingFragment.getInstance(mLeagueStandings));
             }
         };
     }
@@ -74,18 +74,43 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
     public void finished(Response response, Request request) {
         switch (request.getURIHelper()) {
             case GET_CHALLENGER:
+                boolean hideLoading = false;
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     mLeagueStandings = (LeagueStandings) response.getReturnedObject();
-                    populateChallengerLayout();
+                    ArrayList<String> summonerIds = populateChallengerLayout();
+                    if (summonerIds != null)
+                        executeGetSummonersById(this, summonerIds, mLeagueStandings);
+                    else
+                        hideLoading = true;
                 } else {
+                    hideLoading = true;
                     challengerLayoutError();
+                }
+                if (hideLoading)
+                    hideLoading();
+                break;
+            case GET_SUMMONER_BY_IDS:
+                if (response.getStatus() == Response.Status.SUCCESS) {
+                    mLeagueStandings = (LeagueStandings) response.getReturnedObject();
+                    updateChallengerLayout();
                 }
                 hideLoading();
                 break;
         }
     }
 
-    private void populateChallengerLayout() {
+    private void updateChallengerLayout() {
+        int size = mChallengerLayout.getViewHolderCountSize();
+        for (int i = 0; i < size; i++) {
+            View view = mChallengerLayout.getViewHolderChildAt(i);
+            new LeagueChampionHolder(view).updateImage(mLeagueStandings, getActivity());
+        }
+
+    }
+
+    private ArrayList<String> populateChallengerLayout() {
+        ArrayList<String> summonersToReturn = null;
+
         if (mLeagueStandings != null && mLeagueStandings.getEntries() != null && mLeagueStandings.getEntries().size() > 0) {
             int i = 0;
 
@@ -95,11 +120,17 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
                 if (i > 2)
                     break;
                 mChallengerLayout.addViewToHolder(getChallengerView(summoner, i + 1));
+                if (summonersToReturn == null)
+                    summonersToReturn = new ArrayList<>();
+
+                summonersToReturn.add(summoner.getPlayerOrTeamId());
                 i++;
             }
         } else {
             mChallengerLayout.showError();
         }
+
+        return summonersToReturn;
     }
 
     private View getChallengerView(RankedSummoner summoner, int rank) {

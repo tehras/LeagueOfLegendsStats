@@ -68,7 +68,7 @@ public class FloatingActionButtonViewHelper {
                 isSearchIcon = true;
                 closeSearch(fab, tsv);
 
-                mMainActivity.startFragment(SummonerStatsFragment.getInstance(searchName));
+                mMainActivity.startFragment(SummonerStatsFragment.getInstance(searchName, null));
             }
         });
     }

@@ -13,9 +13,11 @@ import com.github.koshkin.leagueoflegendsstats.utils.SharedPrefsUtil;
 import com.github.koshkin.leagueoflegendsstats.utils.Utils;
 
 import java.io.File;
+import java.util.HashMap;
 
 /**
  * Created by tehras on 1/11/16.
+ * will hold all static objects
  */
 public class StaticDataHolder {
 
@@ -86,7 +88,11 @@ public class StaticDataHolder {
     }
 
     public Drawable getProfileIcon(int icon) {
-        return getProfileIcon(mProfileIcons.getProfileIcons().get(String.valueOf(icon)));
+        return getProfileIcon(mProfileIcons.getProfileIcons().get(String.valueOf(icon)), false);
+    }
+
+    public Drawable getProfileIconSmall(int icon) {
+        return getProfileIcon(mProfileIcons.getProfileIcons().get(String.valueOf(icon)), true);
     }
 
     public Drawable getChampionIcon(int id) {
@@ -117,11 +123,15 @@ public class StaticDataHolder {
         return loadFromAssets(spell.getImage(), size, size);
     }
 
-    public Drawable getProfileIcon(ProfileIcon profileIcon) {
+    public Drawable getProfileIcon(ProfileIcon profileIcon, boolean smallSize) {
         if (profileIcon == null || profileIcon.getImage() == null)
             return null;
 
-        int size = mContext.getResources().getDimensionPixelSize(R.dimen.profile_icon_size);
+        int size;
+        if (smallSize)
+            size = mContext.getResources().getDimensionPixelSize(R.dimen.profile_icon_size_small);
+        else
+            size = mContext.getResources().getDimensionPixelSize(R.dimen.profile_icon_size);
         return loadFromAssets(profileIcon.getImage(), size, size);
     }
 
@@ -143,7 +153,17 @@ public class StaticDataHolder {
         return loadFromAssets(championIcon.getImage(), size, size);
     }
 
+    private HashMap<String, Drawable> mLoadedImages;
+
     public Drawable loadFromAssets(Image image, int width, int height) {
+        String key = image.getFull();
+
+        if (mLoadedImages != null && mLoadedImages.containsKey(key)) {
+            Drawable drawable = mLoadedImages.get(key);
+            if (drawable != null)
+                return drawable;
+        }
+
         File file = new File(mContext.getCacheDir(), image.getSprite());
         Bitmap bm;
         if (file.exists() && file.length() > 0) {
@@ -159,6 +179,10 @@ public class StaticDataHolder {
             drawable = new BitmapDrawable(mContext.getResources(), sprite);
             bm.recycle();
         }
+
+        if (mLoadedImages == null)
+            mLoadedImages = new HashMap<>();
+        mLoadedImages.put(key, drawable);
 
         return drawable;
     }

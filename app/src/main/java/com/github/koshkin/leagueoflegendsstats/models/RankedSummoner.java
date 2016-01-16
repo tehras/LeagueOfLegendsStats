@@ -28,6 +28,16 @@ public class RankedSummoner implements Comparable<RankedSummoner> {
     @SerializedName("isInactive")
     private boolean mIsInactive;
 
+    private Summoner mSummoner;
+
+    public Summoner getSummoner() {
+        return mSummoner;
+    }
+
+    public void setSummoner(Summoner summoner) {
+        mSummoner = summoner;
+    }
+
     public String getPlayerOrTeamId() {
         return mPlayerOrTeamId;
     }
@@ -111,5 +121,25 @@ public class RankedSummoner implements Comparable<RankedSummoner> {
     @Override
     public int compareTo(RankedSummoner another) {
         return (int) (another.getLeaguePoints() - this.getLeaguePoints());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RankedSummoner summoner = (RankedSummoner) o;
+
+        if (mPlayerOrTeamId != null ? !mPlayerOrTeamId.equals(summoner.mPlayerOrTeamId) : summoner.mPlayerOrTeamId != null)
+            return false;
+        return mPlayerOrTeamName != null ? mPlayerOrTeamName.equals(summoner.mPlayerOrTeamName) : summoner.mPlayerOrTeamName == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = mPlayerOrTeamId != null ? mPlayerOrTeamId.hashCode() : 0;
+        result = 31 * result + (mPlayerOrTeamName != null ? mPlayerOrTeamName.hashCode() : 0);
+        return result;
     }
 }
