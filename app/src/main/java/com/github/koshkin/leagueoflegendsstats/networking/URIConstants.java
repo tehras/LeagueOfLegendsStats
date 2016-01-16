@@ -25,6 +25,9 @@ public class URIConstants {
     public static final String SUMMONER_RECENT_RANKED = "/api/lol/%s/v1.3/game/by-summoner/%s/recent";
     public static final String SUMMONER_HISTORY_RANKED = "/api/lol/%s/v2.2/matchlist/by-summoner/%s";
 
+    public static final String LEAGUE_CHALLENGER = "/api/lol/%s/v2.5/league/challenger?type=%s";
+    public static final String LEAGUE_MASTER = "/api/lol/%s/v2.5/league/master?type=%s";
+
     public static final String REALM = "/api/lol/static-data/%s/v1.2/realm";
     public static final String STATIC_DATA = "/%s/%s";
     public static final String STATIC_SPRITE = "/sprite/%s";

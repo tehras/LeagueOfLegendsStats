@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
+import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
+import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.MatchHistory;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerStatSummaries;
@@ -56,6 +58,10 @@ public class BaseFragment extends Fragment {
 
     protected void executeGetRankedStats(Request.RequestCallback requestCallback, String summonerId) {
         new Executor(new Request(Request.RequestType.GET, new PlayerRanked(), requestCallback, URIHelper.GET_SUMMONER_RANKED, summonerId), getActivity()).execute();
+    }
+
+    protected void executeGetChallengerStandings(Request.RequestCallback requestCallback, LeagueQueueType type) {
+        new Executor(new Request(Request.RequestType.GET, new LeagueStandings(), requestCallback, URIHelper.GET_CHALLENGER, type.name()), getActivity()).execute();
     }
 
     protected void executeGetRankedHistory5v5(Request.RequestCallback requestCallback, String summonerId) {

@@ -61,17 +61,19 @@ public class StaticDataHolder {
     public void init() {
         if (mChampionIcons == null && mProfileIcons == null && mSpellIcons == null) {
             String champResponse = SharedPrefsUtil.getSharedPrefs(AssetReaderUtil.CONSTANT_CHAMPION, mContext);
-            Log.e(getClass().getSimpleName(), "response - " + champResponse);
+            Log.e(getClass().getSimpleName(), "champResponse - " + champResponse);
             if (NullChecker.isNullOrEmpty(champResponse)) {
                 champResponse = AssetReaderUtil.read(FILE_NAME_CHAMPIONS, mContext);
             }
             mChampionIcons = new ChampionIcons().parse(champResponse);
             String profileRsponse = SharedPrefsUtil.getSharedPrefs(AssetReaderUtil.CONSTANT_PROFILE, mContext);
+            Log.e(getClass().getSimpleName(), "profileResponse - " + profileRsponse);
             if (NullChecker.isNullOrEmpty(profileRsponse)) {
                 profileRsponse = AssetReaderUtil.read(FILE_NAME_PROFILE, mContext);
             }
             mProfileIcons = new ProfileIcons().parse(profileRsponse);
             String spellResponse = SharedPrefsUtil.getSharedPrefs(AssetReaderUtil.CONSTANT_SUMMONER, mContext);
+            Log.e(getClass().getSimpleName(), "spellResponse - " + spellResponse);
             if (NullChecker.isNullOrEmpty(spellResponse)) {
                 spellResponse = AssetReaderUtil.read(FILE_NAME_SUMMONER, mContext);
             }

@@ -1,6 +1,8 @@
 package com.github.koshkin.leagueoflegendsstats.networking;
 
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.API_KEY;
+import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.LEAGUE_CHALLENGER;
+import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.LEAGUE_MASTER;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.NA_BASE_URI;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.NA_STATIC_DATA_URI;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.NA_STATIC_URI;
@@ -28,6 +30,8 @@ public enum URIHelper {
     GET_PROFILE_URI(PROFILE_ICON, NA_STATIC_URI),
     GET_JSON(STATIC_DATA, NA_STATIC_DATA_URI),
     GET_SPRITES(STATIC_SPRITE, NA_STATIC_URI),
+    GET_CHALLENGER(LEAGUE_CHALLENGER, NA_BASE_URI),
+    GET_MASTER(LEAGUE_MASTER, NA_BASE_URI),
     GET_REALM(REALM, NA_BASE_URI);
 
     private final String mBaseUri;
@@ -43,7 +47,12 @@ public enum URIHelper {
     public String getUrl(String... params) {
         boolean isNonStaticContent = mBaseUri.equalsIgnoreCase(NA_BASE_URI);
 
-        String url = mBaseUri + mOperationUrl + (isNonStaticContent ? API_KEY : "");
+        String url = mBaseUri + mOperationUrl;
+
+        String apiKey = API_KEY;
+        if (url.contains("?"))
+            apiKey = apiKey.replace("?", "&");
+        url = url + (isNonStaticContent ? apiKey : "");
 
         if (isNonStaticContent)
             url = url.replaceFirst("%s", sRegion.getRegionName());

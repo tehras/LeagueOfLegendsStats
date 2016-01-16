@@ -22,4 +22,13 @@
     <string name="most_played_champs_no_found">No Champion History Found</string>
     <string name="match_history_title">Recent Match History</string>
     <string name="match_history_view_more_text">View Full Recent Matches</string>
+    <string name="win_percentage">Win %</string>
+    <string name="top_champions">Top Challenger Players</string>
+    <string name="no_challengers_found">No Challenger Players Found</string>
+    <string name="view_all_challengers">View All Challengers</string>
+    <string name="challenger_title">Top Ranked Challengers</string>
+    <string name="accessibility_hot_streak">hot streak</string>
+    <string name="accessibility_new_player">new player</string>
+    <string name="accessibility_veteran">veteran</string>
+    <string name="accessibility_next">click nywhere to continue</string>
 </resources>

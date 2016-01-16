@@ -95,10 +95,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (savedInstanceState == null) {
-            startFragment(HomeFragment.class);
-        }
-
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
         mProgressBar = (ContentLoadingProgressBar) findViewById(R.id.loading_bar);
@@ -113,7 +109,10 @@ public class MainActivity extends AppCompatActivity
         mTimer = new Timer();
         mTimer.schedule(new MyTimerTask(), 0, 2000);
 
-        new FirstInitialize(this, this, mLoadingText).initialize();
+        //Has to go last
+        if (savedInstanceState == null)
+            new FirstInitialize(this, this, mLoadingText).initialize();
+
     }
 
     int imageI = 0;
@@ -138,6 +137,7 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
+
     }
 
     public void startFragment(Class<? extends BaseFragment> fragmentClass) {
@@ -245,10 +245,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void completed() {
         mTimer.cancel();
+        Log.e(getClass().getSimpleName(), "Main Loading Layout is GONE");
         mMainLoadingLayout.setVisibility(View.GONE);
+        startFragment(HomeFragment.class);
     }
 
     public static String[] loadingText = new String[]{"Loading...", "Please Wait...", "Getting all the images...", "Clearing the table...", "Doing the dishes...", "Back to getting all the images...", "That image is cute...", "Oh wait.. no it's not...", "Please wait..."};
-
 
 }

@@ -3,4 +3,9 @@
     <declare-styleable name="ToolbarSearchView">
         <attr name="textHint" format="string" localization="suggested"/>
     </declare-styleable>
+    <declare-styleable name="CustomCardView">
+        <attr name="titleText" format="string" localization="suggested"/>
+        <attr name="viewMoreText" format="string" localization="suggested"/>
+        <attr name="dataNotFound" format="string" localization="suggested"/>
+    </declare-styleable>
 </resources>
