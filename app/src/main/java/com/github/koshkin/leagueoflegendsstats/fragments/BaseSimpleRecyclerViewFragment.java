@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 
 import com.github.koshkin.leagueoflegendsstats.BaseFragment;
 import com.github.koshkin.leagueoflegendsstats.R;
@@ -18,12 +20,30 @@ import com.github.koshkin.leagueoflegendsstats.utils.Utils;
  */
 public abstract class BaseSimpleRecyclerViewFragment extends BaseFragment {
 
+    private LinearLayout mExtraLayout;
+
+    protected void toggleLayout() {
+        if (mExtraLayout.getVisibility() == View.VISIBLE)
+            hideExtraLayout();
+        else
+            showExtraLayout();
+    }
+
+    protected void showExtraLayout() {
+        mExtraLayout.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_from_top));
+        mExtraLayout.setVisibility(View.VISIBLE);
+    }
+
+    protected void hideExtraLayout() {
+        mExtraLayout.setVisibility(View.GONE);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ranked_champons_layout, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         Utils.setUpRecyclerView(recyclerView);
 
         recyclerView.setAdapter(getAdapter());
@@ -36,12 +56,21 @@ public abstract class BaseSimpleRecyclerViewFragment extends BaseFragment {
             }
         });
 
+        mExtraLayout = (LinearLayout) rootView.findViewById(R.id.extra_layout);
+        final View view = populateExtraLayout(inflater);
+        if (view != null) {
+            mExtraLayout.addView(view);
+        }
+
+        mExtraLayout.setVisibility(View.GONE);
+
         //noinspection deprecation
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             private int THRESHOLD = 0;
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                hideExtraLayout();
                 if ((dy) > THRESHOLD) {
                     ((FloatingActionButton) getActivity().findViewById(R.id.fab)).hide();
                 } else if ((dy) < -THRESHOLD) {
@@ -51,6 +80,10 @@ public abstract class BaseSimpleRecyclerViewFragment extends BaseFragment {
         });
 
         return rootView;
+    }
+
+    protected View populateExtraLayout(LayoutInflater inflater) {
+        return null;
     }
 
     public abstract RecyclerView.Adapter getAdapter();

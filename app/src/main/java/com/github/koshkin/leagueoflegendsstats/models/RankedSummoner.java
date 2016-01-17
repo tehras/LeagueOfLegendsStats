@@ -2,6 +2,8 @@ package com.github.koshkin.leagueoflegendsstats.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Comparator;
+
 /**
  * Created by tehras on 1/15/16.
  */
@@ -29,6 +31,7 @@ public class RankedSummoner implements Comparable<RankedSummoner> {
     private boolean mIsInactive;
 
     private Summoner mSummoner;
+    private int mRank;
 
     public Summoner getSummoner() {
         return mSummoner;
@@ -130,9 +133,7 @@ public class RankedSummoner implements Comparable<RankedSummoner> {
 
         RankedSummoner summoner = (RankedSummoner) o;
 
-        if (mPlayerOrTeamId != null ? !mPlayerOrTeamId.equals(summoner.mPlayerOrTeamId) : summoner.mPlayerOrTeamId != null)
-            return false;
-        return mPlayerOrTeamName != null ? mPlayerOrTeamName.equals(summoner.mPlayerOrTeamName) : summoner.mPlayerOrTeamName == null;
+        return mPlayerOrTeamId != null ? mPlayerOrTeamId.equals(summoner.mPlayerOrTeamId) : summoner.mPlayerOrTeamId == null && (mPlayerOrTeamName != null ? mPlayerOrTeamName.equals(summoner.mPlayerOrTeamName) : summoner.mPlayerOrTeamName == null);
 
     }
 
@@ -141,5 +142,52 @@ public class RankedSummoner implements Comparable<RankedSummoner> {
         int result = mPlayerOrTeamId != null ? mPlayerOrTeamId.hashCode() : 0;
         result = 31 * result + (mPlayerOrTeamName != null ? mPlayerOrTeamName.hashCode() : 0);
         return result;
+    }
+
+    public void setRank(int rank) {
+        mRank = rank;
+    }
+
+    public int getRank() {
+        return mRank;
+    }
+
+    public class WinComparator implements Comparator<RankedSummoner> {
+        @Override
+        public int compare(RankedSummoner lhs, RankedSummoner rhs) {
+            return (int) (rhs.getWins() - lhs.getWins());
+        }
+    }
+
+    public class LossComparator implements Comparator<RankedSummoner> {
+        @Override
+        public int compare(RankedSummoner lhs, RankedSummoner rhs) {
+            return (int) (rhs.getLosses() - lhs.getLosses());
+        }
+    }
+
+    public class PointsComparator implements Comparator<RankedSummoner> {
+        @Override
+        public int compare(RankedSummoner lhs, RankedSummoner rhs) {
+            return (int) (rhs.getLeaguePoints() - lhs.getLeaguePoints());
+        }
+    }
+
+    public class WinPercentageComparator implements Comparator<RankedSummoner> {
+
+        @Override
+        public int compare(RankedSummoner lhs, RankedSummoner rhs) {
+            return getWinPercentage(rhs) - getWinPercentage(lhs);
+        }
+
+        private int getWinPercentage(RankedSummoner summoner) {
+            double winPercentage = ((summoner.getWins() * 100) / ((summoner.getWins()) + summoner.getLosses()));
+
+            return (int) winPercentage;
+        }
+    }
+
+    public enum SortBy {
+        WINS, LOSSES, WINP, POINTS
     }
 }

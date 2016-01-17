@@ -119,7 +119,7 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
             for (RankedSummoner summoner : mLeagueStandings.getEntries()) {
                 if (i > 2)
                     break;
-                mChallengerLayout.addViewToHolder(getChallengerView(summoner, i + 1));
+                mChallengerLayout.addViewToHolder(getChallengerView(summoner));
                 if (summonersToReturn == null)
                     summonersToReturn = new ArrayList<>();
 
@@ -133,12 +133,12 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
         return summonersToReturn;
     }
 
-    private View getChallengerView(RankedSummoner summoner, int rank) {
+    private View getChallengerView(RankedSummoner summoner) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.partial_summoner, null);
 
-        new LeagueChampionHolder(view).populate(summoner, (MainActivity) getActivity(), rank, false);
+        new LeagueChampionHolder(view).populate(summoner, (MainActivity) getActivity(), LeagueQueueType.RANKED_SOLO_5x5, false);
 
         return view;
     }

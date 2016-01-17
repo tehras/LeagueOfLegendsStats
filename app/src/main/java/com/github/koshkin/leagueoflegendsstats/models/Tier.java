@@ -5,6 +5,24 @@ package com.github.koshkin.leagueoflegendsstats.models;
  */
 public enum Tier {
 
-    CHALLENGER, MASTER, DIAMOND, PLATINUM, GOLD, SILVER, BRONZE
+    CHALLENGER("Challenger"), MASTER("Master"), DIAMOND("Diamond"), PLATINUM("Platinum"), GOLD("Gold"), SILVER("Silver"), BRONZE("Bronze");
 
+    private final String mName;
+
+    Tier(String tierName) {
+        mName = tierName;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public static Tier fromName(String name) {
+        for (Tier tier : values()) {
+            if (tier.getName().equalsIgnoreCase(name))
+                return tier;
+        }
+
+        return CHALLENGER;
+    }
 }

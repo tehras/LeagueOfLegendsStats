@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.fragments.SummonerStatsFragment;
+import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.RankedSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
@@ -55,7 +56,7 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
     }
 
     @SuppressLint("SetTextI18n")
-    public void populate(final RankedSummoner summoner, final MainActivity activity, int rank, boolean t) {
+    public void populate(final RankedSummoner summoner, final MainActivity activity, LeagueQueueType queueType, boolean t) {
         mWins.setText(String.valueOf(summoner.getWins()));
         mLosses.setText(String.valueOf(summoner.getLosses()));
 
@@ -67,7 +68,7 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
         mName.setText(summoner.getPlayerOrTeamName());
         mName.setSelected(true);
 
-        mRank.setText(Html.fromHtml("Rank <b>" + String.valueOf(rank) + "</b>"));
+        mRank.setText(Html.fromHtml("Rank <b>" + String.valueOf(summoner.getRank()) + "</b>"));
 
         if (summoner.isFreshBlood())
             mNewPlayer.setVisibility(View.VISIBLE);
@@ -86,11 +87,13 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
 
         if (t)
             mDivider.setVisibility(View.GONE);
-//
+
         if (summoner.getSummoner() != null) {
             populateImage(summoner.getSummoner(), activity);
-        } else {
+        } else if (queueType == LeagueQueueType.RANKED_SOLO_5x5) {
             mIcon.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_account_circle_black_48dp, null));
+        } else {
+            mIcon.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_social_group, null));
         }
 
         mTotalView.setOnClickListener(new View.OnClickListener() {

@@ -8,4 +8,12 @@
         <attr name="viewMoreText" format="string" localization="suggested"/>
         <attr name="dataNotFound" format="string" localization="suggested"/>
     </declare-styleable>
+    <declare-styleable name="MaterialButton">
+        <attr name="buttonText" format="string" localization="suggested"/>
+        <attr name="textColor" format="color" localization="suggested"/>
+    </declare-styleable>
+    <declare-styleable name="CustomSpinner">
+        <attr name="spinnerText" format="string" localization="suggested"/>
+        <attr name="spinnerTextColor" format="color" localization="suggested"/>
+    </declare-styleable>
 </resources>

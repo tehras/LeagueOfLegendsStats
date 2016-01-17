@@ -3,6 +3,8 @@ package com.github.koshkin.leagueoflegendsstats;
 import android.app.Fragment;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.ImageView;
 
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
@@ -29,13 +31,17 @@ import java.util.ArrayList;
 public class BaseFragment extends Fragment {
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //leave blank by defualt
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         hideErrorLayout();
     }
-
-
 
     @Override
     public void onResume() {
@@ -82,6 +88,10 @@ public class BaseFragment extends Fragment {
 
     protected void executeGetChallengerStandings(Request.RequestCallback requestCallback, LeagueQueueType type) {
         new Executor(new Request(Request.RequestType.GET, new LeagueStandings(), requestCallback, URIHelper.GET_CHALLENGER, type.name()), getActivity()).execute();
+    }
+
+    protected void executeGetMasterStandings(Request.RequestCallback requestCallback, LeagueQueueType type) {
+        new Executor(new Request(Request.RequestType.GET, new LeagueStandings(), requestCallback, URIHelper.GET_MASTER, type.name()), getActivity()).execute();
     }
 
     protected void executeGetRankedHistory5v5(Request.RequestCallback requestCallback, String summonerId) {

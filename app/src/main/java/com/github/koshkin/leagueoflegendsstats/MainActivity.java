@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,6 +42,15 @@ public class MainActivity extends AppCompatActivity
     private View mMainLoadingLayout;
     private TextView mLoadingText;
     private Timer mTimer;
+    private PopupWindow mLastPopupWindow;
+    private Toolbar mToolbar;
+
+    @Override
+    protected void onPause() {
+        if (mLastPopupWindow != null)
+            mLastPopupWindow.dismiss();
+        super.onPause();
+    }
 
     public void showLoading() {
         if (mProgressLayout != null) {
@@ -82,14 +92,14 @@ public class MainActivity extends AppCompatActivity
         if (!BuildConfig.DEBUG)
             Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main); //main content view
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar); //toolbar
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         FloatingActionButtonViewHelper.getInstance(this).initialize(); //initialized the fab helper
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -133,8 +143,11 @@ public class MainActivity extends AppCompatActivity
         imageI++;
     }
 
-    private class MyTimerTask extends TimerTask {
+    public void setLastPopupWindow(PopupWindow lastPopupWindow) {
+        mLastPopupWindow = lastPopupWindow;
+    }
 
+    private class MyTimerTask extends TimerTask {
         @Override
         public void run() {
             runOnUiThread(new Runnable() {
@@ -144,7 +157,6 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
-
     }
 
     public void startFragment(Class<? extends BaseFragment> fragmentClass) {
@@ -184,8 +196,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        //blank by default
         return true;
     }
 
@@ -231,7 +248,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public Toolbar getToolbar() {
-        return (Toolbar) findViewById(R.id.toolbar);
+        return mToolbar;
     }
 
     public void openKeyboard(EditText editText) {

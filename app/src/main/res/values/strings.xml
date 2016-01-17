@@ -31,4 +31,10 @@
     <string name="accessibility_new_player">new player</string>
     <string name="accessibility_veteran">veteran</string>
     <string name="accessibility_next">click nywhere to continue</string>
+    <string name="overflow_sort">Sort</string>
+    <string name="overflow_filter">Filter</string>
+    <string name="menu_sort_by_points">By Points</string>
+    <string name="menu_sort_by_wins">By Wins</string>
+    <string name="menu_sort_by_win_p">Win %</string>
+    <string name="menu_sort_by_losses">By Losses</string>
 </resources>

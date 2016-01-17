@@ -28,5 +28,7 @@
     <color name="average">#FF9800</color>
     <color name="bad">#F44336</color>
 
-
+    <color name="elevation_background">#FFFFFF</color>
+    <color name="text_color_dark">#000000</color>
+    <color name="text_color_grey">#9E9E9E</color>
 </resources>

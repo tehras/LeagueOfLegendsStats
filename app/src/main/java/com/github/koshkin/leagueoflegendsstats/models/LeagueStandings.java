@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 /**
@@ -74,14 +75,28 @@ public class LeagueStandings implements Request.ParserCallback<LeagueStandings> 
 
                 addToSummonerRanked(summoners);
             } else {
-                return new Gson().fromJson(body, this.getClass());
+                return assignRanking(new Gson().fromJson(body, this.getClass()));
             }
 
             return this;
         } catch (JSONException e) {
             Log.e(getClass().getSimpleName(), "JsonException - ", e);
         }
-        return new Gson().fromJson(body, this.getClass());
+        return assignRanking(new Gson().fromJson(body, this.getClass()));
+    }
+
+    private LeagueStandings assignRanking(LeagueStandings leagueStandings) {
+        if (leagueStandings != null && leagueStandings.getEntries() != null && leagueStandings.getEntries().size() > 0) {
+            ArrayList<RankedSummoner> entries = leagueStandings.getEntries();
+            Collections.sort(entries);
+
+            for (int i = 1; i < entries.size() + 1; i++) {
+                RankedSummoner rankedSummoner = entries.get(i - 1);
+                rankedSummoner.setRank(i);
+            }
+        }
+
+        return leagueStandings;
     }
 
     /**

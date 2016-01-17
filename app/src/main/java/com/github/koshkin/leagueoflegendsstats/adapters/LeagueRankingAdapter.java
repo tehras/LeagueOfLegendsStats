@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.holders.LeagueChampionHolder;
+import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.RankedSummoner;
 
@@ -20,15 +21,31 @@ import java.util.ArrayList;
  */
 public abstract class LeagueRankingAdapter extends RecyclerView.Adapter<LeagueChampionHolder> {
 
+    private final LeagueQueueType mLequeQueueType;
     private ArrayList<RankedSummoner> mEntries;
     private final Activity mContext;
     private ArrayList<RankedSummoner> mArrayToExecute;
 
-    public LeagueRankingAdapter(LeagueStandings leagueStandings, Activity activity) {
+    public LeagueRankingAdapter(LeagueStandings leagueStandings, Activity activity, LeagueQueueType leagueQueueType) {
         mEntries = leagueStandings.getEntries();
         mContext = activity;
+        mLequeQueueType = leagueQueueType;
+
+        if (leagueQueueType == LeagueQueueType.RANKED_SOLO_5x5)
+            getItemsToExecute(mEntries, true);
+    }
+
+    public void updateAllNew(LeagueStandings leagueStandings) {
+        mEntries = leagueStandings.getEntries();
 
         getItemsToExecute(mEntries, true);
+        notifyDataSetChanged();
+    }
+
+    public void updateError() {
+        mEntries = new ArrayList<>();
+
+        notifyDataSetChanged();
     }
 
     private void getItemsToExecute(ArrayList<RankedSummoner> entries, boolean isFirst) {
@@ -75,9 +92,10 @@ public abstract class LeagueRankingAdapter extends RecyclerView.Adapter<LeagueCh
         if (mHighestPos < position) {
             mHighestPos = position;
 
-            checkIfNeedToExecuteMore(position);
+            if (mLequeQueueType == LeagueQueueType.RANKED_SOLO_5x5)
+                checkIfNeedToExecuteMore(position);
         }
-        holder.populate(summoner, (MainActivity) mContext, position + 1, true);
+        holder.populate(summoner, (MainActivity) mContext, mLequeQueueType, true);
     }
 
     private void checkIfNeedToExecuteMore(int position) {
