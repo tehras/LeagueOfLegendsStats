@@ -9,6 +9,7 @@
         android:id="@+id/challenger_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        customCard:applyMargin="false"
         customCard:dataNotFound="@string/no_challengers_found"
         customCard:titleText="@string/challenger_title"
         customCard:viewMoreText="@string/view_all_challengers"/>

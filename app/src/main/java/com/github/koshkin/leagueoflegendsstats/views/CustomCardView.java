@@ -100,6 +100,7 @@ public class CustomCardView extends LinearLayout {
     private void init(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.CustomCardView, 0, 0);
+        boolean applyMargin = a.getBoolean(R.styleable.CustomCardView_applyMargin, true);
         String title = a.getString(R.styleable.CustomCardView_titleText);
         String viewMore = a.getString(R.styleable.CustomCardView_viewMoreText);
         String notFound = a.getString(R.styleable.CustomCardView_dataNotFound);
@@ -115,6 +116,13 @@ public class CustomCardView extends LinearLayout {
         mViewAllButton = (MaterialRippleLayout) view.findViewById(R.id.custom_view_view_all);
         mViewHolder = (LinearLayout) view.findViewById(R.id.custom_view_layout_holder);
         mNotFoundText = (TextView) view.findViewById(R.id.custom_view_not_found);
+
+        if (applyMargin) {
+            LinearLayout.LayoutParams params = (LayoutParams) mViewHolder.getLayoutParams();
+            params.setMargins(context.getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin), 0, context.getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin), 0);
+            mViewHolder.setLayoutParams(params);
+            mViewHolder.requestLayout();
+        }
 
         if (!NullChecker.isNullOrEmpty(title))
             mTitleEditText.setText(title);

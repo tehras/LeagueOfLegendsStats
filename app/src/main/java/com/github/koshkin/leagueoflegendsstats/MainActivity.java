@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,11 +48,15 @@ public class MainActivity extends AppCompatActivity
     private PopupWindow mLastPopupWindow;
     private Toolbar mToolbar;
     private WeakReference<FragmentActivity> thisActivity;
+    private boolean mIsPaused;
+    private NestedScrollView mNestedScrollView;
 
     @Override
     protected void onPause() {
         if (mLastPopupWindow != null)
             mLastPopupWindow.dismiss();
+
+        mIsPaused = true;
         super.onPause();
     }
 
@@ -112,6 +117,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        mNestedScrollView = (NestedScrollView) findViewById(R.id.scroll_view_container);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
         mProgressBar = (ContentLoadingProgressBar) findViewById(R.id.loading_bar);
@@ -149,6 +155,11 @@ public class MainActivity extends AppCompatActivity
         imageI++;
     }
 
+    public void resetScrollView() {
+        if (mNestedScrollView != null)
+            mNestedScrollView.smoothScrollTo(0, 0);
+    }
+
     public void setLastPopupWindow(PopupWindow lastPopupWindow) {
         mLastPopupWindow = lastPopupWindow;
     }
@@ -166,7 +177,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void startFragment(Class<? extends BaseFragment> fragmentClass) {
-        if (thisActivity == null)
+        if (thisActivity == null || mIsPaused)
             return;
 
         try {
@@ -182,7 +193,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void startFragment(BaseFragment fragment) {
-        if (thisActivity == null)
+        if (thisActivity == null || mIsPaused)
             return;
 
         getFragmentManager().beginTransaction()
@@ -210,6 +221,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        mIsPaused = false;
     }
 
     @Override

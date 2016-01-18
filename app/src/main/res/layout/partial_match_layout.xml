@@ -1,186 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout
+<com.balysv.materialripple.MaterialRippleLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/material_button_layout"
     android:layout_height="wrap_content"
     >
 
-    <ImageView
-        android:id="@+id/ribbon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ribbon_top_negative_margin"
-        android:src="@drawable/ic_action_bookmark"/>
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/ribbon"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin_small"
-            android:layout_marginTop="@dimen/activity_vertical_margin">
-
-            <TextView
-                android:id="@+id/game_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ranked Solo"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/text_size_medium_small"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/game_started"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin_small"
-                android:layout_toEndOf="@+id/game_type"
-                android:text="15 hours ago"
-                android:textSize="@dimen/text_size_medium_small"
-                android:textStyle="italic"/>
-
-            <TextView
-                android:id="@+id/game_length"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:gravity="end"
-                android:text="42m 12s"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/text_size_medium_small"
-                android:textStyle="bold"/>
-
-        </RelativeLayout>
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/ribbon_top_negative_margin"
+            android:src="@drawable/ic_action_bookmark"/>
 
         <LinearLayout
-            android:id="@+id/champion_layout_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/activity_vertical_margin">
+            android:layout_marginEnd="@dimen/activity_horizontal_margin_large"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:orientation="vertical"
+            >
 
-            <!-- Images and Champ Name -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <include layout="@layout/partial_match_individual_icons_layout" />
-
-                <TextView
-                    android:id="@+id/champion_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
-                    android:ellipsize="end"
-                    android:text="Champ"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorAccent"
-                    android:textStyle="bold"/>
-
-            </LinearLayout>
-
-
-            <!-- Middle -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="30"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <include layout="@layout/partial_match_individual_kda_layout"/>
-
-            </LinearLayout>
-
-            <!-- Right -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="30"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/game_champ_level"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Level 18"/>
-
-                <TextView
-                    android:id="@+id/game_cs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="189 CS"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/game_wards"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Bought 3 Wards"/>
-
-                <TextView
-                    android:id="@+id/game_kill_part"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Kill Part. - 70%"/>
-
-            </LinearLayout>
-
-            <!-- Win/Loss -->
             <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="15"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin_small"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
 
                 <TextView
-                    android:id="@+id/game_result"
+                    android:id="@+id/game_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/activity_vertical_margin_small"
-                    android:text="WIN"
-                    android:textSize="@dimen/text_size_large_med"
+                    android:text="Ranked Solo"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/text_size_medium_small"
                     android:textStyle="bold"/>
 
-                <RelativeLayout
+                <TextView
+                    android:id="@+id/game_started"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin_small"
-                    android:background="@drawable/background_adc">
+                    android:layout_marginStart="@dimen/activity_horizontal_margin_small"
+                    android:layout_toEndOf="@+id/game_type"
+                    android:text="15 hours ago"
+                    android:textSize="@dimen/text_size_medium_small"
+                    android:textStyle="italic"/>
 
-                    <TextView
-                        android:id="@+id/game_role"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="ADC"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/text_size_xsmall"/>
-
-                </RelativeLayout>
+                <TextView
+                    android:id="@+id/game_length"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="end"
+                    android:text="42m 12s"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/text_size_medium_small"
+                    android:textStyle="bold"/>
 
             </RelativeLayout>
 
+            <LinearLayout
+                android:id="@+id/champion_layout_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin">
+
+                <!-- Images and Champ Name -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/partial_match_individual_icons_layout"/>
+
+                    <TextView
+                        android:id="@+id/champion_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                        android:ellipsize="end"
+                        android:text="Champ"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorAccent"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+
+                <!-- Middle -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="30"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/partial_match_individual_kda_layout"/>
+
+                </LinearLayout>
+
+                <!-- Right -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="30"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/game_champ_level"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Level 18"
+                        android:textSize="@dimen/text_size_small"/>
+
+                    <TextView
+                        android:id="@+id/game_cs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="189 CS"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/game_wards"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bought 3 Wards"
+                        android:textSize="@dimen/text_size_small"/>
+
+                    <TextView
+                        android:id="@+id/game_kill_part"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Kill Part. - 70%"
+                        android:textSize="@dimen/text_size_small"/>
+
+                </LinearLayout>
+
+                <!-- Win/Loss -->
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="15"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/game_result"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/activity_vertical_margin_small"
+                        android:text="WIN"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textStyle="bold"/>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin_small"
+                        android:background="@drawable/background_adc">
+
+                        <TextView
+                            android:id="@+id/game_role"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ADC"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/text_size_xsmall"/>
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <include
+                layout="@layout/partial_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                />
         </LinearLayout>
 
-        <include
-            layout="@layout/partial_divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            />
-    </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_chevron_right_black_24dp"/>
 
-</FrameLayout>
+    </FrameLayout>
+
+</com.balysv.materialripple.MaterialRippleLayout>

@@ -35,7 +35,7 @@ public class GameHolder extends RecyclerView.ViewHolder {
     public GameHolder(View view) {
         super(view);
 
-        mItemView = view;
+        mItemView = view.findViewById(R.id.material_button_layout);
 
         ribbon = (ImageView) view.findViewById(R.id.ribbon);
 

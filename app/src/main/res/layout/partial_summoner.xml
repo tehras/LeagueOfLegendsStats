@@ -1,262 +1,267 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.balysv.materialripple.MaterialRippleLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:orientation="vertical"
-    >
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_vertical_margin_xsmall"
-        android:paddingTop="@dimen/activity_vertical_margin_small">
-
-        <TextView
-            android:id="@+id/summoner_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:maxLength="12"
-            android:maxLines="1"
-            android:text="Tehras"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/ranked_rank"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:paddingEnd="@dimen/activity_horizontal_margin"
-            android:text="Rank 1"
-            />
-
-    </RelativeLayout>
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/summoner_header_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="true"
-        android:orientation="horizontal"
-        android:paddingBottom="@dimen/activity_vertical_margin_small"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:orientation="vertical"
         >
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="28"
-            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_xsmall"
+            android:paddingTop="@dimen/activity_vertical_margin_small">
+
+            <TextView
+                android:id="@+id/summoner_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:maxLength="12"
+                android:maxLines="1"
+                android:text="Tehras"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/ranked_rank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:text="Rank 1"
+                tools:ignore="RtlSymmetry"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/summoner_header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="true"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/activity_vertical_margin_small"
             >
 
-            <include layout="@layout/layout_summoner_icon_small"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="95"
-            android:baselineAligned="false"
-            android:orientation="horizontal">
-
             <LinearLayout
-                android:id="@+id/wins_losses_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="70"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal"
-                tools:ignore="NestedWeights">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/ranked_wins"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="423"
-                        android:textColor="@color/success_green"
-                        android:textSize="@dimen/text_size_medium"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/wins"
-                        android:textSize="@dimen/text_size_small"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/ranked_losses"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="323"
-                        android:textColor="@color/failed_red"
-                        android:textSize="@dimen/text_size_medium"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/losses"
-                        android:textSize="@dimen/text_size_small"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/ranked_win_percentage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="58%"
-                        android:textColor="@color/failed_red"
-                        android:textSize="@dimen/text_size_medium"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/win_percentage"
-                        android:textSize="@dimen/text_size_small"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/streaks"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin_small"
-                android:layout_marginStart="@dimen/activity_horizontal_margin_small"
-                android:layout_weight="10"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:layout_weight="28"
+                android:orientation="vertical"
+                >
+
+                <include layout="@layout/layout_summoner_icon_small"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="95"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="33"
-                    android:gravity="center_horizontal">
+                    android:id="@+id/wins_losses_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="70"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    tools:ignore="NestedWeights">
 
-                    <ImageView
-                        android:id="@+id/ranked_hot_streak"
-                        android:layout_width="@dimen/ranked_streak_size"
-                        android:layout_height="@dimen/ranked_streak_size"
-                        android:layout_margin="@dimen/activity_vertical_margin_xsmall"
-                        android:contentDescription="@string/accessibility_hot_streak"
-                        android:src="@drawable/ic_social_whatshot"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/ranked_wins"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="423"
+                            android:textColor="@color/success_green"
+                            android:textSize="@dimen/text_size_medium"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/wins"
+                            android:textSize="@dimen/text_size_small"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/ranked_losses"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="323"
+                            android:textColor="@color/failed_red"
+                            android:textSize="@dimen/text_size_medium"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/losses"
+                            android:textSize="@dimen/text_size_small"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/ranked_win_percentage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:text="58%"
+                            android:textColor="@color/failed_red"
+                            android:textSize="@dimen/text_size_medium"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/win_percentage"
+                            android:textSize="@dimen/text_size_small"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="33"
-                    android:gravity="center_horizontal">
+                    android:id="@+id/streaks"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin_small"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin_small"
+                    android:layout_weight="10"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/ranked_new_player"
-                        android:layout_width="@dimen/ranked_streak_size"
-                        android:layout_height="@dimen/ranked_streak_size"
-                        android:layout_margin="@dimen/activity_vertical_margin_xsmall"
-                        android:contentDescription="@string/accessibility_new_player"
-                        android:src="@drawable/ic_hardware_keyboard_alt"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="33"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:id="@+id/ranked_hot_streak"
+                            android:layout_width="@dimen/ranked_streak_size"
+                            android:layout_height="@dimen/ranked_streak_size"
+                            android:layout_margin="@dimen/activity_vertical_margin_xsmall"
+                            android:contentDescription="@string/accessibility_hot_streak"
+                            android:src="@drawable/ic_social_whatshot"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="33"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:id="@+id/ranked_new_player"
+                            android:layout_width="@dimen/ranked_streak_size"
+                            android:layout_height="@dimen/ranked_streak_size"
+                            android:layout_margin="@dimen/activity_vertical_margin_xsmall"
+                            android:contentDescription="@string/accessibility_new_player"
+                            android:src="@drawable/ic_hardware_keyboard_alt"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="33"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:id="@+id/ranked_veteran"
+                            android:layout_width="@dimen/ranked_streak_size"
+                            android:layout_height="@dimen/ranked_streak_size"
+                            android:layout_margin="@dimen/activity_vertical_margin_xsmall"
+                            android:contentDescription="@string/accessibility_veteran"
+                            android:src="@drawable/ic_action_star_rate"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="33"
-                    android:gravity="center_horizontal">
+                    android:id="@+id/points_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin_small"
+                    android:layout_weight="25"
+                    android:gravity="end"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/ranked_veteran"
-                        android:layout_width="@dimen/ranked_streak_size"
-                        android:layout_height="@dimen/ranked_streak_size"
-                        android:layout_margin="@dimen/activity_vertical_margin_xsmall"
-                        android:contentDescription="@string/accessibility_veteran"
-                        android:src="@drawable/ic_action_star_rate"/>
+                    <TextView
+                        android:id="@+id/ranked_points"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="598 Pts"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textStyle="bold"/>
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/points_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin_small"
-                android:layout_weight="25"
-                android:gravity="end"
-                android:orientation="vertical">
+                android:layout_gravity="center_vertical"
+                android:layout_weight="10"
+                android:gravity="center_vertical|end">
 
-                <TextView
-                    android:id="@+id/ranked_points"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="598 Pts"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textStyle="bold"/>
+                    android:contentDescription="@string/accessibility_next"
+                    android:src="@drawable/ic_chevron_right_black_24dp"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="10"
-            android:gravity="center_vertical|end">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/accessibility_next"
-                android:src="@drawable/ic_chevron_right_black_24dp"/>
-
-        </LinearLayout>
-
+        <include
+            layout="@layout/partial_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
     </LinearLayout>
 
-    <include
-        layout="@layout/partial_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"/>
-</LinearLayout>
-
+</com.balysv.materialripple.MaterialRippleLayout>

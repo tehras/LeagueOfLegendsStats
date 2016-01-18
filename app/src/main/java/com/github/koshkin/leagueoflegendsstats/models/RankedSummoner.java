@@ -177,13 +177,11 @@ public class RankedSummoner implements Comparable<RankedSummoner> {
 
         @Override
         public int compare(RankedSummoner lhs, RankedSummoner rhs) {
-            return getWinPercentage(rhs) - getWinPercentage(lhs);
+            return Double.compare(getWinPercentage(rhs), getWinPercentage(lhs));
         }
 
-        private int getWinPercentage(RankedSummoner summoner) {
-            double winPercentage = ((summoner.getWins() * 100) / ((summoner.getWins()) + summoner.getLosses()));
-
-            return (int) winPercentage;
+        private double getWinPercentage(RankedSummoner summoner) {
+            return ((double) summoner.getWins() * 100d) / ((double) ((summoner.getWins()) + summoner.getLosses()));
         }
     }
 

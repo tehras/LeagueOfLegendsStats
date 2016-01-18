@@ -5,6 +5,7 @@
     </declare-styleable>
     <declare-styleable name="CustomCardView">
         <attr name="titleText" format="string" localization="suggested"/>
+        <attr name="applyMargin" format="boolean" localization="suggested"/>
         <attr name="viewMoreText" format="string" localization="suggested"/>
         <attr name="dataNotFound" format="string" localization="suggested"/>
     </declare-styleable>

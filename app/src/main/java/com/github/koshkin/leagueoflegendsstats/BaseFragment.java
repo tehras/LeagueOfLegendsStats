@@ -51,6 +51,7 @@ public class BaseFragment extends Fragment {
         if (getActivity() != null && getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).showFab();
             ((MainActivity) getActivity()).hideError();
+            ((MainActivity) getActivity()).resetScrollView();
         }
     }
 

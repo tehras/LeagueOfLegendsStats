@@ -7,8 +7,6 @@
     android:background="@android:color/white"
     android:elevation="@dimen/small_elevation"
     android:orientation="vertical"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin"
     >
 
     <include layout="@layout/partial_match_layout"/>
