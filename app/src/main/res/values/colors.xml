@@ -31,4 +31,11 @@
     <color name="elevation_background">#FFFFFF</color>
     <color name="text_color_dark">#000000</color>
     <color name="text_color_grey">#9E9E9E</color>
+
+    <color name="red_team_background">#99F44336</color>
+    <color name="blue_team_background">#992196F3</color>
+    <color name="red_team_color">#F44336</color>
+    <color name="blue_team_color">#2196F3</color>
+
+    <color name="gold_color">#FF8F00</color>
 </resources>

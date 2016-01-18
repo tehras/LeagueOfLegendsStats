@@ -118,7 +118,6 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
     }
 
     private void populateImage(final Summoner summoner, final Context context) {
-        mIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_account_circle_black_48dp, null));
         if (summoner != null && summoner.getSummonerInfo() != null) {
             new LoaderHelper() {
                 Drawable mImage;
@@ -127,6 +126,8 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
                 protected void postExecute() {
                     if (mImage != null) {
                         mIcon.setImageDrawable(mImage);
+                    } else {
+                        mIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_account_circle_black_48dp, null));
                     }
                 }
 

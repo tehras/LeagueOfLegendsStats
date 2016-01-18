@@ -1,10 +1,10 @@
 package com.github.koshkin.leagueoflegendsstats;
 
 import android.util.Log;
-import android.widget.TextView;
 
 import com.github.koshkin.leagueoflegendsstats.models.ChampionIcons;
 import com.github.koshkin.leagueoflegendsstats.models.DataParser;
+import com.github.koshkin.leagueoflegendsstats.models.ItemIcons;
 import com.github.koshkin.leagueoflegendsstats.models.ProfileIcons;
 import com.github.koshkin.leagueoflegendsstats.models.SpellIcons;
 import com.github.koshkin.leagueoflegendsstats.models.SpriteHolder;
@@ -56,6 +56,7 @@ public class FirstInitialize implements Request.RequestCallback {
                 String spellIconVersion = staticDataHolder.getSpellIcons().getVersion();
                 String championIcons = staticDataHolder.getChampionIcons().getVersion();
                 String profileIcons = staticDataHolder.getProfileIcons().getVersion();
+                String itemIcons = staticDataHolder.getItemIcons().getVersion();
 
                 URIConstants.NA_STATIC_URI = versionControl.getCdnUrl() + "/" + versionControl.getVersion() + "/img";
                 URIConstants.NA_STATIC_DATA_URI = versionControl.getCdnUrl() + "/" + versionControl.getVersion() + "/data";
@@ -68,6 +69,14 @@ public class FirstInitialize implements Request.RequestCallback {
                         new Executor(new Request(Request.RequestType.GET_IMAGE, new SpriteHolder(Type.SUMMONER), this, URIHelper.GET_SPRITES, "spell" + String.valueOf(i) + ".png"), mMainActivity).execute();
                     }
                 }
+                if (!itemIcons.equalsIgnoreCase(getFromMap(versionControl, "profileicon"))) {
+                    mExecuteCounter++;
+                    new Executor(new Request(Request.RequestType.GET, new DataParser(Type.ITEM, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), SPELL_JSON), mMainActivity).execute();
+                    for (int i = 0; i < 4; i++) {
+                        mExecuteCounter++;
+                        new Executor(new Request(Request.RequestType.GET_IMAGE, new SpriteHolder(Type.ITEM), this, URIHelper.GET_SPRITES, "item" + String.valueOf(i) + ".png"), mMainActivity).execute();
+                    }
+                }
                 if (!championIcons.equalsIgnoreCase(getFromMap(versionControl, "champion"))) {
                     mExecuteCounter++;
                     new Executor(new Request(Request.RequestType.GET, new DataParser(Type.CHAMPION, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), CHAMPION_JSON), mMainActivity).execute();
@@ -76,7 +85,7 @@ public class FirstInitialize implements Request.RequestCallback {
                         new Executor(new Request(Request.RequestType.GET_IMAGE, new SpriteHolder(Type.CHAMPION), this, URIHelper.GET_SPRITES, "champion" + String.valueOf(i) + ".png"), mMainActivity).execute();
                     }
                 }
-                if (!profileIcons.equalsIgnoreCase(getFromMap(versionControl, "profileicon"))) {
+                if (!profileIcons.equalsIgnoreCase(getFromMap(versionControl, "item"))) {
                     mExecuteCounter++;
                     new Executor(new Request(Request.RequestType.GET, new DataParser(Type.PROFILE, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), PROFILE_JSON), mMainActivity).execute();
                     for (int i = 0; i < 1; i++) {
@@ -124,6 +133,10 @@ public class FirstInitialize implements Request.RequestCallback {
                         case PROFILE:
                             if (parser.getResponseObject() instanceof ProfileIcons)
                                 StaticDataHolder.getInstance(mMainActivity).setProfileIcons((ProfileIcons) parser.getResponseObject());
+                            break;
+                        case ITEM:
+                            if (parser.getResponseObject() instanceof ItemIcons)
+                                StaticDataHolder.getInstance(mMainActivity).setItemIcons((ItemIcons) parser.getResponseObject());
                             break;
                     }
                 break;

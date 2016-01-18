@@ -1,5 +1,6 @@
 package com.github.koshkin.leagueoflegendsstats.fragments;
 
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
 import com.github.koshkin.leagueoflegendsstats.adapters.GameHistoryAdapter;
@@ -15,17 +16,30 @@ import java.util.ArrayList;
 public class SummonerRankedGamesFragment extends BaseSimpleRecyclerViewFragment {
 
     private ArrayList<Game> mGames;
+    private String mSummonerId;
 
-    public static SummonerRankedGamesFragment getInstance(ArrayList<Game> games) {
+    public static SummonerRankedGamesFragment getInstance(ArrayList<Game> games, String summonerId) {
         SummonerRankedGamesFragment fragment = new SummonerRankedGamesFragment();
         fragment.setGames(games);
+
+        Bundle args = new Bundle();
+        args.putString(ARG_SUMMONER_ID, summonerId);
+
+        fragment.setArguments(args);
 
         return fragment;
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mSummonerId = getArguments().getString(ARG_SUMMONER_ID);
+    }
+
+    @Override
     public RecyclerView.Adapter getAdapter() {
-        return new GameHistoryAdapter(mGames, getActivity());
+        return new GameHistoryAdapter(mGames, getActivity(), mSummonerId);
     }
 
     public void setGames(ArrayList<Game> games) {

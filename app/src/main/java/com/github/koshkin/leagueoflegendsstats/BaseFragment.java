@@ -16,6 +16,7 @@ import com.github.koshkin.leagueoflegendsstats.models.PlayerStatSummaries;
 import com.github.koshkin.leagueoflegendsstats.models.RecentGames;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Summoner;
+import com.github.koshkin.leagueoflegendsstats.models.match.FullMatch;
 import com.github.koshkin.leagueoflegendsstats.networking.Executor;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.networking.URIConstants;
@@ -49,11 +50,13 @@ public class BaseFragment extends Fragment {
 
         if (getActivity() != null && getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).showFab();
+            ((MainActivity) getActivity()).hideError();
         }
     }
 
     protected static final String ARG_SUMMONER_NAME = "summoner_name";
     protected static final String ARG_SUMMONER_ID = "summoner_id";
+    protected static final String ARG_MATCH_ID = "match_id";
     protected static final String ARG_SUMMONER_ICON_ID = "summoner_icon_id";
     protected static final String ARG_SUMMONER_WINS = "ranked_wins";
     protected static final String ARG_SUMMONER_LOSSES = "ranked_losses";
@@ -104,6 +107,10 @@ public class BaseFragment extends Fragment {
 
     protected void executeGetProfileImage(Request.RequestCallback requestCallback, String imageName) {
         new Executor(new Request(Request.RequestType.GET_IMAGE, new RecentGames(), requestCallback, URIHelper.GET_PROFILE_URI, imageName).addExtraParam(Request.KEY_IMAGE_NAME, imageName), getActivity()).execute();
+    }
+
+    protected void executeGetMatchData(Request.RequestCallback requestCallback, String matchId) {
+        new Executor(new Request(Request.RequestType.GET, new FullMatch(), requestCallback, URIHelper.GET_MATCH_STATS, matchId), getActivity()).execute();
     }
 
     protected void initializeErrorLayout(CharSequence title, CharSequence body) {

@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/match_header"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="@dimen/activity_vertical_margin_small"
+              android:background="@android:color/white"
+              android:elevation="@dimen/medium_elevation"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/match_team_stats_layout"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"/>
+
+        <include
+            layout="@layout/partial_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin_small"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/match_left_team"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:gravity="end"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin_small"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin_small">
+
+            <TextView
+                android:id="@+id/left_team_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Red Team"
+                android:textColor="@color/red_team_color"
+                android:textSize="@dimen/text_size_medium_small"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/left_team_kda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="43/12/13"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/left_team_gold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="46.3k Gold"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/left_team_towers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="2 Towers"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/left_team_dragons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="2 Dragons"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/left_team_barons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="2 Dragons"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:id="@+id/left_team_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_navigation_check"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin_small"
+            android:paddingTop="@dimen/activity_vertical_margin_small">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2sp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/match_label_team"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_size_small"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/match_label_kda"
+                android:textSize="@dimen/text_size_small"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/match_label_gold"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_size_small"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/match_label_towers"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_size_small"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/match_label_dragons"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_size_small"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/match_label_barons"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_size_small"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/match_label_win"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_size_small"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/match_right_team"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:gravity="start"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin_small"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin_small">
+
+            <TextView
+                android:id="@+id/right_team_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="Blue Team"
+                android:textColor="@color/blue_team_color"
+                android:textSize="@dimen/text_size_medium_small"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/right_team_kda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="43/12/13"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/right_team_gold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="46.3k Gold"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/right_team_towers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="2 Towers"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/right_team_dragons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="2 Dragons"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/right_team_barons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="2 Dragons"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:id="@+id/right_team_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_navigation_check"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -44,7 +44,7 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
     private String mWins;
     private String mLosses;
     private PlayerRanked mRankedStats;
-    private String mSummonerName;
+    private String mSummonerName, mSummonerId;
     private int mSummonerIconId;
     private View mRankedHeader, mNoFoundLayout;
     private MaterialRippleLayout mViewAllChamps;
@@ -137,7 +137,7 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String summonerId = getArguments().getString(ARG_SUMMONER_ID);
+        mSummonerId = getArguments().getString(ARG_SUMMONER_ID);
         mSummonerName = getArguments().getString(ARG_SUMMONER_NAME);
         mWins = getArguments().getString(ARG_SUMMONER_WINS);
         mLosses = getArguments().getString(ARG_SUMMONER_LOSSES);
@@ -147,8 +147,8 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         if (name != null)
             executeGetProfileImage(this, name);
 
-        executeGetRankedStats(this, summonerId);
-        executeGetRankeGameHistory(this, summonerId);
+        executeGetRankedStats(this, mSummonerId);
+        executeGetRankeGameHistory(this, mSummonerId);
     }
 
     private int resultsReturned = 0;
@@ -266,7 +266,7 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         //TOP Layout
 
         GameHolder h = new GameHolder(view);
-        h.populate(game, getActivity(), false);
+        h.populate(game, getActivity(), mSummonerId, false);
 
         return view;
     }
@@ -362,7 +362,7 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
             @Override
             public void onClick(View v) {
                 if (getActivity() != null && getActivity() instanceof MainActivity) {
-                    ((MainActivity) getActivity()).startFragment(SummonerRankedGamesFragment.getInstance(games));
+                    ((MainActivity) getActivity()).startFragment(SummonerRankedGamesFragment .getInstance(games, mSummonerId));
                 }
             }
         };

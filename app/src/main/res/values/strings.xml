@@ -37,4 +37,13 @@
     <string name="menu_sort_by_wins">By Wins</string>
     <string name="menu_sort_by_win_p">Win %</string>
     <string name="menu_sort_by_losses">By Losses</string>
+    <string name="match_label_team">Team</string>
+    <string name="match_label_kda">K/D/A</string>
+    <string name="match_label_towers">Towers</string>
+    <string name="match_label_dragons">Dragons</string>
+    <string name="match_label_barons">Barons</string>
+    <string name="match_label_win">Win</string>
+    <string name="match_label_gold">Gold</string>
+    <string name="match_team_stats_layout">Match Team Statistics</string>
+    <string name="match_team_stats_middle">Match Individual Statistics</string>
 </resources>

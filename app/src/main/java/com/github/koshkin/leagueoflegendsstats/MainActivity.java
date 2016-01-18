@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.DrawerLayout;
@@ -27,6 +28,7 @@ import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingActionButtonV
 import com.github.koshkin.leagueoflegendsstats.views.RoundedImageView;
 import com.github.koshkin.leagueoflegendsstats.views.ToolbarSearchView;
 
+import java.lang.ref.WeakReference;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     private Timer mTimer;
     private PopupWindow mLastPopupWindow;
     private Toolbar mToolbar;
+    private WeakReference<FragmentActivity> thisActivity;
 
     @Override
     protected void onPause() {
@@ -89,6 +92,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        thisActivity = new WeakReference<FragmentActivity>(this);
+
         if (!BuildConfig.DEBUG)
             Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main); //main content view
@@ -160,6 +166,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void startFragment(Class<? extends BaseFragment> fragmentClass) {
+        if (thisActivity == null)
+            return;
+
         try {
             getFragmentManager().beginTransaction()
                     .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
@@ -173,6 +182,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void startFragment(BaseFragment fragment) {
+        if (thisActivity == null)
+            return;
+
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                 .replace(R.id.fragment_container, fragment, fragment.getClass().getSimpleName())

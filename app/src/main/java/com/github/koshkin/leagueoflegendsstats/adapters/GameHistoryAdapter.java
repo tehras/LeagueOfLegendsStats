@@ -20,10 +20,12 @@ public class GameHistoryAdapter extends RecyclerView.Adapter<GameHolder> {
 
     private final ArrayList<Game> mGames;
     private final Activity mActivity;
+    private final String mSummonerId;
 
-    public GameHistoryAdapter(ArrayList<Game> games, Activity activity) {
+    public GameHistoryAdapter(ArrayList<Game> games, Activity activity, String summonerId) {
         mGames = games;
         mActivity = activity;
+        mSummonerId = summonerId;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class GameHistoryAdapter extends RecyclerView.Adapter<GameHolder> {
     @Override
     public void onBindViewHolder(GameHolder h, int position) {
         Game game = mGames.get(position);
-        h.populate(game, mActivity, true);
+        h.populate(game, mActivity, mSummonerId, true);
     }
 
     @Override

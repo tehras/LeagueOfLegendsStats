@@ -6,6 +6,7 @@ import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.utils.SharedPrefsUtil;
 
 import static com.github.koshkin.leagueoflegendsstats.utils.AssetReaderUtil.CONSTANT_CHAMPION;
+import static com.github.koshkin.leagueoflegendsstats.utils.AssetReaderUtil.CONSTANT_ITEM;
 import static com.github.koshkin.leagueoflegendsstats.utils.AssetReaderUtil.CONSTANT_PROFILE;
 import static com.github.koshkin.leagueoflegendsstats.utils.AssetReaderUtil.CONSTANT_SUMMONER;
 
@@ -42,6 +43,10 @@ public class DataParser implements Request.ParserCallback<DataParser> {
             case PROFILE:
                 SharedPrefsUtil.saveSharedPrefs(CONSTANT_PROFILE, body, mContext);
                 mResponseObject = new ProfileIcons().parse(body);
+                break;
+            case ITEM:
+                SharedPrefsUtil.saveSharedPrefs(CONSTANT_ITEM, body, mContext);
+                mResponseObject = new ItemIcons().parse(body);
                 break;
         }
         return this;

@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
+import com.github.koshkin.leagueoflegendsstats.fragments.MatchFragment;
 import com.github.koshkin.leagueoflegendsstats.models.Game;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.utils.GameUtils;
@@ -25,12 +27,15 @@ import static com.github.koshkin.leagueoflegendsstats.utils.GameUtils.generateGa
 public class GameHolder extends RecyclerView.ViewHolder {
 
     private final View divider;
+    private final View mItemView;
     public TextView gameTypeTv, role, gameStartedTv, gameLengthTv, gameResult, champNameTv, kdaTv, killsDeathsAssistsTv, achievementText, levelTv, csTv, gameWardsTv, killPartTv;
     public ImageView champImage, icon1, icon2, ribbon;
     public View achievementLayout;
 
     public GameHolder(View view) {
         super(view);
+
+        mItemView = view;
 
         ribbon = (ImageView) view.findViewById(R.id.ribbon);
 
@@ -61,7 +66,7 @@ public class GameHolder extends RecyclerView.ViewHolder {
         divider = view.findViewById(R.id.divider);
     }
 
-    public void populate(final Game game, final Activity activity, boolean t) {
+    public void populate(final Game game, final Activity activity, final String summonerId, boolean t) {
         //TOP Layout
         this.gameTypeTv.setText(generateGameType(game));
         this.gameStartedTv.setText(gameStartedDate(game));
@@ -115,5 +120,12 @@ public class GameHolder extends RecyclerView.ViewHolder {
 
         if (t)
             divider.setVisibility(View.GONE);
+
+        mItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) activity).startFragment(MatchFragment.getInstance(summonerId, String.valueOf(game.getGameId())));
+            }
+        });
     }
 }

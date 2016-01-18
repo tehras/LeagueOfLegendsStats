@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/item_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/icon1"
+                android:layout_width="@dimen/small_icon_height"
+                android:layout_height="@dimen/small_icon_height"
+                android:contentDescription="icon 1"
+                android:src="@color/cardview_dark_background"/>
+
+            <ImageView
+                android:id="@+id/icon4"
+                android:layout_width="@dimen/small_icon_height"
+                android:layout_height="@dimen/small_icon_height"
+                android:contentDescription="icon 4"
+                android:src="@color/cardview_dark_background"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/icon2"
+                android:layout_width="@dimen/small_icon_height"
+                android:layout_height="@dimen/small_icon_height"
+                android:contentDescription="icon 2"
+                android:src="@color/cardview_dark_background"/>
+
+            <ImageView
+                android:id="@+id/icon5"
+                android:layout_width="@dimen/small_icon_height"
+                android:layout_height="@dimen/small_icon_height"
+                android:contentDescription="icon 5"
+                android:src="@color/cardview_dark_background"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/icon3"
+                android:layout_width="@dimen/small_icon_height"
+                android:layout_height="@dimen/small_icon_height"
+                android:contentDescription="icon 3"
+                android:src="@color/cardview_dark_background"/>
+
+            <ImageView
+                android:id="@+id/icon6"
+                android:layout_width="@dimen/small_icon_height"
+                android:layout_height="@dimen/small_icon_height"
+                android:contentDescription="icon 6"
+                android:src="@color/cardview_dark_background"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/item_layout"
+        android:layout_alignStart="@+id/item_layout"
+        android:layout_below="@+id/item_layout"
+        android:gravity="center_vertical|end"
+        tools:ignore="UseCompoundDrawables">
+
+        <TextView
+            android:id="@+id/champion_gold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="46.3k\nGold"
+            android:textColor="@color/gold_color"
+            android:textSize="@dimen/text_size_xsmall"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:id="@+id/icon0"
+            android:layout_width="@dimen/small_icon_height"
+            android:layout_height="@dimen/small_icon_height"
+            android:layout_gravity="top"
+            android:contentDescription="icon 0"
+            android:src="@color/cardview_dark_background"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

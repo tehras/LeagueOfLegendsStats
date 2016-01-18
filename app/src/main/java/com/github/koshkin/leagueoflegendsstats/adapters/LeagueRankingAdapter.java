@@ -118,12 +118,14 @@ public abstract class LeagueRankingAdapter extends RecyclerView.Adapter<LeagueCh
     }
 
     public void update(ArrayList<RankedSummoner> updatedEntries) {
+        ArrayList<Integer> intsToUpdate = new ArrayList<>();
+
         for (RankedSummoner summoner : updatedEntries) {
             int index = mEntries.indexOf(summoner);
             if (index != -1) {
                 mEntries.get(index).setSummoner(summoner.getSummoner());
-                if (index < mHighestPos)
-                    notifyItemChanged(index);
+                if (index < mHighestPos + 1) //In case there's one half in
+                    intsToUpdate.add(index);
             }
             if (mArrayToExecute != null) {
                 int executeIndex = mArrayToExecute.indexOf(summoner);
@@ -131,6 +133,10 @@ public abstract class LeagueRankingAdapter extends RecyclerView.Adapter<LeagueCh
                     mArrayToExecute.remove(executeIndex);
                 }
             }
+        }
+
+        for (Integer index : intsToUpdate) {
+            notifyItemChanged(index);
         }
     }
 }

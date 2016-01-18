@@ -17,6 +17,7 @@
 
     <dimen name="profile_icon_size">60dp</dimen>
     <dimen name="profile_icon_size_small">40dp</dimen>
+    <dimen name="profile_icon_size_xsmall">32dp</dimen>
     <dimen name="champion_icon_size">48dp</dimen>
 
     <dimen name="text_size_large">20sp</dimen>
@@ -38,4 +39,7 @@
     <dimen name="main_loading_rounded_size">16dp</dimen>
     <dimen name="ranked_streak_size">14dp</dimen>
     <dimen name="small_arrow_down_size">14dp</dimen>
+    <dimen name="text_size_small">13sp</dimen>
+    <dimen name="background_lane_small">2dp</dimen>
+    <dimen name="background_lane_radius_small">2dp</dimen>
 </resources>

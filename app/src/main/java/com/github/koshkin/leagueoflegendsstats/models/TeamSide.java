@@ -1,5 +1,6 @@
 package com.github.koshkin.leagueoflegendsstats.models;
 
+import com.github.koshkin.leagueoflegendsstats.R;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -8,8 +9,18 @@ import com.google.gson.annotations.SerializedName;
 public enum TeamSide {
 
     @SerializedName("100")
-    RED,
+    RED(R.color.red_team_color),
     @SerializedName("200")
-    BLUE
+    BLUE(R.color.blue_team_color);
 
+
+    private final int mSideColor;
+
+    TeamSide(int color) {
+        mSideColor = color;
+    }
+
+    public int getSideColor() {
+        return mSideColor;
+    }
 }

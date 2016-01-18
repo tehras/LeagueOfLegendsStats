@@ -3,6 +3,7 @@ package com.github.koshkin.leagueoflegendsstats.networking;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.API_KEY;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.LEAGUE_CHALLENGER;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.LEAGUE_MASTER;
+import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.MATCH_STATS;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.NA_BASE_URI;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.NA_STATIC_DATA_URI;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.NA_STATIC_URI;
@@ -33,6 +34,7 @@ public enum URIHelper {
     GET_SPRITES(STATIC_SPRITE, NA_STATIC_URI),
     GET_CHALLENGER(LEAGUE_CHALLENGER, NA_BASE_URI),
     GET_MASTER(LEAGUE_MASTER, NA_BASE_URI),
+    GET_MATCH_STATS(MATCH_STATS, NA_BASE_URI),
     GET_SUMMONER_BY_IDS(SUMMONER_BY_ID, NA_BASE_URI),
     GET_REALM(REALM, NA_BASE_URI);
 

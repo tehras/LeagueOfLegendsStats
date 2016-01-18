@@ -27,6 +27,11 @@ public class StaticDataHolder {
     private ChampionIcons mChampionIcons;
     private ProfileIcons mProfileIcons;
     private SpellIcons mSpellIcons;
+    private ItemIcons mItemIcons;
+
+    public void setItemIcons(ItemIcons itemIcons) {
+        mItemIcons = itemIcons;
+    }
 
     public void setChampionIcons(ChampionIcons championIcons) {
         mChampionIcons = championIcons;
@@ -52,9 +57,14 @@ public class StaticDataHolder {
         return mChampionIcons;
     }
 
+    public ItemIcons getItemIcons() {
+        return mItemIcons;
+    }
+
     private static final String FILE_NAME_CHAMPIONS = "champion_icons.json";
     private static final String FILE_NAME_PROFILE = "profile_icons.json";
     private static final String FILE_NAME_SUMMONER = "summoner_icons.json";
+    private static final String FILE_NAME_ITEM = "item_icons.json";
 
     private StaticDataHolder(Context context) {
         mContext = context;
@@ -80,6 +90,12 @@ public class StaticDataHolder {
                 spellResponse = AssetReaderUtil.read(FILE_NAME_SUMMONER, mContext);
             }
             mSpellIcons = new SpellIcons().parse(spellResponse);
+            String itemResponse = SharedPrefsUtil.getSharedPrefs(AssetReaderUtil.CONSTANT_ITEM, mContext);
+            Log.e(getClass().getSimpleName(), "itemResponse - " + itemResponse);
+            if (NullChecker.isNullOrEmpty(itemResponse)) {
+                itemResponse = AssetReaderUtil.read(FILE_NAME_ITEM, mContext);
+            }
+            mItemIcons = new ItemIcons().parse(itemResponse);
         }
     }
 
@@ -114,6 +130,19 @@ public class StaticDataHolder {
 
         return profileIcon.getImage().getFull();
     }
+
+    public Drawable getItemIcon(int iconId) {
+        return getItemIcon(mItemIcons.getItemIcon(String.valueOf(iconId)));
+    }
+
+    public Drawable getItemIcon(ItemIcon itemIcon) {
+        if (itemIcon == null || itemIcon.getImage() == null)
+            return null;
+
+        int size = mContext.getResources().getDimensionPixelSize(R.dimen.small_icon_height);
+        return loadFromAssets(itemIcon.getImage(), size, size);
+    }
+
 
     public Drawable getSpellIcon(Spell spell) {
         if (spell == null || spell.getImage() == null)
@@ -194,5 +223,4 @@ public class StaticDataHolder {
 
         return sStaticDataHolder;
     }
-
 }

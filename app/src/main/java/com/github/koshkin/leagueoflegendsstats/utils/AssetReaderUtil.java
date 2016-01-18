@@ -38,6 +38,7 @@ public class AssetReaderUtil {
 
     public static final String CONSTANT_CHAMPION = "champion_key";
     public static final String CONSTANT_PROFILE = "item_key";
+    public static final String CONSTANT_ITEM = "real_item_key";
     public static final String CONSTANT_SUMMONER = "summoner_key";
 
     public static String read(String assetName, Context context) {
