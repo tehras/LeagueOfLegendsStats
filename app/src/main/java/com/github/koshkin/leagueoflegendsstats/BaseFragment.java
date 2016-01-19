@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.ImageView;
 
+import com.github.koshkin.leagueoflegendsstats.models.Favorite;
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
@@ -21,6 +22,7 @@ import com.github.koshkin.leagueoflegendsstats.networking.Executor;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.networking.URIConstants;
 import com.github.koshkin.leagueoflegendsstats.networking.URIHelper;
+import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingFavoriteActionButtonHelper;
 
 import java.util.ArrayList;
 
@@ -29,7 +31,7 @@ import java.util.ArrayList;
  * <p/>
  * Class is to create general
  */
-public class BaseFragment extends Fragment {
+public class BaseFragment extends Fragment implements FloatingFavoriteActionButtonHelper.FavoriteCallback {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -52,7 +54,24 @@ public class BaseFragment extends Fragment {
             ((MainActivity) getActivity()).showFab();
             ((MainActivity) getActivity()).hideError();
             ((MainActivity) getActivity()).resetScrollView();
+            if (showFab())
+                ((MainActivity) getActivity()).showFaveFab(this, getSummonerId());
+            else
+                ((MainActivity) getActivity()).hideFaveFab();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    protected String getSummonerId() {
+        return null;
+    }
+
+    protected boolean showFab() {
+        return false;
     }
 
     protected static final String ARG_SUMMONER_NAME = "summoner_name";
@@ -63,7 +82,7 @@ public class BaseFragment extends Fragment {
     protected static final String ARG_SUMMONER_LOSSES = "ranked_losses";
 
     protected void executeGetSummoner(Request.RequestCallback requestCallback, String summonerName) {
-        new Executor(new Request(Request.RequestType.GET, new Summoner(summonerName), requestCallback, URIHelper.GET_SUMMONER, summonerName), getActivity()).execute();
+        new Executor(new Request(Request.RequestType.GET, new Summoner(summonerName.toLowerCase()), requestCallback, URIHelper.GET_SUMMONER, summonerName), getActivity()).execute();
     }
 
     protected void executeGetSummonersById(Request.RequestCallback requestCallback, ArrayList<String> summonerIds, LeagueStandings leagueStandings) {
@@ -156,4 +175,8 @@ public class BaseFragment extends Fragment {
     }
 
 
+    @Override
+    public Favorite getFavorite() {
+        return null;
+    }
 }

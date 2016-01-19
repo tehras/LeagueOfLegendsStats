@@ -18,6 +18,7 @@ import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.holders.ChampionHolder;
 import com.github.koshkin.leagueoflegendsstats.holders.GameHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Champion;
+import com.github.koshkin.leagueoflegendsstats.models.Favorite;
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
 import com.github.koshkin.leagueoflegendsstats.models.Game;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
@@ -67,6 +68,21 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @Override
+    protected boolean showFab() {
+        return true;
+    }
+
+    @Override
+    public String getSummonerId() {
+        return mSummonerId;
+    }
+
+    @Override
+    public Favorite getFavorite() {
+        return new Favorite(mRankedStats, mSummonerId, mSummonerName, mSummonerIconId);
     }
 
     @Nullable
@@ -362,7 +378,7 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
             @Override
             public void onClick(View v) {
                 if (getActivity() != null && getActivity() instanceof MainActivity) {
-                    ((MainActivity) getActivity()).startFragment(SummonerRankedGamesFragment .getInstance(games, mSummonerId));
+                    ((MainActivity) getActivity()).startFragment(SummonerRankedGamesFragment.getInstance(games, mSummonerId));
                 }
             }
         };

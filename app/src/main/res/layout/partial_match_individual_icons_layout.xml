@@ -15,6 +15,7 @@
             android:id="@+id/champion_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="false"
             android:contentDescription="champion icon"
             android:src="@drawable/ic_wallpaper_black_48dp"/>
 
@@ -29,6 +30,7 @@
                 android:id="@+id/icon1"
                 android:layout_width="@dimen/small_icon_height"
                 android:layout_height="@dimen/small_icon_height"
+                android:clickable="false"
                 android:contentDescription="icon F"
                 android:src="@drawable/ic_wallpaper_black_48dp"/>
 
@@ -37,6 +39,7 @@
                 android:layout_width="@dimen/small_icon_height"
                 android:layout_height="@dimen/small_icon_height"
                 android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:clickable="false"
                 android:contentDescription="icon D"
                 android:src="@drawable/ic_wallpaper_black_48dp"/>
 

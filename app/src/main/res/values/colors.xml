@@ -23,6 +23,8 @@
     <color name="neutral_orange">#FF9800</color>
     <color name="neutral_blue">#1565C0</color>
 
+    <color name="favorite_color">#FFEB3B</color>
+
     <color name="great">#2196F3</color>
     <color name="good">#4CAF50</color>
     <color name="average">#FF9800</color>

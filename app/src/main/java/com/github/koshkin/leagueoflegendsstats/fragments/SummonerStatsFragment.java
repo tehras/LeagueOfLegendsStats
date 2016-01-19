@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.github.koshkin.leagueoflegendsstats.BaseFragment;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
+import com.github.koshkin.leagueoflegendsstats.models.Favorite;
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerStatSummaries;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerSummary;
@@ -26,7 +28,6 @@ import com.github.koshkin.leagueoflegendsstats.models.SummonerAggregateObject;
 import com.github.koshkin.leagueoflegendsstats.models.SummonerInfo;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.networking.Response;
-import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
 import com.github.koshkin.leagueoflegendsstats.utils.NumberUtils;
 import com.github.koshkin.leagueoflegendsstats.utils.Utils;
 
@@ -52,6 +53,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
     private String mSummonerName;
     private FileHandler mProfFileHandler;
     private Summoner mSummoner;
+    private String mSummonerId;
 
     public void setSummoner(Summoner summoner) {
         mSummoner = summoner;
@@ -61,6 +63,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
         Bundle args = new Bundle();
         args.putString(ARG_SUMMONER_NAME, summonerName);
         args.putString(ARG_SUMMONER_ID, summonerId);
+        Log.e("TARAS", "summName - " + summonerName);
 
         SummonerStatsFragment fragment = new SummonerStatsFragment();
         fragment.setArguments(args);
@@ -68,6 +71,21 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
         return fragment;
     }
 
+    @Override
+    protected boolean showFab() {
+        return true;
+    }
+
+    protected String getSummonerId() {
+        return mSummonerId;
+    }
+
+    @Override
+    public Favorite getFavorite() {
+        if (mSummonerAggregateObject == null || mSummonerAggregateObject.getSummoner() == null || mSummonerAggregateObject.getPlayerStatSummaries() == null)
+            return null;
+        return new Favorite(mSummonerAggregateObject);
+    }
 
     @Nullable
     @Override
@@ -150,17 +168,17 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
         super.onCreate(savedInstanceState);
 
         mSummonerName = getArguments().getString(ARG_SUMMONER_NAME, null);
-        String summonerId = getArguments().getString(ARG_SUMMONER_ID, null);
+        mSummonerId = getArguments().getString(ARG_SUMMONER_ID, null);
 
         if (mSummonerAggregateObject == null) {
-            if (summonerId == null || mSummoner == null)
+            if (mSummonerId == null || mSummoner == null)
                 executeGetSummoner(this, mSummonerName);
             else {
                 if (mSummoner.getSummonerInfo() != null) {
                     getProfileImage(mSummoner.getSummonerInfo());
                 }
                 mFromSummonerId = true;
-                executeGetStats(this, summonerId);
+                executeGetStats(this, mSummonerId);
             }
         }
     }
@@ -183,7 +201,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     Summoner summoner = (Summoner) response.getReturnedObject();
 
-                    if (summoner != null && !NullChecker.isNullOrEmpty(summoner.getSummonerId())) {
+                    if (summoner != null) {
                         mSummonerAggregateObject.setSummoner(summoner);
 
                         if (summoner.getSummonerInfo() != null) {
@@ -232,6 +250,8 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
     private void generalException() {
         hideLoading();
         hideHeaderLayout();
+        if (getActivity() != null && getActivity() instanceof MainActivity)
+            ((MainActivity) getActivity()).hideFaveFab();
 
         initializeErrorLayout(getResources().getString(R.string.general_error_title), getResources().getString(R.string.general_error_body));
     }

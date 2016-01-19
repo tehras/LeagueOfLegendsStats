@@ -46,4 +46,12 @@
     <string name="match_label_gold">Gold</string>
     <string name="match_team_stats_layout">Match Team Statistics</string>
     <string name="match_team_stats_middle">Match Individual Statistics</string>
+    <string name="match_creep_per_ten_title">Creep Score Per Ten Minute</string>
+    <string name="match_cs_per_ten_diff">Creep Score Per Ten vs Opponent</string>
+    <string name="match_xp_per_ten_diff">XP Gained Per Ten vs Opponent</string>
+    <string name="top_champions_title">Most Played Champions</string>
+    <string name="menu_sort_by_games">Games</string>
+    <string name="no_favorite_players_added_yet">No Favorite players chosen yet</string>
+    <string name="favorite_payer_title">Favorite Summoners</string>
+    <string name="view_all_favorites">View All Favorite Champions</string>
 </resources>

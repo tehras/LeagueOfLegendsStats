@@ -186,6 +186,11 @@ public class MiddleIndividualLayoutHolder {
             TextView leftSideName = (TextView) view.findViewById(R.id.left_match_individual_name);
             TextView rightSideName = (TextView) view.findViewById(R.id.right_match_individual_name);
 
+            View leftView = view.findViewById(R.id.match_left_side_container);
+            View rightView = view.findViewById(R.id.match_right_side_container);
+
+            new LongHoldHelper(activity, leftView, leftParticipant, leftParticipantIdentity).init();
+            new LongHoldHelper(activity, rightView, rightParticipant, rightParticipantIdentity).init();
 
             //POPULATES LEFT AND RIGHT SIDE
             leftSideName.setText(MatchUtils.getName(leftParticipantIdentity));
@@ -242,12 +247,19 @@ public class MiddleIndividualLayoutHolder {
         TextView gold = (TextView) view.findViewById(R.id.champion_gold);
 
         final ImageView spell0 = (ImageView) view.findViewById(R.id.icon0);
+        spell0.setClickable(false);
         final ImageView spell1 = (ImageView) view.findViewById(R.id.icon1);
+        spell1.setClickable(false);
         final ImageView spell2 = (ImageView) view.findViewById(R.id.icon2);
+        spell2.setClickable(false);
         final ImageView spell3 = (ImageView) view.findViewById(R.id.icon3);
+        spell3.setClickable(false);
         final ImageView spell4 = (ImageView) view.findViewById(R.id.icon4);
+        spell4.setClickable(false);
         final ImageView spell5 = (ImageView) view.findViewById(R.id.icon5);
+        spell5.setClickable(false);
         final ImageView spell6 = (ImageView) view.findViewById(R.id.icon6);
+        spell6.setClickable(false);
 
         gold.setText(MatchUtils.getGold(participant));
 

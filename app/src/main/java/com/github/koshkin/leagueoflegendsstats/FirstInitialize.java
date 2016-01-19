@@ -1,7 +1,5 @@
 package com.github.koshkin.leagueoflegendsstats;
 
-import android.util.Log;
-
 import com.github.koshkin.leagueoflegendsstats.models.ChampionIcons;
 import com.github.koshkin.leagueoflegendsstats.models.DataParser;
 import com.github.koshkin.leagueoflegendsstats.models.ItemIcons;
@@ -142,7 +140,7 @@ public class FirstInitialize implements Request.RequestCallback {
                 break;
         }
 
-        Log.e(getClass().getSimpleName(), "count - " + mExecuteCounter);
+
         if (mExecuteCounter == 0) {
             mCallback.completed();
         }
@@ -150,6 +148,5 @@ public class FirstInitialize implements Request.RequestCallback {
 
     public interface Callback {
         void completed();
-
     }
 }

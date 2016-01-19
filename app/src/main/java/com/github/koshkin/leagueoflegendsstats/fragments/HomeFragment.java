@@ -6,20 +6,25 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.github.koshkin.leagueoflegendsstats.BaseFragment;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.holders.LeagueChampionHolder;
+import com.github.koshkin.leagueoflegendsstats.models.Favorite;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.RankedSummoner;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.networking.Response;
+import com.github.koshkin.leagueoflegendsstats.utils.SharedPrefsUtil;
+import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingFavoriteActionButtonHelper;
 import com.github.koshkin.leagueoflegendsstats.views.CustomCardView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Set;
 
 
 /**
@@ -31,6 +36,8 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
 
     private CustomCardView mChallengerLayout;
     private LeagueStandings mLeagueStandings;
+    private CustomCardView mFavoriteLayout;
+    private boolean mFirstLoad;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,13 +47,32 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
         showLoading();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!mFirstLoad) {
+            mFavoriteLayout.clearViewsFromHolder();
+            populateFavoriteLayout();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        mFirstLoad = false;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_layout, container, false);
 
         initChallengerLayout(view);
+        initFavoriteLayout(view);
 
+        populateFavoriteLayout();
         if (mLeagueStandings != null) {
             populateChallengerLayout();
         } else
@@ -58,6 +84,10 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
     private void initChallengerLayout(View view) {
         mChallengerLayout = (CustomCardView) view.findViewById(R.id.challenger_layout);
         mChallengerLayout.showError().setViewAllOnClickListener(viewAllChallengersListener());
+    }
+
+    private void initFavoriteLayout(View view) {
+        mFavoriteLayout = (CustomCardView) view.findViewById(R.id.favorite_layout);
     }
 
     private View.OnClickListener viewAllChallengersListener() {
@@ -108,6 +138,35 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
 
     }
 
+    private void populateFavoriteLayout() {
+        Set<String> set = SharedPrefsUtil.getFromSharedPrefs(null, FloatingFavoriteActionButtonHelper.PREFS_KEY, getActivity());
+        if (set != null && set.size() > 0) {
+            int i = 0;
+            for (String string : set) {
+                if (i > 2)
+                    break;
+
+                Favorite favorite = Favorite.fromJson(string);
+                if (favorite == null)
+                    continue;
+
+                mFavoriteLayout.addViewToHolder(getFavoritesView(favorite));
+                i++;
+            }
+        } else {
+            mFavoriteLayout.showError().setViewAllOnClickListener(viewAllFavoritesListener());
+        }
+    }
+
+    private View.OnClickListener viewAllFavoritesListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
     private ArrayList<String> populateChallengerLayout() {
         ArrayList<String> summonersToReturn = null;
 
@@ -137,8 +196,16 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.partial_summoner, null);
-
         new LeagueChampionHolder(view).populate(summoner, (MainActivity) getActivity(), LeagueQueueType.RANKED_SOLO_5x5, false);
+
+        return view;
+    }
+
+    private View getFavoritesView(Favorite favorite) {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.partial_summoner, null);
+        new LeagueChampionHolder(view).populate(favorite, (MainActivity) getActivity(), false);
 
         return view;
     }

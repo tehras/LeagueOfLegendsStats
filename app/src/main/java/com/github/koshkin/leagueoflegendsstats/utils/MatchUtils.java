@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.text.Html;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.koshkin.leagueoflegendsstats.models.GameStats;
 import com.github.koshkin.leagueoflegendsstats.models.TeamSide;
 import com.github.koshkin.leagueoflegendsstats.models.match.Participant;
 import com.github.koshkin.leagueoflegendsstats.models.match.ParticipantIdentity;
@@ -18,6 +20,8 @@ import com.github.koshkin.leagueoflegendsstats.viewhelpers.match.MiddleIndividua
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.github.koshkin.leagueoflegendsstats.utils.Utils.NOT_AVAILABLE;
 
 /**
  * Created by tehras on 1/17/16.
@@ -229,5 +233,66 @@ public class MatchUtils {
             return Utils.NOT_AVAILABLE;
 
         return leftParticipantIdentity.getPlayer().getSummonerName();
+    }
+
+    public static CharSequence getLevel(Participant participant) {
+        return Html.fromHtml("Level " + "<b>" + String.valueOf(participant.getStats().getChampLevel()) + "</b>");
+    }
+
+    public static String kdaCalculated(Participant participant, TextView kdaView, Activity activity) {
+        if (participant.getStats() == null) {
+            kdaView.setTextColor(Utils.getKDAColor(0d, activity));
+            return NOT_AVAILABLE;
+        }
+
+        Stats gameStats = participant.getStats();
+
+        double kills = gameStats.getKills();
+        double deaths = gameStats.getDeaths();
+        double assists = gameStats.getAssists();
+
+        if (deaths == 0d) {
+            if (kills == 0d && assists == 0d) {
+                kdaView.setTextColor(Utils.getKDAColor(3.5d, activity));
+                return "No KDA";
+            } else {
+                kdaView.setTextColor(Utils.getKDAColor(10d, activity));
+                return "Perfect KDA";
+            }
+        }
+
+        double kda = ((kills + assists) / deaths);
+
+        kdaView.setTextColor(Utils.getKDAColor(kda, activity));
+        return NumberUtils.oneDecimalSafely(kda) + ":1 KDA";
+    }
+
+    public static CharSequence gameWards(Participant participant) {
+        if (participant.getStats() == null)
+            return new SpannableString("");
+
+        int wards = participant.getStats().getWardsPlaced();
+        String HTML_WARDS = "Placed <b>%s</b> Wards";
+        if (wards == 0) {
+            String NO_HTML_WARDS = "No Wards Placed";
+            return Html.fromHtml(NO_HTML_WARDS);
+        } else
+            return Html.fromHtml(String.format(HTML_WARDS, wards));
+    }
+
+    public static Spanned dmgDealt(Participant participant) {
+        if (participant.getStats() == null)
+            return new SpannableString(NOT_AVAILABLE);
+
+        Stats gameStats = participant.getStats();
+        double damage = gameStats.getTotalDamageDealtToChampions();
+        String output;
+        if (damage > 1000d) {
+            output = "<b>" + NumberUtils.oneDecimalSafely(damage / 1000d) + "</b>" + "K dmg dealt";
+        } else {
+            output = "<b>" + String.valueOf((int) damage) + "</b>" + " dmg dealt";
+        }
+
+        return Html.fromHtml(output);
     }
 }

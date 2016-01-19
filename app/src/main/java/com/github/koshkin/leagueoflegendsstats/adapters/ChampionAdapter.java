@@ -21,13 +21,27 @@ import java.util.HashMap;
  */
 public class ChampionAdapter extends RecyclerView.Adapter<ChampionHolder> {
 
-    private final ArrayList<Champion> mChampions;
+    private ArrayList<Champion> mChampions;
     private final Activity mActivity;
 
     public ChampionAdapter(ArrayList<Champion> champions, Activity context) {
         mChampions = new ArrayList<>(champions);
-        mChampions.remove(0);
+        removeNa(mChampions);
         mActivity = context;
+    }
+
+    private void removeNa(ArrayList<Champion> champions) {
+        Champion champToRemove = null;
+
+        for (Champion champion : champions) {
+            if (champion.getId() == 0) {
+                champToRemove = champion;
+                break;
+            }
+        }
+
+        if (champToRemove != null)
+            champions.remove(champToRemove);
     }
 
     @Override
@@ -69,4 +83,9 @@ public class ChampionAdapter extends RecyclerView.Adapter<ChampionHolder> {
         return mChampions.size();
     }
 
+    public void updateData(ArrayList<Champion> champions) {
+        mChampions = champions;
+        removeNa(champions);
+        notifyDataSetChanged();
+    }
 }

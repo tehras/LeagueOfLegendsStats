@@ -1,5 +1,6 @@
 package com.github.koshkin.leagueoflegendsstats.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -103,7 +104,7 @@ public class Utils {
 
         textView.setTextColor(context.getResources().getColor(colorId));
     }
-    
+
     public static void setUpRecyclerView(RecyclerView recyclerView) {
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

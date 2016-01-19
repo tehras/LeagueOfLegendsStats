@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,7 +24,11 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.koshkin.leagueoflegendsstats.fragments.HomeFragment;
+import com.github.koshkin.leagueoflegendsstats.utils.SharedPrefsUtil;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingActionButtonViewHelper;
+import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingFavoriteActionButtonHelper;
+import com.github.koshkin.leagueoflegendsstats.views.BlockableFloatingActionBar;
+import com.github.koshkin.leagueoflegendsstats.views.BlockableNestedScrollView;
 import com.github.koshkin.leagueoflegendsstats.views.RoundedImageView;
 import com.github.koshkin.leagueoflegendsstats.views.ToolbarSearchView;
 
@@ -49,7 +52,8 @@ public class MainActivity extends AppCompatActivity
     private Toolbar mToolbar;
     private WeakReference<FragmentActivity> thisActivity;
     private boolean mIsPaused;
-    private NestedScrollView mNestedScrollView;
+    private BlockableNestedScrollView mNestedScrollView;
+    private BlockableFloatingActionBar mFavFab;
 
     @Override
     protected void onPause() {
@@ -117,7 +121,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mNestedScrollView = (NestedScrollView) findViewById(R.id.scroll_view_container);
+        mNestedScrollView = (BlockableNestedScrollView) findViewById(R.id.scroll_view_container);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
         mProgressBar = (ContentLoadingProgressBar) findViewById(R.id.loading_bar);
@@ -131,6 +135,8 @@ public class MainActivity extends AppCompatActivity
 
         mTimer = new Timer();
         mTimer.schedule(new MyTimerTask(), 0, 2000);
+
+        mFavFab = (BlockableFloatingActionBar) findViewById(R.id.favorite_fab);
 
         //Has to go last
         if (savedInstanceState == null) {
@@ -156,8 +162,24 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void resetScrollView() {
-        if (mNestedScrollView != null)
+        if (mNestedScrollView != null) {
             mNestedScrollView.smoothScrollTo(0, 0);
+            allowScrollview();
+        }
+    }
+
+    public void blockScrollView(View.OnTouchListener onTouchListener) {
+        if (mNestedScrollView != null) {
+            mNestedScrollView.setBlocked(true);
+            mNestedScrollView.addListener(onTouchListener);
+        }
+    }
+
+    public void allowScrollview() {
+        if (mNestedScrollView != null) {
+            mNestedScrollView.setBlocked(false);
+            mNestedScrollView.addListener(null);
+        }
     }
 
     public void setLastPopupWindow(PopupWindow lastPopupWindow) {
@@ -296,6 +318,26 @@ public class MainActivity extends AppCompatActivity
         Log.e(getClass().getSimpleName(), "Main Loading Layout is GONE");
         mMainLoadingLayout.setVisibility(View.GONE);
         startFragment(HomeFragment.class);
+    }
+
+    public void showFaveFab(FloatingFavoriteActionButtonHelper.FavoriteCallback favoriteCallback, String summonerId) {
+        if (mFavFab != null) {
+            mFavFab.setBlocked(false);
+            new FloatingFavoriteActionButtonHelper(mFavFab, this, favoriteCallback, summonerId).init();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+    }
+
+    public void hideFaveFab() {
+        if (mFavFab != null) {
+            mFavFab.setBlocked(true);
+            mFavFab.hide();
+        }
     }
 
     public static String[] loadingText = new String[]{"Loading...", "Please Wait...", "Getting all the images...", "Clearing the table...", "Doing the dishes...", "Back to getting all the images...", "That image is cute...", "Oh wait.. no it's not...", "Please wait..."};

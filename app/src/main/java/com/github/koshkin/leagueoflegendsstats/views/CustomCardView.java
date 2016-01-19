@@ -69,6 +69,16 @@ public class CustomCardView extends LinearLayout {
         }
     }
 
+    public CustomCardView hideViewAllView() {
+        mViewAllButton.setVisibility(GONE);
+        return this;
+    }
+
+    public CustomCardView showViewAllView() {
+        mViewAllButton.setVisibility(VISIBLE);
+        return this;
+    }
+
     public View getViewHolderChildAt(int i) {
         int childSize = mViewHolder.getChildCount();
         if (i + 1 > childSize)
@@ -88,12 +98,14 @@ public class CustomCardView extends LinearLayout {
     public CustomCardView showError() {
         mNotFoundText.setVisibility(VISIBLE);
         mViewHolder.setVisibility(GONE);
+        mViewAllButton.setVisibility(GONE);
         return this;
     }
 
     public CustomCardView hideError() {
         mNotFoundText.setVisibility(GONE);
         mViewHolder.setVisibility(VISIBLE);
+        mViewAllButton.setVisibility(VISIBLE);
         return this;
     }
 

@@ -16,6 +16,8 @@ import com.github.koshkin.leagueoflegendsstats.viewhelpers.match.TopLayoutViewHo
 
 /**
  * Created by tehras on 1/17/16.
+ * <p/>
+ * Match Fragment
  */
 public class MatchFragment extends BaseFragment implements Request.RequestCallback {
 

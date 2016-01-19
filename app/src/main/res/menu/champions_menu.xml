@@ -1,0 +1,28 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.github.koshkin.leagueoflegendsstats.MainActivity">
+    <item
+        android:id="@+id/action_sort"
+        android:icon="@drawable/ic_sort_white_24dp"
+        android:orderInCategory="100"
+        android:title="@string/overflow_sort"
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <item
+                android:id="@+id/action_sort_by_games_played"
+                android:title="@string/menu_sort_by_games"/>
+            <item
+                android:id="@+id/action_sort_wins"
+                android:title="@string/menu_sort_by_wins"/>
+            <item
+                android:id="@+id/action_sort_win_p"
+                android:title="@string/menu_sort_by_win_p"/>
+            <item
+                android:id="@+id/action_sort_losses"
+                android:title="@string/menu_sort_by_losses"/>
+        </menu>
+
+    </item>
+</menu>
