@@ -75,6 +75,8 @@ public class BaseFragment extends Fragment implements FloatingFavoriteActionButt
     protected static final String ARG_SUMMONER_NAME = "summoner_name";
     protected static final String ARG_SUMMONER_ID = "summoner_id";
     protected static final String ARG_MATCH_ID = "match_id";
+    protected static final String ARG_MATCH_TIME = "match_time";
+    protected static final String ARG_MATCH_LENGTH = "match_length";
     protected static final String ARG_SUMMONER_ICON_ID = "summoner_icon_id";
     protected static final String ARG_SUMMONER_WINS = "ranked_wins";
     protected static final String ARG_SUMMONER_LOSSES = "ranked_losses";

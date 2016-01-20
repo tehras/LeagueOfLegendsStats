@@ -22,13 +22,16 @@ import com.github.koshkin.leagueoflegendsstats.viewhelpers.match.TopLayoutViewHo
 public class MatchFragment extends BaseFragment implements Request.RequestCallback {
 
     private View mHeaderLayout, mMiddleLayout, mOverallLayout;
+    private String mMatchTime, mMatchLength;
 
-    public static MatchFragment getInstance(String summonerId, String matchId) {
+    public static MatchFragment getInstance(String summonerId, String matchId, String matchTime, String matchLength) {
         MatchFragment fragment = new MatchFragment();
 
         Bundle args = new Bundle();
         args.putString(ARG_SUMMONER_ID, summonerId);
         args.putString(ARG_MATCH_ID, matchId);
+        args.putString(ARG_MATCH_TIME, matchTime);
+        args.putString(ARG_MATCH_LENGTH, matchLength);
 
         fragment.setArguments(args);
         return fragment;
@@ -42,6 +45,8 @@ public class MatchFragment extends BaseFragment implements Request.RequestCallba
         super.onCreate(savedInstanceState);
 
         mSummonerId = getArguments().getString(ARG_SUMMONER_ID);
+        mMatchTime = getArguments().getString(ARG_MATCH_TIME);
+        mMatchLength = getArguments().getString(ARG_MATCH_LENGTH);
         String matchId = getArguments().getString(ARG_MATCH_ID);
 
         if (mFullMatch == null) {
@@ -76,7 +81,7 @@ public class MatchFragment extends BaseFragment implements Request.RequestCallba
         TopLayoutViewHolder topLayoutViewHolder = new TopLayoutViewHolder(mHeaderLayout);
         MiddleIndividualLayoutHolder middleIndividualLayoutHolder = new MiddleIndividualLayoutHolder(mMiddleLayout);
 
-        topLayoutViewHolder.populate(mFullMatch, getActivity(), mSummonerId);
+        topLayoutViewHolder.populate(mFullMatch, getActivity(), mSummonerId, mMatchTime, mMatchLength);
         middleIndividualLayoutHolder.populate(getActivity(), mFullMatch, mSummonerId);
     }
 

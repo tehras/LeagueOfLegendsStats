@@ -32,7 +32,7 @@ import static com.github.koshkin.leagueoflegendsstats.utils.MatchUtils.populateK
 public class TopLayoutViewHolder {
 
     private final TextView mLeftTeamTitle, mLeftKDA, mLefGold, mLeftTowers, mLeftDragons, mLeftBarons;
-    private final TextView mRightTeamTitle, mRightKDA, mRightGold, mRightTowers, mRightDragons, mRightBarons;
+    private final TextView mRightTeamTitle, mRightKDA, mRightGold, mRightTowers, mRightDragons, mRightBarons, mGameTime, mGameLength;
     private final ImageView mLeftWin, mRightWin;
 
     public TopLayoutViewHolder(View view) {
@@ -44,6 +44,9 @@ public class TopLayoutViewHolder {
         mLeftBarons = (TextView) view.findViewById(R.id.left_team_barons);
         mLeftWin = (ImageView) view.findViewById(R.id.left_team_check);
 
+        mGameTime = (TextView) view.findViewById(R.id.game_time);
+        mGameLength = (TextView) view.findViewById(R.id.game_length);
+
         mRightTeamTitle = (TextView) view.findViewById(R.id.right_team_title);
         mRightKDA = (TextView) view.findViewById(R.id.right_team_kda);
         mRightGold = (TextView) view.findViewById(R.id.right_team_gold);
@@ -54,7 +57,7 @@ public class TopLayoutViewHolder {
     }
 
     @SuppressLint("SetTextI18n")
-    public void populate(FullMatch fullMatch, Activity activity, String summonerId) {
+    public void populate(FullMatch fullMatch, Activity activity, String summonerId, String matchTime, String matchLength) {
         if (fullMatch.getTeams() != null && fullMatch.getParticipants() != null && fullMatch.getParticipantIdentities() != null && summonerId != null) {
             ArrayList<Team> teams = (ArrayList<Team>) fullMatch.getTeams();
             ArrayList<Participant> participants = (ArrayList<Participant>) fullMatch.getParticipants();
@@ -99,6 +102,9 @@ public class TopLayoutViewHolder {
                 mLeftTeamTitle.setTextColor(activity.getResources().getColor(TeamSide.RED.getSideColor()));
                 mRightTeamTitle.setTextColor(activity.getResources().getColor(TeamSide.BLUE.getSideColor()));
             }
+
+            mGameLength.setText("Game Length - " + matchLength);
+            mGameTime.setText("Played " + matchTime);
         } else {
             //TODO error layout
         }

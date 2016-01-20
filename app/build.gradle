@@ -23,8 +23,8 @@ android {
         applicationId "com.github.koshkin.leagueoflegendsstats"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 10007 //TODO auto versioning
-        versionName "1.0.7" //TODO auto versioning
+        versionCode 10008 //TODO auto versioning
+        versionName "1.0.8" //TODO auto versioning
     }
     buildTypes {
         release {
@@ -56,7 +56,7 @@ dependencies {
     compile 'com.balysv:material-ripple:1.0.2'
 
     //Charts
-    compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
+//    compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
 
     //Test Libraries
     testCompile 'junit:junit:4.12'

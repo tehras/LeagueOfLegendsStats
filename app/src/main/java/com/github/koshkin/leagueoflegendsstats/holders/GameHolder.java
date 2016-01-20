@@ -69,8 +69,10 @@ public class GameHolder extends RecyclerView.ViewHolder {
     public void populate(final Game game, final Activity activity, final String summonerId, boolean t) {
         //TOP Layout
         this.gameTypeTv.setText(generateGameType(game));
-        this.gameStartedTv.setText(gameStartedDate(game));
-        this.gameLengthTv.setText(gameLength(game));
+        final String startedDate = gameStartedDate(game);
+        final String gameLength = gameLength(game);
+        this.gameStartedTv.setText(startedDate);
+        this.gameLengthTv.setText(gameLength);
 
         new LoaderHelper() {
 
@@ -124,7 +126,7 @@ public class GameHolder extends RecyclerView.ViewHolder {
         mItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) activity).startFragment(MatchFragment.getInstance(summonerId, String.valueOf(game.getGameId())));
+                ((MainActivity) activity).startFragment(MatchFragment.getInstance(summonerId, String.valueOf(game.getGameId()), startedDate, gameLength));
             }
         });
     }
