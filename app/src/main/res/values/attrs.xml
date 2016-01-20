@@ -13,6 +13,9 @@
         <attr name="buttonText" format="string" localization="suggested"/>
         <attr name="textColor" format="color" localization="suggested"/>
     </declare-styleable>
+    <declare-styleable name="RoundedImageView">
+        <attr name="cornerSize" format="dimension" localization="suggested"/>
+    </declare-styleable>
     <declare-styleable name="MatchPerTenView">
         <attr name="matchPerTenTitle" format="string" localization="suggested"/>
     </declare-styleable>

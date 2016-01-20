@@ -35,6 +35,7 @@
     <dimen name="large_elevation">8dp</dimen>
     <dimen name="text_size_xsmall">10sp</dimen>
     <dimen name="small_icon_height">18dp</dimen>
+    <dimen name="item_icon_height">22dp</dimen>
     <dimen name="rounded_corners_radius">8dp</dimen>
     <dimen name="ribbon_top_negative_margin">-12dp</dimen>
     <dimen name="main_loading_rounded_size">16dp</dimen>
@@ -43,4 +44,5 @@
     <dimen name="text_size_small">13sp</dimen>
     <dimen name="background_lane_small">2dp</dimen>
     <dimen name="background_lane_radius_small">2dp</dimen>
+    <dimen name="small_corner">4dp</dimen>
 </resources>

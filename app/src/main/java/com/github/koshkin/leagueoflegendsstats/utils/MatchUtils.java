@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.koshkin.leagueoflegendsstats.models.GameStats;
 import com.github.koshkin.leagueoflegendsstats.models.TeamSide;
 import com.github.koshkin.leagueoflegendsstats.models.match.Participant;
 import com.github.koshkin.leagueoflegendsstats.models.match.ParticipantIdentity;
@@ -178,7 +177,7 @@ public class MatchUtils {
         if (participant == null || participant.getStats() == null)
             return Utils.NOT_AVAILABLE;
 
-        return NumberUtils.oneDecimalSafely(((double) participant.getStats().getGoldEarned()) / 1000) + "K\nGold";
+        return NumberUtils.oneDecimalSafely(((double) participant.getStats().getGoldEarned()) / 1000) + "K Gold";
 
     }
 

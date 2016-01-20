@@ -139,7 +139,7 @@ public class StaticDataHolder {
         if (itemIcon == null || itemIcon.getImage() == null)
             return null;
 
-        int size = mContext.getResources().getDimensionPixelSize(R.dimen.small_icon_height);
+        int size = mContext.getResources().getDimensionPixelSize(R.dimen.item_icon_height);
         return loadFromAssets(itemIcon.getImage(), size, size);
     }
 
@@ -148,7 +148,7 @@ public class StaticDataHolder {
         if (spell == null || spell.getImage() == null)
             return null;
 
-        int size = mContext.getResources().getDimensionPixelSize(R.dimen.small_icon_height);
+        int size = mContext.getResources().getDimensionPixelSize(R.dimen.item_icon_height);
         return loadFromAssets(spell.getImage(), size, size);
     }
 

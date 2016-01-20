@@ -186,6 +186,12 @@ public class MiddleIndividualLayoutHolder {
             TextView leftSideName = (TextView) view.findViewById(R.id.left_match_individual_name);
             TextView rightSideName = (TextView) view.findViewById(R.id.right_match_individual_name);
 
+            View overall = view.findViewById(R.id.match_individual_overall);
+            if (leftParticipant.getTeamId() == TeamSide.RED)
+                overall.setBackground(activity.getResources().getDrawable(R.drawable.background_red_blue));
+            else
+                overall.setBackground(activity.getResources().getDrawable(R.drawable.background_blue_red));
+
             View leftView = view.findViewById(R.id.match_left_side_container);
             View rightView = view.findViewById(R.id.match_right_side_container);
 
@@ -204,6 +210,14 @@ public class MiddleIndividualLayoutHolder {
                 rightSideName.setTextColor(activity.getResources().getColor(R.color.success_green));
             else
                 rightSideName.setTextColor(activity.getResources().getColor(rightSide.getSideColor()));
+
+            View leftGameRoleLayout = view.findViewById(R.id.left_game_role_layout);
+            TextView leftGameRoleText = (TextView) view.findViewById(R.id.left_game_role);
+            populateGameRole(leftGameRoleLayout, leftGameRoleText, MatchUtils.getRoleFromParticipant(leftParticipant), activity);
+
+            View rightGameRoleLayout = view.findViewById(R.id.right_game_role_layout);
+            TextView rightGameRoleText = (TextView) view.findViewById(R.id.right_game_role);
+            populateGameRole(rightGameRoleLayout, rightGameRoleText, MatchUtils.getRoleFromParticipant(rightParticipant), activity);
 
             //Populate First Kill Layout
             View leftSideFirstKill = view.findViewById(R.id.left_first_kill);
@@ -335,10 +349,6 @@ public class MiddleIndividualLayoutHolder {
         final ImageView summonerIcon2 = (ImageView) iconLayout.findViewById(R.id.icon2);
 
         TextView championName = (TextView) iconLayout.findViewById(R.id.champion_name);
-        View gameRoleLayout = iconLayout.findViewById(R.id.game_role_layout);
-        TextView gameRoleText = (TextView) iconLayout.findViewById(R.id.game_role);
-
-        populateGameRole(gameRoleLayout, gameRoleText, MatchUtils.getRoleFromParticipant(pariticipant), activity);
         championName.setText(StaticDataHolder.getInstance(activity).getChampionName(pariticipant.getChampionId()));
 
         new LoaderHelper() {

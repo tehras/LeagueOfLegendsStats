@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:rounded_image="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical">
@@ -12,72 +13,58 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="70"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
             <com.github.koshkin.leagueoflegendsstats.views.CircleImageView
                 android:id="@+id/champion_icon"
-                android:layout_width="@dimen/profile_icon_size_xsmall"
-                android:layout_height="@dimen/profile_icon_size_xsmall"
+                android:layout_width="@dimen/profile_icon_size_small"
+                android:layout_height="@dimen/profile_icon_size_small"
                 android:layout_gravity="start"
                 android:contentDescription="champion icon"
                 android:src="@drawable/ic_wallpaper_black_48dp"/>
 
-            <TextView
-                android:id="@+id/champion_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lines="1"
-                android:text="Kha-Zix"
-                android:textSize="@dimen/text_size_xsmall"/>
-
-            <RelativeLayout
-                android:id="@+id/game_role_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:background="@drawable/background_small_adc">
-
-                <TextView
-                    android:id="@+id/game_role"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ADC"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/text_size_xsmall"/>
-
-            </RelativeLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="2dp"
-            android:layout_weight="30"
-            android:gravity="center_vertical"
+            android:layout_marginStart="4dp"
+            android:gravity="top"
             android:orientation="vertical">
 
-            <ImageView
+            <com.github.koshkin.leagueoflegendsstats.views.RoundedImageView
                 android:id="@+id/icon1"
-                android:layout_width="@dimen/small_icon_height"
-                android:layout_height="@dimen/small_icon_height"
+                android:layout_width="@dimen/item_icon_height"
+                android:layout_height="@dimen/item_icon_height"
                 android:contentDescription="icon F"
-                android:src="@drawable/ic_wallpaper_black_48dp"/>
+                android:src="@drawable/ic_wallpaper_black_48dp"
+                rounded_image:cornerSize="@dimen/small_corner"/>
 
-            <ImageView
+            <com.github.koshkin.leagueoflegendsstats.views.RoundedImageView
                 android:id="@+id/icon2"
-                android:layout_width="@dimen/small_icon_height"
-                android:layout_height="@dimen/small_icon_height"
-                android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+                android:layout_width="@dimen/item_icon_height"
+                android:layout_height="@dimen/item_icon_height"
                 android:contentDescription="icon D"
-                android:src="@drawable/ic_wallpaper_black_48dp"/>
+                android:src="@drawable/ic_wallpaper_black_48dp"
+                rounded_image:cornerSize="@dimen/small_corner"/>
 
         </LinearLayout>
 
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/champion_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="Kha-Zix"
+        android:textSize="@dimen/text_size_small"
+        android:textStyle="bold"/>
 </LinearLayout>
