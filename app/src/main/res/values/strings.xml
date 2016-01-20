@@ -54,4 +54,6 @@
     <string name="no_favorite_players_added_yet">No Favorite players chosen yet</string>
     <string name="favorite_payer_title">Favorite Summoners</string>
     <string name="view_all_favorites">View All Favorite Champions</string>
+    <string name="menu_sort_by_alphabetical">Alphabetical</string>
+    <string name="menu_sort_by_date_added">Date Updated</string>
 </resources>

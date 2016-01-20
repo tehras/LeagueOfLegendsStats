@@ -7,12 +7,13 @@ import android.view.View;
 
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.models.Favorite;
+import com.github.koshkin.leagueoflegendsstats.models.Favorites;
 import com.github.koshkin.leagueoflegendsstats.utils.SharedPrefsUtil;
-
-import java.util.Set;
 
 /**
  * Created by tehras on 1/18/16.
+ * <p/>
+ * FloatingActionButtonHelper
  */
 @SuppressWarnings("deprecation")
 public class FloatingFavoriteActionButtonHelper {
@@ -31,7 +32,7 @@ public class FloatingFavoriteActionButtonHelper {
     }
 
     public boolean refresh(Favorite favorite, String summonerId) {
-        Set<String> favorites = SharedPrefsUtil.getFromSharedPrefs(favorite, PREFS_KEY, mActivity);
+        Favorites favorites = SharedPrefsUtil.getFromSharedPrefs(favorite, PREFS_KEY, mActivity);
         final boolean isAlreadyFav = containsInSet(favorites, summonerId);
 
         if (isAlreadyFav)
@@ -44,12 +45,12 @@ public class FloatingFavoriteActionButtonHelper {
         return isAlreadyFav;
     }
 
-    private boolean containsInSet(Set<String> favorites, String summonerId) {
-        if (summonerId == null || favorites == null)
+    private boolean containsInSet(Favorites favorites, String summonerId) {
+        if (summonerId == null || favorites == null || favorites.getFavorites() == null || favorites.getFavorites().size() == 0)
             return false;
 
-        for (String string : favorites) {
-            if (Favorite.fromJson(string).getSummonerId().equalsIgnoreCase(summonerId))
+        for (Favorite favorite : favorites.getFavorites()) {
+            if (favorite.getSummonerId().equalsIgnoreCase(summonerId))
                 return true;
         }
 

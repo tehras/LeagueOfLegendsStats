@@ -33,7 +33,7 @@ import java.util.Locale;
  */
 public class LeagueChampionHolder extends RecyclerView.ViewHolder {
     public final TextView mLosses, mWins, mWinP, mName, mPoints;
-    public final TextView mRank;
+    public final TextView mRank, mSmallDateText;
     public final View mDivider, mFreshBlood, mNewPlayer, mVeteran;
     public final ImageView mIcon;
     public final View mTotalView;
@@ -44,6 +44,7 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
 
         mTotalView = itemView.findViewById(R.id.material_clickable_layout);
 
+        mSmallDateText = (TextView) mTotalView.findViewById(R.id.small_date_layout);
         mWins = (TextView) itemView.findViewById(R.id.ranked_wins);
         mLosses = (TextView) itemView.findViewById(R.id.ranked_losses);
         mWinP = (TextView) itemView.findViewById(R.id.ranked_win_percentage);
@@ -142,7 +143,10 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
         mName.setSelected(true);
 
         mRank.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
-        mRank.setText("Last updated: " + getDate(favorite));
+        mSmallDateText.setVisibility(View.VISIBLE);
+        mSmallDateText.setText(getDate(favorite));
+        mSmallDateText.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+        mRank.setVisibility(View.GONE);
 
         mNewPlayer.setVisibility(View.GONE);
         mVeteran.setVisibility(View.GONE);
@@ -171,6 +175,19 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
         if (date > 0)
             c.setTimeInMillis(date);
 
+        Calendar today = Calendar.getInstance();
+        if (today.get(Calendar.DATE) == c.get(Calendar.DATE)) {
+            return "Last Updated : " + c.get(Calendar.HOUR) + ":" + c.get(Calendar.MINUTE) + " " + (c.get(Calendar.AM_PM) == 0 ? "AM" : "PM");
+        }
+        today.add(Calendar.HOUR, -24); //yesterady
+        if (today.before(c)) {
+            return "Last Updated Yesterday";
+        }
+
+        return "Last Updated On :" + getDateOther(c);
+    }
+
+    private String getDateOther(Calendar c) {
         String month = c.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US);
         String day = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
         String year = String.valueOf(c.get(Calendar.YEAR));
@@ -185,7 +202,7 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
     }
 
     private void startSummonerLayout(Favorite favorite, MainActivity activity) {
-        activity.startFragment(SummonerStatsFragment.getInstance(favorite.getName(), null));
+        activity.startFragment(SummonerStatsFragment.getInstance(favorite.getName(), favorite.getSummonerId()));
     }
 
     public void updateImage(LeagueStandings leagueStandings, Context context) {

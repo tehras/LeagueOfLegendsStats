@@ -11,7 +11,6 @@ import com.github.koshkin.leagueoflegendsstats.models.Favorite;
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
-import com.github.koshkin.leagueoflegendsstats.models.MatchHistory;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerStatSummaries;
 import com.github.koshkin.leagueoflegendsstats.models.RecentGames;
@@ -20,7 +19,6 @@ import com.github.koshkin.leagueoflegendsstats.models.Summoner;
 import com.github.koshkin.leagueoflegendsstats.models.match.FullMatch;
 import com.github.koshkin.leagueoflegendsstats.networking.Executor;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
-import com.github.koshkin.leagueoflegendsstats.networking.URIConstants;
 import com.github.koshkin.leagueoflegendsstats.networking.URIHelper;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingFavoriteActionButtonHelper;
 
@@ -115,10 +113,6 @@ public class BaseFragment extends Fragment implements FloatingFavoriteActionButt
 
     protected void executeGetMasterStandings(Request.RequestCallback requestCallback, LeagueQueueType type) {
         new Executor(new Request(Request.RequestType.GET, new LeagueStandings(), requestCallback, URIHelper.GET_MASTER, type.name()), getActivity()).execute();
-    }
-
-    protected void executeGetRankedHistory5v5(Request.RequestCallback requestCallback, String summonerId) {
-        new Executor(new Request(Request.RequestType.GET, new MatchHistory(), requestCallback, URIHelper.GET_SUMMONER_RANKED_HISTORY_5V5, summonerId, URIConstants.PARAM_RANKED_SOLO_5V5), getActivity()).execute();
     }
 
     protected void executeGetRankeGameHistory(Request.RequestCallback requestCallback, String summonerId) {

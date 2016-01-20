@@ -41,6 +41,17 @@
                 android:text="Rank 1"
                 tools:ignore="RtlSymmetry"/>
 
+            <TextView
+                android:id="@+id/small_date_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:text="Lsat Updated On: Yesterady"
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone"/>
+
         </RelativeLayout>
 
         <LinearLayout

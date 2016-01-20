@@ -2,16 +2,17 @@ package com.github.koshkin.leagueoflegendsstats.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.models.Favorite;
+import com.github.koshkin.leagueoflegendsstats.models.Favorites;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
 
 /**
  * Created by tehras on 1/14/16.
+ * <p/>
+ * SharedPreferences helper
  */
 public class SharedPrefsUtil {
 
@@ -34,26 +35,30 @@ public class SharedPrefsUtil {
         SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(prefName, Context.MODE_PRIVATE);
 
         if (prefs != null) {
-            Set<String> set = prefs.getStringSet(prefName, null);
+            String string = prefs.getString(prefName, null);
 
-            if (set != null && removeFavoriteFromSet(favorite, set)) {
-                prefs.edit().putStringSet(prefName, set).apply();
+            string = removeFavoriteFromSet(favorite, string);
+            if (string != null) {
+                prefs.edit().putString(prefName, string).apply();
             }
         }
     }
 
-    private static boolean removeFavoriteFromSet(Favorite favorite, Set<String> set) {
-        String stringToRemove = getFavorite(favorite, set);
+    private static String removeFavoriteFromSet(Favorite favorite, String set) {
+        if (!NullChecker.isNullOrEmpty(set)) {
+            Favorites favorites = Favorites.fromJson(set);
+            if (favorites != null && favorites.getFavorites() != null) {
+                Favorite favoriteToRemove = getFavorite(favorite, favorites.getFavorites());
 
-        if (stringToRemove != null) {
-            set.remove(stringToRemove);
-            return true;
+                if (favoriteToRemove != null) {
+                    favorites.getFavorites().remove(favoriteToRemove);
+                    return favorites.toJson();
+                }
+            }
         }
 
-        return false;
+        return null;
     }
-
-    private static final String TAG = "SharedPrefsUtils";
 
     public static void addToSharedPrefs(Favorite favorite, String prefName, Context context) {
         context = fixContext(context);
@@ -64,60 +69,73 @@ public class SharedPrefsUtil {
         SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(prefName, Context.MODE_PRIVATE);
 
         if (prefs != null) {
-            Set<String> set = prefs.getStringSet(prefName, null);
+            String set = prefs.getString(prefName, null);
 
-            if (set == null)
-                set = new HashSet<>();
-
-            addToSet(favorite, set);
-
-            Log.e(TAG, "" + set.size());
-            prefs.edit().putStringSet(prefName, set).apply();
-        }
-    }
-
-    private static void addToSet(Favorite addFavorite, Set<String> set) {
-        String stringToRemove = getFavorite(addFavorite, set);
-
-        if (stringToRemove != null) {
-            set.remove(stringToRemove);
-        }
-
-        set.add(addFavorite.toJson());
-    }
-
-    private static String getFavorite(Favorite addFavorite, Set<String> set) {
-        for (String string : set) {
-            Favorite favorite = Favorite.fromJson(string);
-            if (favorite.getSummonerId().equalsIgnoreCase(addFavorite.getSummonerId())) {
-                return string;
+            Favorites favorites = null;
+            if (!NullChecker.isNullOrEmpty(set)) {
+                favorites = Favorites.fromJson(set);
             }
+            if (favorites == null || favorites.getFavorites() == null) {
+                favorites = new Favorites();
+            }
+
+            addToSet(favorite, favorites);
+
+            prefs.edit().putString(prefName, favorites.toJson()).apply();
         }
+    }
+
+    private static void addToSet(Favorite addFavorite, Favorites favorites) {
+        Favorite favorite = getFavorite(addFavorite, favorites.getFavorites());
+
+        if (favorite != null) {
+            favorites.getFavorites().remove(favorite);
+        }
+
+        favorites.addFavorite(addFavorite);
+    }
+
+    private static Favorite getFavorite(Favorite addFavorite, ArrayList<Favorite> favorites) {
+        if (addFavorite != null && favorites != null && favorites.size() > 0)
+            for (Favorite favorite : favorites) {
+                if (favorite != null && favorite.getSummonerId().equalsIgnoreCase(addFavorite.getSummonerId())) {
+                    return favorite;
+                }
+            }
+
         return null;
     }
 
-    private static void addIfAlreadyContains(Favorite addFavorite, Set<String> set) {
-        if (addFavorite == null)
-            return;
+    private static Favorites addIfAlreadyContains(Favorite addFavorite, String set, SharedPreferences.Editor edit, String key) {
+        if (!NullChecker.isNullOrEmpty(set)) {
+            Favorites favorites = Favorites.fromJson(set);
+            if (addFavorite != null && favorites != null && favorites.getFavorites() != null) {
+                Favorite favorite = getFavorite(addFavorite, favorites.getFavorites());
+                if (favorite != null) {
+                    favorites.removeFavorite(favorite);
+                    favorites.addFavorite(addFavorite);
 
-        String stringToRemove = getFavorite(addFavorite, set);
-
-        if (stringToRemove != null) {
-            set.remove(stringToRemove);
-            set.add(addFavorite.toJson());
+                    edit.putString(key, favorites.toJson()).apply();
+                }
+            }
+            return favorites;
         }
+
+        return null;
     }
 
-    public static Set<String> getFromSharedPrefs(Favorite favorite, String prefName, Context context) {
+    public static Favorites getFromSharedPrefs(Favorite favorite, String prefName, Context context) {
         context = fixContext(context);
         SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(prefName, Context.MODE_PRIVATE);
 
         if (prefs != null) {
-            Set<String> set = prefs.getStringSet(prefName, null);
-            addIfAlreadyContains(favorite, set);
+            String set = prefs.getString(prefName, null);
+            SharedPreferences.Editor edit = prefs.edit();
 
-            Log.e(TAG, "" + (set != null ? set.size() : 0));
-            return set;
+            Favorites favorites = addIfAlreadyContains(favorite, set, edit, prefName);
+            edit.apply();
+
+            return favorites;
         }
         return null;
     }

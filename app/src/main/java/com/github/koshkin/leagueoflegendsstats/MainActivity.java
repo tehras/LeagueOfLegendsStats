@@ -24,7 +24,6 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.koshkin.leagueoflegendsstats.fragments.HomeFragment;
-import com.github.koshkin.leagueoflegendsstats.utils.SharedPrefsUtil;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingActionButtonViewHelper;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingFavoriteActionButtonHelper;
 import com.github.koshkin.leagueoflegendsstats.views.BlockableFloatingActionBar;

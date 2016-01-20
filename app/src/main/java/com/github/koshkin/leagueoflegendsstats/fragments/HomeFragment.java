@@ -6,13 +6,13 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.github.koshkin.leagueoflegendsstats.BaseFragment;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.holders.LeagueChampionHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Favorite;
+import com.github.koshkin.leagueoflegendsstats.models.Favorites;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.RankedSummoner;
@@ -24,7 +24,6 @@ import com.github.koshkin.leagueoflegendsstats.views.CustomCardView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Set;
 
 
 /**
@@ -37,7 +36,7 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
     private CustomCardView mChallengerLayout;
     private LeagueStandings mLeagueStandings;
     private CustomCardView mFavoriteLayout;
-    private boolean mFirstLoad;
+    private boolean mFirstLoad = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -139,30 +138,36 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
     }
 
     private void populateFavoriteLayout() {
-        Set<String> set = SharedPrefsUtil.getFromSharedPrefs(null, FloatingFavoriteActionButtonHelper.PREFS_KEY, getActivity());
-        if (set != null && set.size() > 0) {
+        Favorites favorites = SharedPrefsUtil.getFromSharedPrefs(null, FloatingFavoriteActionButtonHelper.PREFS_KEY, getActivity());
+        if (favorites != null && favorites.getFavorites() != null && favorites.getFavorites().size() > 0) {
             int i = 0;
-            for (String string : set) {
+
+            ArrayList<Favorite> favoriteArrayList = favorites.getFavorites();
+            Collections.sort(favoriteArrayList, new Favorites().new DateAddedComparator());
+
+            for (Favorite favorite : favoriteArrayList) {
                 if (i > 2)
                     break;
 
-                Favorite favorite = Favorite.fromJson(string);
                 if (favorite == null)
                     continue;
 
                 mFavoriteLayout.addViewToHolder(getFavoritesView(favorite));
                 i++;
             }
+
+            mFavoriteLayout.setViewAllOnClickListener(viewAllFavoritesListener(favorites));
         } else {
-            mFavoriteLayout.showError().setViewAllOnClickListener(viewAllFavoritesListener());
+            mFavoriteLayout.showError();
         }
     }
 
-    private View.OnClickListener viewAllFavoritesListener() {
+    private View.OnClickListener viewAllFavoritesListener(final Favorites favorites) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+                if (getActivity() != null && getActivity() instanceof MainActivity)
+                    ((MainActivity) getActivity()).startFragment(FavoritesFragment.getInstance(favorites));
             }
         };
     }
