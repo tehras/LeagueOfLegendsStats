@@ -18,7 +18,7 @@ import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.holders.ChampionHolder;
 import com.github.koshkin.leagueoflegendsstats.holders.GameHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Champion;
-import com.github.koshkin.leagueoflegendsstats.models.Favorite;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
 import com.github.koshkin.leagueoflegendsstats.models.Game;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
@@ -76,13 +76,13 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
     }
 
     @Override
-    public String getSummonerId() {
-        return mSummonerId;
+    public String getSummonerName() {
+        return mSummonerName;
     }
 
     @Override
-    public Favorite getFavorite() {
-        return new Favorite(mRankedStats, mSummonerId, mSummonerName, mSummonerIconId);
+    public SimpleSummoner getFavorite() {
+        return new SimpleSummoner(mRankedStats, mSummonerId, mSummonerName, mSummonerIconId);
     }
 
     @Nullable

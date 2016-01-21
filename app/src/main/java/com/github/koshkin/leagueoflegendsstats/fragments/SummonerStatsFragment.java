@@ -17,16 +17,18 @@ import android.widget.TextView;
 import com.github.koshkin.leagueoflegendsstats.BaseFragment;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
-import com.github.koshkin.leagueoflegendsstats.models.Favorite;
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerStatSummaries;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerSummary;
+import com.github.koshkin.leagueoflegendsstats.models.RecentSummoner;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Summoner;
 import com.github.koshkin.leagueoflegendsstats.models.SummonerAggregateObject;
 import com.github.koshkin.leagueoflegendsstats.models.SummonerInfo;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.networking.Response;
+import com.github.koshkin.leagueoflegendsstats.sqlite.RecentSearchSqlLiteHelper;
 import com.github.koshkin.leagueoflegendsstats.utils.NumberUtils;
 import com.github.koshkin.leagueoflegendsstats.utils.Utils;
 
@@ -74,15 +76,19 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
         return true;
     }
 
+    protected String getSummonerName() {
+        return mSummonerName;
+    }
+
     protected String getSummonerId() {
         return mSummonerId;
     }
 
     @Override
-    public Favorite getFavorite() {
+    public SimpleSummoner getFavorite() {
         if (mSummonerAggregateObject == null || mSummonerAggregateObject.getSummoner() == null || mSummonerAggregateObject.getPlayerStatSummaries() == null)
             return null;
-        return new Favorite(mSummonerAggregateObject);
+        return new SimpleSummoner(mSummonerAggregateObject);
     }
 
     @Nullable
@@ -238,6 +244,14 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                 }
                 break;
         }
+        addToRecent(mSummonerAggregateObject);
+    }
+
+    private void addToRecent(SummonerAggregateObject summoner) {
+        if (summoner.getPlayerStatSummaries() != null && summoner.getSummoner() != null) {
+            RecentSummoner recentSummoner = new RecentSummoner(summoner);
+            RecentSearchSqlLiteHelper.addRecent(recentSummoner);
+        }
     }
 
     private void getProfileImage(SummonerInfo summonerInfo) {
@@ -269,7 +283,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
     }
 
     private void populateSummaryLayout() {
-        mSummaryName.setText(getSummonerName());
+        mSummaryName.setText(getSummonerNameFromAggregate());
         if (mSummonerAggregateObject != null && mSummonerAggregateObject.getSummoner() != null && mSummonerAggregateObject.getPlayerStatSummaries() != null) {
             PlayerSummary summary = getRankedStats(mSummonerAggregateObject.getPlayerStatSummaries().getPlayerSummaries());
             if (summary != null) {
@@ -301,7 +315,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
         return NOT_AVAILABLE;
     }
 
-    public String getSummonerName() {
+    public String getSummonerNameFromAggregate() {
         if (mSummonerAggregateObject == null)
             return "";
 

@@ -319,10 +319,10 @@ public class MainActivity extends AppCompatActivity
         startFragment(HomeFragment.class);
     }
 
-    public void showFaveFab(FloatingFavoriteActionButtonHelper.FavoriteCallback favoriteCallback, String summonerId) {
+    public void showFaveFab(FloatingFavoriteActionButtonHelper.FavoriteCallback favoriteCallback, String summonerName) {
         if (mFavFab != null) {
             mFavFab.setBlocked(false);
-            new FloatingFavoriteActionButtonHelper(mFavFab, this, favoriteCallback, summonerId).init();
+            new FloatingFavoriteActionButtonHelper(mFavFab, this, favoriteCallback, summonerName).init();
         }
     }
 

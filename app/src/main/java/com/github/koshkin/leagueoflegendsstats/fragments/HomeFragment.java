@@ -11,15 +11,14 @@ import com.github.koshkin.leagueoflegendsstats.BaseFragment;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.holders.LeagueChampionHolder;
-import com.github.koshkin.leagueoflegendsstats.models.Favorite;
-import com.github.koshkin.leagueoflegendsstats.models.Favorites;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummonerComparator;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.RankedSummoner;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.networking.Response;
-import com.github.koshkin.leagueoflegendsstats.utils.SharedPrefsUtil;
-import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingFavoriteActionButtonHelper;
+import com.github.koshkin.leagueoflegendsstats.sqlite.FavoritesSqLiteHelper;
 import com.github.koshkin.leagueoflegendsstats.views.CustomCardView;
 
 import java.util.ArrayList;
@@ -138,36 +137,35 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
     }
 
     private void populateFavoriteLayout() {
-        Favorites favorites = SharedPrefsUtil.getFromSharedPrefs(null, FloatingFavoriteActionButtonHelper.PREFS_KEY, getActivity());
-        if (favorites != null && favorites.getFavorites() != null && favorites.getFavorites().size() > 0) {
+        ArrayList<SimpleSummoner> simpleSummoners = (ArrayList<SimpleSummoner>) FavoritesSqLiteHelper.getAllFavorites();
+        if (simpleSummoners != null && simpleSummoners.size() > 0) {
             int i = 0;
 
-            ArrayList<Favorite> favoriteArrayList = favorites.getFavorites();
-            Collections.sort(favoriteArrayList, new Favorites().new DateAddedComparator());
+            Collections.sort(simpleSummoners, new SimpleSummonerComparator().new DateAddedComparator());
 
-            for (Favorite favorite : favoriteArrayList) {
+            for (SimpleSummoner simpleSummoner : simpleSummoners) {
                 if (i > 2)
                     break;
 
-                if (favorite == null)
+                if (simpleSummoner == null)
                     continue;
 
-                mFavoriteLayout.addViewToHolder(getFavoritesView(favorite));
+                mFavoriteLayout.addViewToHolder(getFavoritesView(simpleSummoner));
                 i++;
             }
 
-            mFavoriteLayout.setViewAllOnClickListener(viewAllFavoritesListener(favorites));
+            mFavoriteLayout.setViewAllOnClickListener(viewAllFavoritesListener(simpleSummoners));
         } else {
             mFavoriteLayout.showError();
         }
     }
 
-    private View.OnClickListener viewAllFavoritesListener(final Favorites favorites) {
+    private View.OnClickListener viewAllFavoritesListener(final ArrayList<SimpleSummoner> simpleSummoners) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getActivity() != null && getActivity() instanceof MainActivity)
-                    ((MainActivity) getActivity()).startFragment(FavoritesFragment.getInstance(favorites));
+                    ((MainActivity) getActivity()).startFragment(FavoritesFragment.getInstance(simpleSummoners));
             }
         };
     }
@@ -206,11 +204,11 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
         return view;
     }
 
-    private View getFavoritesView(Favorite favorite) {
+    private View getFavoritesView(SimpleSummoner simpleSummoner) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.partial_summoner, null);
-        new LeagueChampionHolder(view).populate(favorite, (MainActivity) getActivity(), false);
+        new LeagueChampionHolder(view).populate(simpleSummoner, (MainActivity) getActivity(), false);
 
         return view;
     }

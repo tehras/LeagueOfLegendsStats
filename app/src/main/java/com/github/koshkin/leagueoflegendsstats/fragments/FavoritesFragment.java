@@ -8,24 +8,27 @@ import android.view.MenuItem;
 
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.adapters.FavoritesAdapter;
-import com.github.koshkin.leagueoflegendsstats.models.Favorites;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummonerComparator;
+
+import java.util.ArrayList;
 
 /**
  * Created by tehras on 1/19/16.
- *
- * Favorites Fragment
+ * <p/>
+ * SimpleSummonerComparator Fragment
  */
 public class FavoritesFragment extends BaseSimpleRecyclerViewFragment {
 
-    private Favorites mFavorites;
-    private Favorites.SortBy mSortBy;
+    private ArrayList<SimpleSummoner> mSimpleSummoners;
+    private SimpleSummonerComparator.SortBy mSortBy;
 
-    public static FavoritesFragment getInstance(Favorites favorites) {
-        return new FavoritesFragment().setFavorites(favorites);
+    public static FavoritesFragment getInstance(ArrayList<SimpleSummoner> simpleSummoners) {
+        return new FavoritesFragment().setSimpleSummoners(simpleSummoners);
     }
 
-    public FavoritesFragment setFavorites(Favorites favorites) {
-        mFavorites = favorites;
+    public FavoritesFragment setSimpleSummoners(ArrayList<SimpleSummoner> simpleSummoners) {
+        mSimpleSummoners = simpleSummoners;
         return this;
     }
 
@@ -34,7 +37,7 @@ public class FavoritesFragment extends BaseSimpleRecyclerViewFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        mSortBy = Favorites.SortBy.DATE_ADDED;
+        mSortBy = SimpleSummonerComparator.SortBy.DATE_ADDED;
     }
 
     private FavoritesAdapter mAdapter;
@@ -47,23 +50,23 @@ public class FavoritesFragment extends BaseSimpleRecyclerViewFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Favorites.SortBy thisSortBy = mSortBy;
+        SimpleSummonerComparator.SortBy thisSortBy = mSortBy;
 
         switch (item.getItemId()) {
             case R.id.action_sort_alpha:
-                thisSortBy = Favorites.SortBy.ALPHABETICAL;
+                thisSortBy = SimpleSummonerComparator.SortBy.ALPHABETICAL;
                 break;
             case R.id.action_sort_date_added:
-                thisSortBy = Favorites.SortBy.DATE_ADDED;
+                thisSortBy = SimpleSummonerComparator.SortBy.DATE_ADDED;
                 break;
             case R.id.action_sort_win_p:
-                thisSortBy = Favorites.SortBy.WIN_P;
+                thisSortBy = SimpleSummonerComparator.SortBy.WIN_P;
                 break;
             case R.id.action_sort_wins:
-                thisSortBy = Favorites.SortBy.WINS;
+                thisSortBy = SimpleSummonerComparator.SortBy.WINS;
                 break;
             case R.id.action_sort_losses:
-                thisSortBy = Favorites.SortBy.LOSSES;
+                thisSortBy = SimpleSummonerComparator.SortBy.LOSSES;
                 break;
         }
 
@@ -83,7 +86,7 @@ public class FavoritesFragment extends BaseSimpleRecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getAdapter() {
         if (mAdapter == null)
-            mAdapter = new FavoritesAdapter(mFavorites, getActivity());
+            mAdapter = new FavoritesAdapter(mSimpleSummoners, getActivity());
 
         return mAdapter;
     }

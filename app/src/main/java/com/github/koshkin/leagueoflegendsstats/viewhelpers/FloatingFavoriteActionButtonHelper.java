@@ -6,9 +6,8 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.github.koshkin.leagueoflegendsstats.R;
-import com.github.koshkin.leagueoflegendsstats.models.Favorite;
-import com.github.koshkin.leagueoflegendsstats.models.Favorites;
-import com.github.koshkin.leagueoflegendsstats.utils.SharedPrefsUtil;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
+import com.github.koshkin.leagueoflegendsstats.sqlite.FavoritesSqLiteHelper;
 
 /**
  * Created by tehras on 1/18/16.
@@ -31,9 +30,13 @@ public class FloatingFavoriteActionButtonHelper {
         mSummonerId = summonerId;
     }
 
-    public boolean refresh(Favorite favorite, String summonerId) {
-        Favorites favorites = SharedPrefsUtil.getFromSharedPrefs(favorite, PREFS_KEY, mActivity);
-        final boolean isAlreadyFav = containsInSet(favorites, summonerId);
+    public boolean refresh(SimpleSummoner simpleSummoner, String summonerName) {
+        SimpleSummoner favorites = FavoritesSqLiteHelper.getFavorite(summonerName);
+
+        boolean isAlreadyFav = favorites != null;
+
+        if (isAlreadyFav)
+            FavoritesSqLiteHelper.updateFavorite(simpleSummoner);
 
         if (isAlreadyFav)
             mFab.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.ic_fav_fab_disable));
@@ -45,51 +48,37 @@ public class FloatingFavoriteActionButtonHelper {
         return isAlreadyFav;
     }
 
-    private boolean containsInSet(Favorites favorites, String summonerId) {
-        if (summonerId == null || favorites == null || favorites.getFavorites() == null || favorites.getFavorites().size() == 0)
-            return false;
-
-        for (Favorite favorite : favorites.getFavorites()) {
-            if (favorite.getSummonerId().equalsIgnoreCase(summonerId))
-                return true;
-        }
-
-        return false;
-    }
-
     public void init() {
         mIsAlreadyFav = refresh(null, mSummonerId);
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Favorite favorite = mFavoriteCallback.getFavorite();
+                SimpleSummoner simpleSummoner = mFavoriteCallback.getFavorite();
 
                 String text;
                 if (mIsAlreadyFav) {
                     text = "Removed from Favorites";
-                    removeFromFavorites(favorite, mActivity);
+                    removeFromFavorites(simpleSummoner);
                 } else {
                     text = "Added to Favorites";
-                    addToFavorites(mFavoriteCallback.getFavorite(), mActivity);
+                    addToFavorites(mFavoriteCallback.getFavorite());
                 }
                 Snackbar.make(mFab, text, Snackbar.LENGTH_SHORT).show();
-                mIsAlreadyFav = refresh(favorite, mSummonerId);
+                mIsAlreadyFav = refresh(simpleSummoner, mSummonerId);
             }
         });
     }
 
-    public static final String PREFS_KEY = "favorite_summoners_key";
-
-    private void removeFromFavorites(Favorite favorite, Activity activity) {
-        SharedPrefsUtil.removeFromSharedPrefs(favorite, PREFS_KEY, activity);
+    private void removeFromFavorites(SimpleSummoner simpleSummoner) {
+        FavoritesSqLiteHelper.deleteFavorite(simpleSummoner);
     }
 
-    private void addToFavorites(Favorite favorite, Activity activity) {
-        SharedPrefsUtil.addToSharedPrefs(favorite, PREFS_KEY, activity);
+    private void addToFavorites(SimpleSummoner simpleSummoner) {
+        FavoritesSqLiteHelper.addFavorite(simpleSummoner);
     }
 
     public interface FavoriteCallback {
-        Favorite getFavorite();
+        SimpleSummoner getFavorite();
     }
 }

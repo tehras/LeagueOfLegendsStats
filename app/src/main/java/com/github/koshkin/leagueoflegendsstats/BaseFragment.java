@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.ImageView;
 
-import com.github.koshkin.leagueoflegendsstats.models.Favorite;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
@@ -53,7 +53,7 @@ public class BaseFragment extends Fragment implements FloatingFavoriteActionButt
             ((MainActivity) getActivity()).hideError();
             ((MainActivity) getActivity()).resetScrollView();
             if (showFab())
-                ((MainActivity) getActivity()).showFaveFab(this, getSummonerId());
+                ((MainActivity) getActivity()).showFaveFab(this, getSummonerName());
             else
                 ((MainActivity) getActivity()).hideFaveFab();
         }
@@ -64,7 +64,7 @@ public class BaseFragment extends Fragment implements FloatingFavoriteActionButt
         super.onPause();
     }
 
-    protected String getSummonerId() {
+    protected String getSummonerName() {
         return null;
     }
 
@@ -172,7 +172,7 @@ public class BaseFragment extends Fragment implements FloatingFavoriteActionButt
 
 
     @Override
-    public Favorite getFavorite() {
+    public SimpleSummoner getFavorite() {
         return null;
     }
 }

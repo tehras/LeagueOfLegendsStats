@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.fragments.SummonerStatsFragment;
-import com.github.koshkin.leagueoflegendsstats.models.Favorite;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.RankedSummoner;
@@ -114,23 +114,23 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
     }
 
     @SuppressLint("SetTextI18n")
-    public void populate(final Favorite favorite, final MainActivity activity, boolean t) {
+    public void populate(final SimpleSummoner simpleSummoner, final MainActivity activity, boolean t) {
         mStreaksLayout.setVisibility(View.GONE);
         mPointsLayout.setVisibility(View.GONE);
 
-        if (favorite.getWins() > 0)
-            mWins.setText(String.valueOf(favorite.getWins()));
+        if (simpleSummoner.getWins() > 0)
+            mWins.setText(String.valueOf(simpleSummoner.getWins()));
         else
             mWinP.setText(Utils.NOT_AVAILABLE);
-        if (favorite.getLosses() > 0)
-            mLosses.setText(String.valueOf(favorite.getLosses()));
+        if (simpleSummoner.getLosses() > 0)
+            mLosses.setText(String.valueOf(simpleSummoner.getLosses()));
         else
             mLosses.setText(Utils.NOT_AVAILABLE);
 
 
         double winPercentage = -1d;
-        if (favorite.getWins() > 0 && favorite.getLosses() > 0)
-            winPercentage = ((double) favorite.getWins() * 100) / (((double) favorite.getLosses() + (double) favorite.getWins()));
+        if (simpleSummoner.getWins() > 0 && simpleSummoner.getLosses() > 0)
+            winPercentage = ((double) simpleSummoner.getWins() * 100) / (((double) simpleSummoner.getLosses() + (double) simpleSummoner.getWins()));
 
         Utils.assignWinPercentageColor(mWinP, winPercentage, activity);
         if (winPercentage != -1d)
@@ -139,12 +139,12 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
             mWinP.setText(Utils.NOT_AVAILABLE);
 
         mPoints.setVisibility(View.GONE);
-        mName.setText(favorite.getName());
+        mName.setText(simpleSummoner.getName());
         mName.setSelected(true);
 
         mRank.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
         mSmallDateText.setVisibility(View.VISIBLE);
-        mSmallDateText.setText(getDate(favorite));
+        mSmallDateText.setText(getDate(simpleSummoner));
         mSmallDateText.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
         mRank.setVisibility(View.GONE);
 
@@ -155,8 +155,8 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
         if (t)
             mDivider.setVisibility(View.GONE);
 
-        if (favorite.getIconId() != -1) {
-            populateImage(favorite.getIconId(), activity, mIcon);
+        if (simpleSummoner.getIconId() != -1) {
+            populateImage(simpleSummoner.getIconId(), activity, mIcon);
         } else
             mIcon.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_account_circle_black_48dp, null));
 
@@ -164,13 +164,13 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
         mTotalView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startSummonerLayout(favorite, activity);
+                startSummonerLayout(simpleSummoner, activity);
             }
         });
     }
 
-    private String getDate(Favorite favorite) {
-        long date = favorite.getDate();
+    private String getDate(SimpleSummoner simpleSummoner) {
+        long date = simpleSummoner.getDate();
         Calendar c = Calendar.getInstance();
         if (date > 0)
             c.setTimeInMillis(date);
@@ -201,8 +201,8 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
         activity.startFragment(summonerStatsFragment);
     }
 
-    private void startSummonerLayout(Favorite favorite, MainActivity activity) {
-        activity.startFragment(SummonerStatsFragment.getInstance(favorite.getName(), favorite.getSummonerId()));
+    private void startSummonerLayout(SimpleSummoner simpleSummoner, MainActivity activity) {
+        activity.startFragment(SummonerStatsFragment.getInstance(simpleSummoner.getName(), simpleSummoner.getSummonerId()));
     }
 
     public void updateImage(LeagueStandings leagueStandings, Context context) {

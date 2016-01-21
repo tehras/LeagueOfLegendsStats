@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.holders.LeagueChampionHolder;
-import com.github.koshkin.leagueoflegendsstats.models.Favorite;
-import com.github.koshkin.leagueoflegendsstats.models.Favorites;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummonerComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,43 +18,43 @@ import java.util.Comparator;
 /**
  * Created by tehras on 1/19/16.
  * <p/>
- * Favorites adapter
+ * SimpleSummonerComparator adapter
  */
 public class FavoritesAdapter extends RecyclerView.Adapter<LeagueChampionHolder> {
     private final Activity mContext;
-    private ArrayList<Favorite> mFavorites;
+    private ArrayList<SimpleSummoner> mSimpleSummoners;
 
-    public FavoritesAdapter(Favorites favorites, Activity activity) {
-        if (favorites != null) {
-            mFavorites = favorites.getFavorites();
-            sortBy(Favorites.SortBy.DATE_ADDED);
+    public FavoritesAdapter(ArrayList<SimpleSummoner> simpleSummoners, Activity activity) {
+        if (simpleSummoners != null) {
+            mSimpleSummoners = simpleSummoners;
+            sortBy(SimpleSummonerComparator.SortBy.DATE_ADDED);
         }
         mContext = activity;
     }
 
-    private void sortBy(Favorites.SortBy sortBy) {
-        if (mFavorites != null && mFavorites.size() > 0) {
-            Comparator<Favorite> comparator = null;
+    private void sortBy(SimpleSummonerComparator.SortBy sortBy) {
+        if (mSimpleSummoners != null && mSimpleSummoners.size() > 0) {
+            Comparator<SimpleSummoner> comparator = null;
 
             switch (sortBy) {
                 case WIN_P:
-                    comparator = new Favorites().new WinPComparator();
+                    comparator = new SimpleSummonerComparator().new WinPComparator();
                     break;
                 case WINS:
-                    comparator = new Favorites().new WinComparator();
+                    comparator = new SimpleSummonerComparator().new WinComparator();
                     break;
                 case LOSSES:
-                    comparator = new Favorites().new LossComparator();
+                    comparator = new SimpleSummonerComparator().new LossComparator();
                     break;
                 case ALPHABETICAL:
-                    comparator = new Favorites().new AlphabeticalComparator();
+                    comparator = new SimpleSummonerComparator().new AlphabeticalComparator();
                     break;
                 case DATE_ADDED:
-                    comparator = new Favorites().new DateAddedComparator();
+                    comparator = new SimpleSummonerComparator().new DateAddedComparator();
                     break;
             }
 
-            Collections.sort(mFavorites, comparator);
+            Collections.sort(mSimpleSummoners, comparator);
         }
     }
 
@@ -68,17 +68,17 @@ public class FavoritesAdapter extends RecyclerView.Adapter<LeagueChampionHolder>
 
     @Override
     public void onBindViewHolder(LeagueChampionHolder holder, int position) {
-        holder.populate(mFavorites.get(position), (MainActivity) mContext, true);
+        holder.populate(mSimpleSummoners.get(position), (MainActivity) mContext, true);
     }
 
     @Override
     public int getItemCount() {
-        if (mFavorites == null)
+        if (mSimpleSummoners == null)
             return 0;
-        else return mFavorites.size();
+        else return mSimpleSummoners.size();
     }
 
-    public void updateSort(Favorites.SortBy sortBy) {
+    public void updateSort(SimpleSummonerComparator.SortBy sortBy) {
         sortBy(sortBy);
         notifyDataSetChanged();
     }

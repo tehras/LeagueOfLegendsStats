@@ -58,8 +58,13 @@ dependencies {
     //Charts
 //    compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
 
+    //SQLite ORM
+    compile 'com.github.satyan:sugar:1.4'
+
     //Test Libraries
     testCompile 'junit:junit:4.12'
+
+    //Crashalytics
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
