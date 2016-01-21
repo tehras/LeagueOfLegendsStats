@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ToolbarSearchView toolbarSearchView = (ToolbarSearchView) findViewById(R.id.toolbar_search_layout);
+        
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (toolbarSearchView.getVisibility() == View.VISIBLE) {

@@ -13,10 +13,10 @@ import android.widget.TextView;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.fragments.SummonerStatsFragment;
-import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.RankedSummoner;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Summoner;
 import com.github.koshkin.leagueoflegendsstats.utils.NumberUtils;
@@ -177,7 +177,13 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
 
         Calendar today = Calendar.getInstance();
         if (today.get(Calendar.DATE) == c.get(Calendar.DATE)) {
-            return "Last Updated : " + c.get(Calendar.HOUR) + ":" + c.get(Calendar.MINUTE) + " " + (c.get(Calendar.AM_PM) == 0 ? "AM" : "PM");
+            String hour = String.valueOf(c.get(Calendar.HOUR));
+            String minute = String.valueOf(c.get(Calendar.MINUTE));
+            if (minute.length() == 1)
+                minute = "0" + minute;
+            int amPm = (c.get(Calendar.AM_PM));
+
+            return "Last Updated : " + hour + ":" + minute + " " + (amPm == 0 ? "AM" : "PM");
         }
         today.add(Calendar.HOUR, -24); //yesterady
         if (today.before(c)) {

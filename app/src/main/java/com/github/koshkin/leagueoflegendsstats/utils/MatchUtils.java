@@ -24,6 +24,8 @@ import static com.github.koshkin.leagueoflegendsstats.utils.Utils.NOT_AVAILABLE;
 
 /**
  * Created by tehras on 1/17/16.
+ * <p/>
+ * Match Utils to help with the view
  */
 public class MatchUtils {
 
@@ -88,15 +90,6 @@ public class MatchUtils {
         return MiddleIndividualLayoutHolder.Role.NONE;
     }
 
-    public static Participant getParticipantFromRoleAndSide(List<Participant> participants, TeamSide teamSide, MiddleIndividualLayoutHolder.Role role) {
-        for (Participant participant : participants) {
-            if (participant.getTeamId() == teamSide && MatchUtils.getRoleFromParticipant(participant) == role) {
-                return participant;
-            }
-        }
-        return null;
-    }
-
     public static ParticipantIdentity getParticipantIdenityFromParticipant(List<ParticipantIdentity> participantIdentities, Participant participant) {
         if (participant != null)
             for (ParticipantIdentity participantIdentity : participantIdentities) {
@@ -113,7 +106,29 @@ public class MatchUtils {
 
     public static void populateGameRole(View gameRoleLayout, TextView gameRoleText, MiddleIndividualLayoutHolder.Role role, Activity activity) {
         gameRoleText.setText(role.getName());
+        //noinspection deprecation
         gameRoleLayout.setBackground(activity.getResources().getDrawable(role.getBackground()));
+    }
+
+    public static String getKills(Participant participant) {
+        if (participant.getStats() == null)
+            return Utils.NOT_AVAILABLE;
+
+        return String.valueOf(participant.getStats().getKills());
+    }
+
+    public static String getDeaths(Participant participant) {
+        if (participant.getStats() == null)
+            return Utils.NOT_AVAILABLE;
+
+        return String.valueOf(participant.getStats().getDeaths());
+    }
+
+    public static String getAssists(Participant participant) {
+        if (participant.getStats() == null)
+            return Utils.NOT_AVAILABLE;
+
+        return String.valueOf(participant.getStats().getAssists());
     }
 
     public static String getKDA(Participant participant) {
@@ -124,6 +139,34 @@ public class MatchUtils {
         int assists = participant.getStats().getAssists();
 
         return String.valueOf(kills) + "/" + String.valueOf(deaths) + "/" + String.valueOf(assists);
+    }
+
+    public static String getKDA(Participant participant, TextView kdaView, Activity activity) {
+        if (participant.getStats() == null) {
+            kdaView.setTextColor(Utils.getKDAColor(0d, activity));
+            return NOT_AVAILABLE;
+        }
+
+        Stats gameStats = participant.getStats();
+
+        double kills = gameStats.getKills();
+        double deaths = gameStats.getDeaths();
+        double assists = gameStats.getAssists();
+
+        if (deaths == 0d) {
+            if (kills == 0d && assists == 0d) {
+                kdaView.setTextColor(Utils.getKDAColor(3.5d, activity));
+                return "No KDA";
+            } else {
+                kdaView.setTextColor(Utils.getKDAColor(10d, activity));
+                return "Perfect KDA";
+            }
+        }
+
+        double kda = ((kills + assists) / deaths);
+
+        kdaView.setTextColor(Utils.getKDAColor(kda, activity));
+        return NumberUtils.oneDecimalSafely(kda) + ":1 KDA";
     }
 
     public static Spanned getCS(Participant participant) {
@@ -141,7 +184,20 @@ public class MatchUtils {
 
         double dmg = participant.getStats().getTotalDamageDealtToChampions();
 
-        return Html.fromHtml("<b>" + NumberUtils.oneDecimalSafely(dmg / 1000) + "K</b> dmg");
+        return Html.fromHtml("<b>" + NumberUtils.oneDecimalSafely(dmg / 1000) + "K</b> dmg dealt");
+    }
+
+    public static Spanned getWards(Participant participant) {
+        if (participant.getStats() == null)
+            return Html.fromHtml(Utils.NOT_AVAILABLE);
+
+        int wards = participant.getStats().getWardsPlaced();
+        String HTML_WARDS = "Placed <b>%s</b> Wards";
+        if (wards == 0) {
+            String NO_HTML_WARDS = "No Wards Placed";
+            return Html.fromHtml(NO_HTML_WARDS);
+        } else
+            return Html.fromHtml(String.format(HTML_WARDS, wards));
     }
 
     public static void populateAchievement(ViewGroup achievementLayout, TextView achievementTextView, Participant participant) {

@@ -7,16 +7,84 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/champion_kills_deaths_assists"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="3/2/6"
-        android:textSize="@dimen/text_size_medium_small"
-        android:textStyle="bold"/>
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/champion_kills"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textSize="@dimen/text_size_medium_small"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            android:textSize="@dimen/text_size_medium_small"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/champion_deaths"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textSize="@dimen/text_size_medium_small"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            android:textSize="@dimen/text_size_medium_small"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/champion_assists"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textSize="@dimen/text_size_medium_small"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_xsmall"
+            android:text="("
+            android:textSize="@dimen/text_size_medium_small"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/champion_kda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3.45"
+            android:textSize="@dimen/text_size_medium_small"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin_xsmall"
+            android:text=")"
+            android:textSize="@dimen/text_size_medium_small"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/champion_cs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="106 CS"
+        android:textSize="@dimen/text_size_small"/>
+
+    <TextView
+        android:id="@+id/champion_wards"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="106 CS"

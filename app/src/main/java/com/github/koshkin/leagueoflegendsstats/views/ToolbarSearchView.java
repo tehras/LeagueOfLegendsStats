@@ -7,18 +7,28 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.koshkin.leagueoflegendsstats.R;
+import com.github.koshkin.leagueoflegendsstats.adapters.CompleteAdapter;
+import com.github.koshkin.leagueoflegendsstats.models.AutoCompleteAdapterHolder;
 import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
+
+import java.util.ArrayList;
 
 /**
  * Created by tehras on 1/9/16.
  */
 public class ToolbarSearchView extends LinearLayout {
+
+    private int mThreshold = 2;
+    private Context mContext;
 
     public ToolbarSearchView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -35,7 +45,7 @@ public class ToolbarSearchView extends LinearLayout {
         init(context, attrs);
     }
 
-    private EditText mEditText;
+    private AutoCompleteTextView mEditText;
     private ImageView mBackImage;
     private ImageView mClearImage;
 
@@ -50,9 +60,11 @@ public class ToolbarSearchView extends LinearLayout {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.view_toolbar_search_view, this);
 
-        mEditText = (EditText) view.findViewById(R.id.search_edit_field);
+        mEditText = (AutoCompleteTextView) view.findViewById(R.id.search_edit_field);
         if (!NullChecker.isNullOrEmpty(hint))
             mEditText.setHint(hint);
+
+        mContext = context;
 
         mBackImage = (ImageView) view.findViewById(R.id.toolbar_search_view_back_image);
         mClearImage = (ImageView) view.findViewById(R.id.toolbar_search_view_clear_image);
@@ -82,14 +94,12 @@ public class ToolbarSearchView extends LinearLayout {
 
     public void setOnButtonListener(ToolbarSearchCallback callback) {
         mCallback = callback;
-
         mBackImage.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCallback.backButtonClicked();
             }
         });
-
         mClearImage.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +127,22 @@ public class ToolbarSearchView extends LinearLayout {
 
     public void resetText() {
         mEditText.setText("");
+    }
+
+    public void setUpAdapter(ArrayList<AutoCompleteAdapterHolder> fullArray) {
+        if (fullArray != null) {
+            ArrayAdapter<AutoCompleteAdapterHolder> adapter = new CompleteAdapter(mContext, R.layout.array_adapter_list_dropdown, fullArray);
+
+            mEditText.setAdapter(adapter);
+            mEditText.setThreshold(mThreshold);
+            mEditText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String str = ((AutoCompleteAdapterHolder) parent.getItemAtPosition(position)).getName();
+                    mActionCallback.performSearch(str);
+                }
+            });
+        }
     }
 
     public interface ToolbarSearchActionCallback {

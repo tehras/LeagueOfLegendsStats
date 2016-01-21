@@ -78,42 +78,6 @@ public class RecentSummoner extends SugarRecord {
     public RecentSummoner() {
     }
 
-//    public RecentSummoner(PlayerRanked rankedStats, String summonerId, String summonerName, int summonerIconId) {
-//        this.summonerId = summonerId;
-//        this.name = summonerName;
-//        this.iconId = summonerIconId;
-//
-//        populateRankedWInsLossesAssists(rankedStats.getChampions());
-//
-//        this.date = Calendar.getInstance().getTimeInMillis();
-//    }
-
-    private void populateRankedWInsLossesAssists(ArrayList<Champion> champions) {
-        int wins = 0;
-        int losses = 0;
-
-        if (champions != null && champions.size() > 0) {
-            for (Champion champion : champions) {
-                if (champion.getStats() == null)
-                    continue;
-                wins = wins + champion.getStats().getTotalSessionsWon();
-                losses = losses + champion.getStats().getTotalSessionsLost();
-            }
-        }
-
-        if (wins > 0)
-            this.wins = wins;
-        if (losses > 0)
-            this.losses = losses;
-
-        this.date = Calendar.getInstance().getTimeInMillis();
-    }
-//
-//    public RecentSummoner(Summoner summoner){
-//        setName(summoner.getSummonerInfo().getName());
-//        setSummonerId(summoner.getSummonerId());
-//    }
-
     public RecentSummoner(SummonerAggregateObject combinedObj) {
         Summoner summoner = combinedObj.getSummoner();
         PlayerStatSummaries playerStats = combinedObj.getPlayerStatSummaries();
@@ -146,4 +110,6 @@ public class RecentSummoner extends SugarRecord {
         setName(simpleSummoner.getName());
         setSummonerId(simpleSummoner.getSummonerId());
     }
+
+
 }

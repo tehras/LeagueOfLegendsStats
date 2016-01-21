@@ -186,14 +186,16 @@ public class MiddleIndividualLayoutHolder {
             TextView leftSideName = (TextView) view.findViewById(R.id.left_match_individual_name);
             TextView rightSideName = (TextView) view.findViewById(R.id.right_match_individual_name);
 
-            View overall = view.findViewById(R.id.match_individual_overall);
-            if (leftParticipant.getTeamId() == TeamSide.RED)
-                overall.setBackground(activity.getResources().getDrawable(R.drawable.background_red_blue));
-            else
-                overall.setBackground(activity.getResources().getDrawable(R.drawable.background_blue_red));
-
             View leftView = view.findViewById(R.id.match_left_side_container);
             View rightView = view.findViewById(R.id.match_right_side_container);
+
+            if (leftParticipant.getTeamId() == TeamSide.RED) {
+                leftView.setBackground(activity.getResources().getDrawable(R.color.red_team_color));
+                rightView.setBackground(activity.getResources().getDrawable(R.color.blue_team_color));
+            } else {
+                leftView.setBackground(activity.getResources().getDrawable(R.color.blue_team_color));
+                rightView.setBackground(activity.getResources().getDrawable(R.color.red_team_color));
+            }
 
             new LongHoldHelper(activity, leftView, leftParticipant, leftParticipantIdentity).init();
             new LongHoldHelper(activity, rightView, rightParticipant, rightParticipantIdentity).init();
@@ -243,8 +245,8 @@ public class MiddleIndividualLayoutHolder {
             View leftMiddleLayout = view.findViewById(R.id.match_individual_left_stats);
             View rightMiddleLayout = view.findViewById(R.id.match_individual_right_stats);
 
-            populateMiddelLayout(leftMiddleLayout, leftParticipant);
-            populateMiddelLayout(rightMiddleLayout, rightParticipant);
+            populateMiddelLayout(leftMiddleLayout, leftParticipant, activity);
+            populateMiddelLayout(rightMiddleLayout, rightParticipant, activity);
 
             //Populate Spell Icons
             View leftSpellIcons = view.findViewById(R.id.match_individual_left_spells);
@@ -328,17 +330,27 @@ public class MiddleIndividualLayoutHolder {
             }.execute();
     }
 
-    private void populateMiddelLayout(View leftMiddleLayout, Participant participant) {
-        TextView kda = (TextView) leftMiddleLayout.findViewById(R.id.champion_kills_deaths_assists);
+    private void populateMiddelLayout(View leftMiddleLayout, Participant participant, Activity activity) {
+        TextView kills = (TextView) leftMiddleLayout.findViewById(R.id.champion_kills);
+        TextView deaths = (TextView) leftMiddleLayout.findViewById(R.id.champion_deaths);
+        TextView assists = (TextView) leftMiddleLayout.findViewById(R.id.champion_assists);
+        TextView kda = (TextView) leftMiddleLayout.findViewById(R.id.champion_kda);
+
         TextView cs = (TextView) leftMiddleLayout.findViewById(R.id.champion_cs);
+        TextView wards = (TextView) leftMiddleLayout.findViewById(R.id.champion_wards);
         TextView dmg = (TextView) leftMiddleLayout.findViewById(R.id.champion_dmg);
 
         ViewGroup achievementLayout = (ViewGroup) leftMiddleLayout.findViewById(R.id.game_achievement_layout);
         TextView achievementTextView = (TextView) leftMiddleLayout.findViewById(R.id.game_achievement);
 
-        kda.setText(MatchUtils.getKDA(participant));
+        kills.setText(MatchUtils.getKills(participant));
+        deaths.setText(MatchUtils.getDeaths(participant));
+        assists.setText(MatchUtils.getAssists(participant));
+        kda.setText(MatchUtils.getKDA(participant, kda, activity));
+
         cs.setText(MatchUtils.getCS(participant));
         dmg.setText(MatchUtils.getDmg(participant));
+        wards.setText(MatchUtils.getWards(participant));
 
         MatchUtils.populateAchievement(achievementLayout, achievementTextView, participant);
     }

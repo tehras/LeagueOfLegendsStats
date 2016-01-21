@@ -20,7 +20,7 @@ import com.github.koshkin.leagueoflegendsstats.models.match.ParticipantIdentity;
  */
 public class LongHoldHelper implements View.OnTouchListener {
 
-    private static final long LONG_TAP_THRESHOLD = 400;
+    private static final long LONG_TAP_THRESHOLD = 450;
     private final View mViewGroup;
     private final Activity mActivity;
     private final Participant mParticipant;

@@ -9,7 +9,15 @@ import android.view.animation.AnimationUtils;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.fragments.SummonerStatsFragment;
+import com.github.koshkin.leagueoflegendsstats.models.AutoCompleteAdapterHolder;
+import com.github.koshkin.leagueoflegendsstats.models.RecentSummoner;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
+import com.github.koshkin.leagueoflegendsstats.sqlite.FavoritesSqLiteHelper;
+import com.github.koshkin.leagueoflegendsstats.sqlite.RecentSearchSqlLiteHelper;
 import com.github.koshkin.leagueoflegendsstats.views.ToolbarSearchView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tehras on 1/9/16.
@@ -21,6 +29,7 @@ public class FloatingActionButtonViewHelper {
     private MainActivity mMainActivity;
 
     private static FloatingActionButtonViewHelper sHelper;
+    private ToolbarSearchView mTsv;
 
     private FloatingActionButtonViewHelper() {
     }
@@ -50,7 +59,8 @@ public class FloatingActionButtonViewHelper {
     }
 
     private void initToolbarSearchView(final ToolbarSearchView tsv, final FloatingActionButton fab) {
-        tsv.setOnButtonListener(new ToolbarSearchView.ToolbarSearchCallback() {
+        this.mTsv = tsv;
+        mTsv.setOnButtonListener(new ToolbarSearchView.ToolbarSearchCallback() {
             @Override
             public void backButtonClicked() {
                 isSearchIcon = true;
@@ -62,7 +72,7 @@ public class FloatingActionButtonViewHelper {
                 tsv.clearText();
             }
         });
-        tsv.setOnSearchButtonListener(new ToolbarSearchView.ToolbarSearchActionCallback() {
+        mTsv.setOnSearchButtonListener(new ToolbarSearchView.ToolbarSearchActionCallback() {
             @Override
             public void performSearch(String searchName) {
                 isSearchIcon = true;
@@ -71,6 +81,12 @@ public class FloatingActionButtonViewHelper {
                 mMainActivity.startFragment(SummonerStatsFragment.getInstance(searchName, null));
             }
         });
+        updateSearchSuggestions();
+    }
+
+    private void updateSearchSuggestions() {
+        ArrayList<AutoCompleteAdapterHolder> array = getSuggestionArray();
+        mTsv.setUpAdapter(array);
     }
 
     private Animation mSlideInAnim;
@@ -125,6 +141,8 @@ public class FloatingActionButtonViewHelper {
     }
 
     private void openSearch(FloatingActionButton fab, ToolbarSearchView toolbarSearchView) {
+        updateSearchSuggestions();
+
         toolbarSearchView.resetText();
         //animate fab
         animateSearchIcon(true, fab);
@@ -178,5 +196,37 @@ public class FloatingActionButtonViewHelper {
             floatingActionButton.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    public ArrayList<AutoCompleteAdapterHolder> getSuggestionArray() {
+        List<SimpleSummoner> favorites = FavoritesSqLiteHelper.getAllFavorites();
+        List<RecentSummoner> recent = RecentSearchSqlLiteHelper.getAllRecent();
+
+        ArrayList<AutoCompleteAdapterHolder> strings = new ArrayList<>();
+        if (favorites != null)
+            for (SimpleSummoner favore : favorites) {
+                strings.add(new AutoCompleteAdapterHolder(favore.getName(), AutoCompleteAdapterHolder.AutoCompleteType.FAVORITES));
+            }
+        if (recent != null)
+            for (RecentSummoner thisRecent : recent) {
+                if (!contains(strings, thisRecent.getName()))
+                    strings.add(new AutoCompleteAdapterHolder(thisRecent.getName(), AutoCompleteAdapterHolder.AutoCompleteType.RECENT));
+            }
+
+        if (strings.size() > 0)
+            return strings;
+
+        return new ArrayList<>();
+    }
+
+    private boolean contains(ArrayList<AutoCompleteAdapterHolder> strings, String name) {
+        if (strings != null) {
+            for (AutoCompleteAdapterHolder string : strings) {
+                if (name.equalsIgnoreCase(string.getName()))
+                    return true;
+            }
+        }
+
+        return false;
     }
 }
