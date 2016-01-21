@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.models.AutoCompleteAdapterHolder;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 /**
@@ -68,7 +69,7 @@ public class CompleteAdapter extends ArrayAdapter<AutoCompleteAdapterHolder> {
                 addAll((ArrayList<AutoCompleteAdapterHolder>) results.values);
             } else {
                 // no filter, add entire original list back in
-                addAll(mHolder);
+                addAll(new ArrayDeque<AutoCompleteAdapterHolder>());
             }
             notifyDataSetChanged();
         }

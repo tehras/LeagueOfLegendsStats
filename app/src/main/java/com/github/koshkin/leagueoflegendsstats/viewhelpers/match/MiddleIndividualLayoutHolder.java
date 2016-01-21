@@ -387,7 +387,7 @@ public class MiddleIndividualLayoutHolder {
     }
 
     public enum Role {
-        TOP("Top", R.drawable.background_small_top), MID("Mid", R.drawable.background_small_mid), JUNGLE("Jgl", R.drawable.background_small_jg), ADC("ADC", R.drawable.background_small_adc), SUPP("Sup", R.drawable.background_small_supp), NONE("N/A", R.drawable.background_small_none), BOT("Bot", R.drawable.background_small_adc);
+        TOP("Top", R.drawable.background_small_top), MID("Mid", R.drawable.background_small_mid), JUNGLE("Jungle", R.drawable.background_small_jg), ADC("ADC", R.drawable.background_small_adc), SUPP("Sup", R.drawable.background_small_supp), NONE("N/A", R.drawable.background_small_none), BOT("Bot", R.drawable.background_small_adc);
 
         private final int background;
         private final String name;
