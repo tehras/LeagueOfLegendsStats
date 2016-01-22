@@ -56,4 +56,7 @@
     <string name="view_all_favorites">View All Favorite Champions</string>
     <string name="menu_sort_by_alphabetical">Alphabetical</string>
     <string name="menu_sort_by_date_added">Date Updated</string>
+    <string name="featured_games_error">No Featured Games Not Found</string>
+    <string name="featured_games_title">Featured Games</string>
+    <string name="view_all_featured_games">View More Featured Games</string>
 </resources>

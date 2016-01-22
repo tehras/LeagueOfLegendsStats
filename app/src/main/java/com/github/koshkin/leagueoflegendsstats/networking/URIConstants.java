@@ -24,12 +24,13 @@ public class URIConstants {
     public static final String SUMMONER_SUMMARY = "/api/lol/%s/v1.3/stats/by-summoner/%s/summary";
     public static final String SUMMONER_SUMMARY_RANKED = "/api/lol/%s/v1.3/stats/by-summoner/%s/ranked";
     public static final String SUMMONER_RECENT_RANKED = "/api/lol/%s/v1.3/game/by-summoner/%s/recent";
-    public static final String SUMMONER_HISTORY_RANKED = "/api/lol/%s/v2.2/matchlist/by-summoner/%s";
 
     public static final String LEAGUE_CHALLENGER = "/api/lol/%s/v2.5/league/challenger?type=%s";
     public static final String LEAGUE_MASTER = "/api/lol/%s/v2.5/league/master?type=%s";
 
     public static final String MATCH_STATS = "/api/lol/%s/v2.2/match/%s";
+
+    public static final String FEATURED_MATCHES = "/observer-mode/rest/featured";
 
     public static final String REALM = "/api/lol/static-data/%s/v1.2/realm";
     public static final String STATIC_DATA = "/%s/%s";

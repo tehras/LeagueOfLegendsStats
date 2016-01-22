@@ -24,5 +24,15 @@
         customCard:titleText="@string/favorite_payer_title"
         customCard:viewMoreText="@string/view_all_favorites"/>
 
+    <com.github.koshkin.leagueoflegendsstats.views.CustomCardView
+        android:id="@+id/featured_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/challenger_layout"
+        customCard:applyMargin="false"
+        customCard:dataNotFound="@string/featured_games_error"
+        customCard:titleText="@string/featured_games_title"
+        customCard:viewMoreText="@string/view_all_featured_games"/>
+
 
 </RelativeLayout>

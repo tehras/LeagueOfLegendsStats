@@ -40,7 +40,7 @@ public class GameUtils {
         return gameType;
     }
 
-    private static String capitalizeFirstLetter(String s) {
+    public static String capitalizeFirstLetter(String s) {
         return Character.toUpperCase(s.charAt(0)) + s.substring(1);
     }
 

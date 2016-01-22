@@ -1,5 +1,7 @@
 package com.github.koshkin.leagueoflegendsstats.sqlite;
 
+import android.database.sqlite.SQLiteException;
+
 import com.github.koshkin.leagueoflegendsstats.models.RecentSummoner;
 
 import java.util.ArrayList;
@@ -13,16 +15,20 @@ public class RecentSearchSqlLiteHelper {
 
     //Get SimpleSummonerComparator
     public static List<RecentSummoner> getAllRecent() {
-        Iterator<RecentSummoner> summoners = RecentSummoner.findAll(RecentSummoner.class);
-        ArrayList<RecentSummoner> allSimpleSummoners = null;
-        while (summoners.hasNext()) {
-            if (allSimpleSummoners == null)
-                allSimpleSummoners = new ArrayList<>();
+        try {
+            Iterator<RecentSummoner> summoners = RecentSummoner.findAll(RecentSummoner.class);
+            ArrayList<RecentSummoner> allSimpleSummoners = null;
+            while (summoners.hasNext()) {
+                if (allSimpleSummoners == null)
+                    allSimpleSummoners = new ArrayList<>();
 
-            allSimpleSummoners.add(summoners.next());
+                allSimpleSummoners.add(summoners.next());
+            }
+
+            return allSimpleSummoners;
+        } catch (SQLiteException e) {
+            return new ArrayList<>();
         }
-
-        return allSimpleSummoners;
     }
 
     //Get SimpleSummoner By Id

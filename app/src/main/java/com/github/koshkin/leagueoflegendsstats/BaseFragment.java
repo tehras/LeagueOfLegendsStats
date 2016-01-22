@@ -7,13 +7,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.ImageView;
 
-import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
+import com.github.koshkin.leagueoflegendsstats.models.FeaturedGames;
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerStatSummaries;
 import com.github.koshkin.leagueoflegendsstats.models.RecentGames;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Summoner;
 import com.github.koshkin.leagueoflegendsstats.models.match.FullMatch;
@@ -51,7 +52,7 @@ public class BaseFragment extends Fragment implements FloatingFavoriteActionButt
         if (getActivity() != null && getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).showFab();
             ((MainActivity) getActivity()).hideError();
-            ((MainActivity) getActivity()).resetScrollView();
+//            ((MainActivity) getActivity()).resetScrollView();
             if (showFab())
                 ((MainActivity) getActivity()).showFaveFab(this, getSummonerName());
             else
@@ -127,6 +128,10 @@ public class BaseFragment extends Fragment implements FloatingFavoriteActionButt
 
     protected void executeGetMatchData(Request.RequestCallback requestCallback, String matchId) {
         new Executor(new Request(Request.RequestType.GET, new FullMatch(), requestCallback, URIHelper.GET_MATCH_STATS, matchId), getActivity()).execute();
+    }
+
+    protected void executeGetFeaturedGames(Request.RequestCallback requestCallback) {
+        new Executor(new Request(Request.RequestType.GET, new FeaturedGames(), requestCallback, URIHelper.GET_FEATURED_MATCHES), getActivity()).execute();
     }
 
     protected void initializeErrorLayout(CharSequence title, CharSequence body) {

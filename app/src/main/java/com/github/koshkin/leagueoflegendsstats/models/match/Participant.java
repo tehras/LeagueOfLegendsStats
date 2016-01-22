@@ -27,6 +27,15 @@ public class Participant {
     @SerializedName("timeline")
     @Expose
     private Timeline timeline;
+    @SerializedName("profileIconId")
+    @Expose
+    private String profileIconId;
+    @SerializedName("summonerName")
+    @Expose
+    private String summonerName;
+    @SerializedName("bot")
+    @Expose
+    private boolean bot;
     @SerializedName("masteries")
     @Expose
     private List<Mastery> masteries = new ArrayList<Mastery>();
@@ -94,6 +103,30 @@ public class Participant {
      */
     public void setChampionId(int championId) {
         this.championId = championId;
+    }
+
+    public String getProfileIconId() {
+        return profileIconId;
+    }
+
+    public void setProfileIconId(String profileIconId) {
+        this.profileIconId = profileIconId;
+    }
+
+    public String getSummonerName() {
+        return summonerName;
+    }
+
+    public void setSummonerName(String summonerName) {
+        this.summonerName = summonerName;
+    }
+
+    public boolean isBot() {
+        return bot;
+    }
+
+    public void setBot(boolean bot) {
+        this.bot = bot;
     }
 
     /**

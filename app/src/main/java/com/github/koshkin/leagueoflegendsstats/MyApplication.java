@@ -20,4 +20,5 @@ public class MyApplication extends Application {
         SugarContext.terminate();
         super.onTerminate();
     }
+    
 }

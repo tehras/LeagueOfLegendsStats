@@ -1,5 +1,7 @@
 package com.github.koshkin.leagueoflegendsstats.sqlite;
 
+import android.database.sqlite.SQLiteException;
+
 import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 
 import java.util.ArrayList;
@@ -13,16 +15,20 @@ public class FavoritesSqLiteHelper {
 
     //Get SimpleSummonerComparator
     public static List<SimpleSummoner> getAllFavorites() {
-        Iterator<SimpleSummoner> favorites = SimpleSummoner.findAll(SimpleSummoner.class);
-        ArrayList<SimpleSummoner> allSimpleSummoners = null;
-        while (favorites.hasNext()) {
-            if (allSimpleSummoners == null)
-                allSimpleSummoners = new ArrayList<>();
+        try {
+            Iterator<SimpleSummoner> favorites = SimpleSummoner.findAll(SimpleSummoner.class);
+            ArrayList<SimpleSummoner> allSimpleSummoners = null;
+            while (favorites.hasNext()) {
+                if (allSimpleSummoners == null)
+                    allSimpleSummoners = new ArrayList<>();
 
-            allSimpleSummoners.add(favorites.next());
+                allSimpleSummoners.add(favorites.next());
+            }
+
+            return allSimpleSummoners;
+        } catch (SQLiteException e) {
+            return new ArrayList<>();
         }
-
-        return allSimpleSummoners;
     }
 
     //Get SimpleSummoner By Id

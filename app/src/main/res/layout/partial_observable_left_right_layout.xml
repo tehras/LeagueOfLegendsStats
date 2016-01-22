@@ -1,0 +1,32 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="50"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/observable_game_left_view"
+            layout="@layout/partial_match_observable_single_layout_left"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="50"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/observable_game_right_view"
+            layout="@layout/partial_match_observable_single_layout_right"/>
+
+    </LinearLayout>
+
+</LinearLayout>
