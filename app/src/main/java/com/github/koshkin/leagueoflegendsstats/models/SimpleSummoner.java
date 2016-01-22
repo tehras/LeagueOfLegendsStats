@@ -141,4 +141,24 @@ public class SimpleSummoner extends SugarRecord {
         setName(simpleSummoner.getName());
         setSummonerId(simpleSummoner.getSummonerId());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SimpleSummoner that = (SimpleSummoner) o;
+
+        if (summonerId != null ? !summonerId.equals(that.summonerId) : that.summonerId != null)
+            return false;
+        return !(name != null ? !name.equals(that.name) : that.name != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = summonerId != null ? summonerId.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
+    }
 }

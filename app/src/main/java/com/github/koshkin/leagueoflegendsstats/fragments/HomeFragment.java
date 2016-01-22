@@ -59,7 +59,6 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
         super.onResume();
 
         if (!mFirstLoad) {
-            mFavoriteLayout.clearViewsFromHolder();
             populateFavoriteLayout();
         }
     }
@@ -85,6 +84,10 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
             populateChallengerLayout();
         } else
             challengerLayoutError();
+
+        if (mFeaturedGames != null) {
+            populateObservableGames();
+        }
 
         return view;
     }
@@ -202,6 +205,8 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
 
             @Override
             protected void postExecute() {
+                mFavoriteLayout.clearViewsFromHolder();
+
                 if (mSimpleSummoners != null && mSimpleSummoners.size() > 0) {
                     int i = 0;
 
@@ -226,8 +231,8 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
 
             @Override
             protected void runInBackground() {
+                mSimpleSummoners = new ArrayList<>();
                 mSimpleSummoners = (ArrayList<SimpleSummoner>) FavoritesSqLiteHelper.getAllFavorites();
-
             }
         }.execute();
     }

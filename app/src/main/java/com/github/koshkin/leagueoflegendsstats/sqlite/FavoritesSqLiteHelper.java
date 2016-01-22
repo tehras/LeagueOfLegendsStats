@@ -22,7 +22,12 @@ public class FavoritesSqLiteHelper {
                 if (allSimpleSummoners == null)
                     allSimpleSummoners = new ArrayList<>();
 
-                allSimpleSummoners.add(favorites.next());
+                SimpleSummoner simpleSummoner = favorites.next();
+
+                if (allSimpleSummoners.contains(simpleSummoner))
+                    continue;
+
+                allSimpleSummoners.add(simpleSummoner);
             }
 
             return allSimpleSummoners;
