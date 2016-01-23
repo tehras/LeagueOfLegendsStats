@@ -16,18 +16,32 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_xsmall"
             android:layout_marginTop="@dimen/activity_vertical_margin_small"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/observable_game_type"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/activity_vertical_margin_xsmall"
-                android:text="Game Type"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/observable_game_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/observable_game_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin_xsmall"
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/observable_game_start"
@@ -39,6 +53,11 @@
                 android:textSize="@dimen/text_size_small"/>
 
         </RelativeLayout>
+
+        <include
+            layout="@layout/partial_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
 
         <include
             android:id="@+id/observable_game_first"
@@ -61,7 +80,7 @@
             layout="@layout/partial_observable_left_right_layout"/>
 
         <include
-            android:id="@+id/divider"
+            android:id="@+id/divider_bottom"
             layout="@layout/partial_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"

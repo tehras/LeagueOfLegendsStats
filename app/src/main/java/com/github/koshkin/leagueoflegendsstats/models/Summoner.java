@@ -3,6 +3,7 @@ package com.github.koshkin.leagueoflegendsstats.models;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +24,9 @@ public class Summoner implements Request.ParserCallback<Summoner> {
     public Summoner() {
     }
 
+    @SerializedName("summonerName")
     private String mSummonerName;
+    @SerializedName("summonerInfo")
     private SummonerInfo mSummonerInfo;
 
     public SummonerInfo getSummonerInfo() {
@@ -34,6 +37,14 @@ public class Summoner implements Request.ParserCallback<Summoner> {
         mSummonerInfo = summonerInfo;
     }
 
+    public String toJson() {
+        return new Gson().toJson(this);
+    }
+
+    public static Summoner fromJson(String json) {
+        return new Gson().fromJson(json, Summoner.class);
+    }
+
     @Override
     public Summoner parse(String body) {
         try {
@@ -41,13 +52,13 @@ public class Summoner implements Request.ParserCallback<Summoner> {
             if (NullChecker.isNullOrEmpty(mSummonerName)) {
                 mSummonerInfo = new Gson().fromJson(body, SummonerInfo.class);
                 mSummonerName = mSummonerInfo.getName();
-            } else if (object.has(mSummonerName)) {
+            } else {
                 Iterator<String> keys = object.keys();
 
                 JSONObject summonerInfoJson = null;
                 while (keys.hasNext()) {
                     String key = keys.next();
-                    if (key.equalsIgnoreCase(mSummonerName)) {
+                    if (key.equalsIgnoreCase(mSummonerName) || key.equalsIgnoreCase(mSummonerName.replaceAll(" ", ""))) {
                         summonerInfoJson = object.getJSONObject(key);
                         break;
                     }

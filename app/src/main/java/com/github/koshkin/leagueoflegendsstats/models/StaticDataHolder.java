@@ -1,11 +1,13 @@
 package com.github.koshkin.leagueoflegendsstats.models;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import com.github.koshkin.leagueoflegendsstats.FirstInitialize;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.utils.AssetReaderUtil;
 import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
@@ -28,6 +30,7 @@ public class StaticDataHolder {
     private ProfileIcons mProfileIcons;
     private SpellIcons mSpellIcons;
     private ItemIcons mItemIcons;
+    private boolean mNeedsRefresh;
 
     public void setItemIcons(ItemIcons itemIcons) {
         mItemIcons = itemIcons;
@@ -222,5 +225,28 @@ public class StaticDataHolder {
         }
 
         return sStaticDataHolder;
+    }
+
+    private Summoner mMySummoner;
+
+    public Summoner getMySummoner() {
+        return mMySummoner;
+    }
+
+    public void setMySummoner(Summoner summoner) {
+        mMySummoner = summoner;
+    }
+
+    public void setMySummoner(Summoner summoner, Activity activity) {
+        SharedPrefsUtil.saveSharedPrefs(FirstInitialize.SHARED_MY_SUMMONER, summoner.toJson(), activity);
+        mMySummoner = summoner;
+    }
+
+    public boolean needsRefresh() {
+        return mNeedsRefresh;
+    }
+
+    public void needsRefresh(boolean needsRefresh) {
+        mNeedsRefresh = needsRefresh;
     }
 }

@@ -1,4 +1,4 @@
-package com.github.koshkin.leagueoflegendsstats.fragments;
+package com.github.koshkin.leagueoflegendsstats.fragments.favorite;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.adapters.FavoritesAdapter;
+import com.github.koshkin.leagueoflegendsstats.fragments.BaseSimpleRecyclerViewFragment;
 import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.SimpleSummonerComparator;
 

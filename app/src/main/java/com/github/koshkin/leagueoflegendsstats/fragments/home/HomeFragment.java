@@ -1,4 +1,4 @@
-package com.github.koshkin.leagueoflegendsstats.fragments;
+package com.github.koshkin.leagueoflegendsstats.fragments.home;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import com.github.koshkin.leagueoflegendsstats.BaseFragment;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
+import com.github.koshkin.leagueoflegendsstats.fragments.favorite.FavoritesFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.league.LeagueRankingFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.observable.ObservableFragment;
 import com.github.koshkin.leagueoflegendsstats.holders.FeaturedGameHolder;
 import com.github.koshkin.leagueoflegendsstats.holders.LeagueChampionHolder;
 import com.github.koshkin.leagueoflegendsstats.models.FeaturedGames;
@@ -103,7 +106,12 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
     }
 
     private View.OnClickListener viewAllObservableListener() {
-        return null;
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).startFragment(ObservableFragment.getInstance(mFeaturedGames.getObservableGames()));
+            }
+        };
     }
 
     private void initFavoriteLayout(View view) {
@@ -180,8 +188,9 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
         if (mFeaturedGames != null && mFeaturedGames.getObservableGames() != null && mFeaturedGames.getObservableGames().size() > 0) {
             ArrayList<ObservableGame> featuredGames = mFeaturedGames.getObservableGames();
             int i = 0;
+            Collections.sort(featuredGames);
             for (ObservableGame game : featuredGames) {
-                if (i == 2)
+                if (i == 1)
                     break;
 
                 LayoutInflater inflater = getActivity().getLayoutInflater();

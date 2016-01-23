@@ -16,13 +16,13 @@
         android:gravity="center_vertical"
         android:orientation="vertical">
 
-        <com.github.koshkin.leagueoflegendsstats.views.RoundedImageView
+        <ImageView
             android:id="@+id/observable_icon_1"
             android:layout_width="@dimen/small_icon_height"
             android:layout_height="@dimen/small_icon_height"
             android:src="@drawable/ic_wallpaper_black_48dp"/>
 
-        <com.github.koshkin.leagueoflegendsstats.views.RoundedImageView
+        <ImageView
             android:id="@+id/observable_icon_2"
             android:layout_width="@dimen/small_icon_height"
             android:layout_height="@dimen/small_icon_height"

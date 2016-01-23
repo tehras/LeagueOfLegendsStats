@@ -1,6 +1,8 @@
 package com.github.koshkin.leagueoflegendsstats.models;
 
 import com.github.koshkin.leagueoflegendsstats.models.match.Participant;
+import com.github.koshkin.leagueoflegendsstats.networking.Request;
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -8,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by tehras on 1/21/16.
  */
-public class ObservableGame {
+public class ObservableGame implements Comparable<ObservableGame>, Request.ParserCallback<ObservableGame> {
 
     @SerializedName("gameId")
     private long gameId;
@@ -101,5 +103,15 @@ public class ObservableGame {
 
     public void setParticipants(ArrayList<Participant> participants) {
         this.participants = participants;
+    }
+
+    @Override
+    public int compareTo(ObservableGame another) {
+        return Long.compare(this.getGameLength(), another.getGameLength());
+    }
+
+    @Override
+    public ObservableGame parse(String body) {
+        return new Gson().fromJson(body, ObservableGame.class);
     }
 }

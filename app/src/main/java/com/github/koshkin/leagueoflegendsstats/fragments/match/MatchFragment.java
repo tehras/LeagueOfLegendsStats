@@ -1,4 +1,4 @@
-package com.github.koshkin.leagueoflegendsstats.fragments;
+package com.github.koshkin.leagueoflegendsstats.fragments.match;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

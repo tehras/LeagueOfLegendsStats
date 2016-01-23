@@ -46,7 +46,6 @@ public class RoundedImageView extends ImageView {
         TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.RoundedImageView, 0, 0);
         int rounded = a.getDimensionPixelSize(R.styleable.RoundedImageView_cornerSize, 0);
-        @SuppressWarnings("deprecation") int color = a.getColor(R.styleable.MaterialButton_textColor, getResources().getColor(R.color.colorAccent));
         a.recycle();
 
         if (rounded != 0)

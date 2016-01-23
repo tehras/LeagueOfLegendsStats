@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
-import com.github.koshkin.leagueoflegendsstats.fragments.MatchFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.match.MatchFragment;
 import com.github.koshkin.leagueoflegendsstats.models.Game;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.utils.GameUtils;

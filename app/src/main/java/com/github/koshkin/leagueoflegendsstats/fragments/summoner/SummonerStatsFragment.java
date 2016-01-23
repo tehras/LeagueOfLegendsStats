@@ -1,4 +1,4 @@
-package com.github.koshkin.leagueoflegendsstats.fragments;
+package com.github.koshkin.leagueoflegendsstats.fragments.summoner;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -376,8 +376,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                 if (mSummonerAggregateObject != null && mSummonerAggregateObject.getSummoner() != null && mSummonerAggregateObject.getSummoner().getSummonerInfo() != null) {
                     String summonerId = mSummonerAggregateObject.getSummoner().getSummonerId();
                     int summonerIconId = 0;
-                    if (mSummonerAggregateObject.getSummoner().getSummonerInfo() != null)
-                        summonerIconId = mSummonerAggregateObject.getSummoner().getSummonerInfo().getProfileIconId();
+                    summonerIconId = mSummonerAggregateObject.getSummoner().getSummonerInfo().getProfileIconId();
                     String summonerName = mSummonerAggregateObject.getSummoner().getSummonerInfo().getName();
 
                     ((MainActivity) getActivity()).startFragment(SummonerRankedStatsFragment.getInstance(summonerIconId, summonerId, summonerName, Utils.getTextSafely(wins), Utils.getTextSafely(losses)));

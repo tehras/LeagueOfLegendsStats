@@ -1,4 +1,4 @@
-package com.github.koshkin.leagueoflegendsstats.fragments;
+package com.github.koshkin.leagueoflegendsstats.fragments.league;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.adapters.LeagueRankingAdapter;
+import com.github.koshkin.leagueoflegendsstats.fragments.BaseSimpleRecyclerViewFragment;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.RankedSummoner;

@@ -1,6 +1,5 @@
 package com.github.koshkin.leagueoflegendsstats;
 
-import android.app.Fragment;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +10,7 @@ import com.github.koshkin.leagueoflegendsstats.models.FeaturedGames;
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
+import com.github.koshkin.leagueoflegendsstats.models.ObservableGame;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerStatSummaries;
 import com.github.koshkin.leagueoflegendsstats.models.RecentGames;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * <p/>
  * Class is to create general
  */
-public class BaseFragment extends Fragment implements FloatingFavoriteActionButtonHelper.FavoriteCallback {
+public class BaseFragment extends android.support.v4.app.Fragment implements FloatingFavoriteActionButtonHelper.FavoriteCallback {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -132,6 +132,10 @@ public class BaseFragment extends Fragment implements FloatingFavoriteActionButt
 
     protected void executeGetFeaturedGames(Request.RequestCallback requestCallback) {
         new Executor(new Request(Request.RequestType.GET, new FeaturedGames(), requestCallback, URIHelper.GET_FEATURED_MATCHES), getActivity()).execute();
+    }
+
+    protected void executeGetObservableGame(Request.RequestCallback requestCallback, String summonerId) {
+        new Executor(new Request(Request.RequestType.GET, new ObservableGame(), requestCallback, URIHelper.GET_OBSERVABLE_GAME, URIHelper.PlatformId.getByRegion(URIHelper.getCurrentRegion()).toString(), summonerId), getActivity()).execute();
     }
 
     protected void initializeErrorLayout(CharSequence title, CharSequence body) {

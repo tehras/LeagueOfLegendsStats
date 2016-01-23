@@ -12,6 +12,7 @@ public class URIConstants {
 
     //BASE URI, diff for each region
     public static final String NA_BASE_URI = "https://na.api.pvp.net";
+    public static final String NA_BASE_URI_WITH_REGION = "https://na.api.pvp.net";
     public static String NA_STATIC_URI = "http://ddragon.leagueoflegends.com/cdn/6.1.1/img";
     public static String NA_STATIC_DATA_URI = "http://ddragon.leagueoflegends.com/cdn/6.1.1/data";
 
@@ -31,6 +32,7 @@ public class URIConstants {
     public static final String MATCH_STATS = "/api/lol/%s/v2.2/match/%s";
 
     public static final String FEATURED_MATCHES = "/observer-mode/rest/featured";
+    public static final String OBSERVALBE_GAME = "/observer-mode/rest/consumer/getSpectatorGameInfo/%s/%s";
 
     public static final String REALM = "/api/lol/static-data/%s/v1.2/realm";
     public static final String STATIC_DATA = "/%s/%s";

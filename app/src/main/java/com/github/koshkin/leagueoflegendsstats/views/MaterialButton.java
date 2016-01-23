@@ -58,6 +58,10 @@ public class MaterialButton extends RelativeLayout {
         return this;
     }
 
+    public CharSequence getText() {
+        return mText.getText();
+    }
+
     private void init(Context context, AttributeSet attrs) {
         mContext = context;
 

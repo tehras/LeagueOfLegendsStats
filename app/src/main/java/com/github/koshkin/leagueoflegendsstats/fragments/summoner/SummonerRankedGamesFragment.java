@@ -1,9 +1,10 @@
-package com.github.koshkin.leagueoflegendsstats.fragments;
+package com.github.koshkin.leagueoflegendsstats.fragments.summoner;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
 import com.github.koshkin.leagueoflegendsstats.adapters.GameHistoryAdapter;
+import com.github.koshkin.leagueoflegendsstats.fragments.BaseSimpleRecyclerViewFragment;
 import com.github.koshkin.leagueoflegendsstats.models.Game;
 
 import java.util.ArrayList;

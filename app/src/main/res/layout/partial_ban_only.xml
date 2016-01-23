@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="end"
+              android:orientation="horizontal">
+
+    <include
+        android:id="@+id/pick_ban_1"
+        layout="@layout/view_pick_or_ban"
+        />
+
+    <include
+        android:id="@+id/pick_ban_2"
+        layout="@layout/view_pick_or_ban"
+        />
+
+    <include
+        android:id="@+id/pick_ban_3"
+        layout="@layout/view_pick_or_ban"/>
+
+</LinearLayout>

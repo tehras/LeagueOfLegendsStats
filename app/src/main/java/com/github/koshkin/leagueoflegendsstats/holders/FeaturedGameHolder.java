@@ -2,36 +2,42 @@ package com.github.koshkin.leagueoflegendsstats.holders;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.text.Html;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
-import com.github.koshkin.leagueoflegendsstats.models.Game;
+import com.github.koshkin.leagueoflegendsstats.fragments.observable.ObservableGameFragment;
 import com.github.koshkin.leagueoflegendsstats.models.ObservableGame;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.TeamSide;
 import com.github.koshkin.leagueoflegendsstats.models.match.Participant;
-import com.github.koshkin.leagueoflegendsstats.utils.GameUtils;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.LoaderHelper;
 import com.github.koshkin.leagueoflegendsstats.views.RoundedImageView;
 
 import java.util.ArrayList;
 
-import static com.github.koshkin.leagueoflegendsstats.utils.NullChecker.isNullOrEmpty;
+import static com.github.koshkin.leagueoflegendsstats.utils.ObservableUtils.getFromGameMode;
+import static com.github.koshkin.leagueoflegendsstats.utils.ObservableUtils.getFromGameType;
+import static com.github.koshkin.leagueoflegendsstats.utils.ObservableUtils.getStartedText;
 
 /**
  * Created by tehras on 1/21/16.
  * <p/>
  * Holder for observable games
  */
-public class FeaturedGameHolder {
+public class FeaturedGameHolder extends RecyclerView.ViewHolder {
 
     private final TextView mGameType, mStartedText;
     private final View mDivider;
+    private final View mClickableView;
+    private final TextView mGameMode;
     private View mFirstLayout, mSecondLayout, mThirdLayout, mFourthLayout, mFifthLayout;
 
     public FeaturedGameHolder(View view) {
+        super(view);
         mFirstLayout = view.findViewById(R.id.observable_game_first);
         mSecondLayout = view.findViewById(R.id.observable_game_second);
         mThirdLayout = view.findViewById(R.id.observable_game_third);
@@ -39,13 +45,16 @@ public class FeaturedGameHolder {
         mFifthLayout = view.findViewById(R.id.observable_game_fifth);
 
         mGameType = (TextView) view.findViewById(R.id.observable_game_type);
+        mGameMode = (TextView) view.findViewById(R.id.observable_game_mode);
         mStartedText = (TextView) view.findViewById(R.id.observable_game_start);
 
-        mDivider = view.findViewById(R.id.divider);
+        mDivider = view.findViewById(R.id.divider_bottom);
+
+        mClickableView = view.findViewById(R.id.material_clickable_layout);
     }
 
-    public void populate(ObservableGame observableGame, Activity activity, boolean showDivider) {
-        ArrayList<Participant> participants = observableGame.getParticipants();
+    public void populate(ObservableGame observableGame, final Activity activity, boolean showDivider) {
+        final ArrayList<Participant> participants = observableGame.getParticipants();
 
         populateView(mFirstLayout, participants, activity, 1);
         populateView(mSecondLayout, participants, activity, 2);
@@ -54,32 +63,22 @@ public class FeaturedGameHolder {
         populateView(mFifthLayout, participants, activity, 5);
 
         mGameType.setText(getFromGameType(observableGame.getGameType()));
+        mGameMode.setText(getFromGameMode(observableGame.getGameMode()));
         mStartedText.setText(getStartedText(observableGame.getGameLength()));
 
         if (showDivider)
             mDivider.setVisibility(View.VISIBLE);
         else
             mDivider.setVisibility(View.GONE);
+
+        mClickableView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) activity).startFragment(ObservableGameFragment.getInstance(null, participants.get(0).getSummonerName()));
+            }
+        });
     }
 
-    private CharSequence getStartedText(long gameLength) {
-        long min = (int) (gameLength / 60); //get minutes
-        long seconds = (int) (gameLength - (min * 60)); //get seconds
-
-        return Html.fromHtml("Game Started <b>" + (min > 0 ? String.valueOf(min) + "m " : "") + (seconds > 0 ? String.valueOf(seconds) + "s" : "") + "</b> ago");
-    }
-
-    private String getFromGameType(Game.GameType gameType) {
-        String gameTypeString = "";
-
-        String[] words = gameType.toString().split("_");
-        for (String word : words) {
-            word = GameUtils.capitalizeFirstLetter(word.toLowerCase()).replace("x", "v");
-            gameTypeString = gameTypeString + (isNullOrEmpty(gameTypeString) ? "" : " ") + word;
-        }
-
-        return gameTypeString;
-    }
 
     private void populateView(View layout, ArrayList<Participant> participants, Activity activity, int i) {
         View leftView = layout.findViewById(R.id.observable_game_left_view);
@@ -120,8 +119,8 @@ public class FeaturedGameHolder {
         TextView championName = (TextView) view.findViewById(R.id.observable_summoner_champion);
 
         final RoundedImageView championIcon = (RoundedImageView) view.findViewById(R.id.observable_profile_icon);
-        final RoundedImageView itemIcon1View = (RoundedImageView) view.findViewById(R.id.observable_icon_1);
-        final RoundedImageView itemIcon2View = (RoundedImageView) view.findViewById(R.id.observable_icon_2);
+        final ImageView itemIcon1View = (ImageView) view.findViewById(R.id.observable_icon_1);
+        final ImageView itemIcon2View = (ImageView) view.findViewById(R.id.observable_icon_2);
 
         summonerName.setText(participant.getSummonerName());
         championName.setText(StaticDataHolder.getInstance(activity).getChampionName(participant.getChampionId()));

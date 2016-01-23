@@ -1,5 +1,7 @@
 package com.github.koshkin.leagueoflegendsstats;
 
+import android.content.Context;
+
 import com.github.koshkin.leagueoflegendsstats.models.ChampionIcons;
 import com.github.koshkin.leagueoflegendsstats.models.DataParser;
 import com.github.koshkin.leagueoflegendsstats.models.ItemIcons;
@@ -7,6 +9,7 @@ import com.github.koshkin.leagueoflegendsstats.models.ProfileIcons;
 import com.github.koshkin.leagueoflegendsstats.models.SpellIcons;
 import com.github.koshkin.leagueoflegendsstats.models.SpriteHolder;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
+import com.github.koshkin.leagueoflegendsstats.models.Summoner;
 import com.github.koshkin.leagueoflegendsstats.models.Type;
 import com.github.koshkin.leagueoflegendsstats.models.VersionControl;
 import com.github.koshkin.leagueoflegendsstats.networking.Executor;
@@ -14,6 +17,8 @@ import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.networking.Response;
 import com.github.koshkin.leagueoflegendsstats.networking.URIConstants;
 import com.github.koshkin.leagueoflegendsstats.networking.URIHelper;
+import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
+import com.github.koshkin.leagueoflegendsstats.utils.SharedPrefsUtil;
 
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -39,6 +44,9 @@ public class FirstInitialize implements Request.RequestCallback {
 
     public void initialize() {
         StaticDataHolder.getInstance(mMainActivity).init();
+
+        URIHelper.Region region = getRegion(mMainActivity);
+        URIHelper.setCurrentRegion(region);
 
         Response response;
         try {
@@ -91,6 +99,8 @@ public class FirstInitialize implements Request.RequestCallback {
                         new Executor(new Request(Request.RequestType.GET_IMAGE, new SpriteHolder(Type.PROFILE), this, URIHelper.GET_SPRITES, "profileicon" + String.valueOf(i) + ".png"), mMainActivity).execute();
                     }
                 }
+
+                StaticDataHolder.getInstance(mMainActivity).setMySummoner(getMySummoner(mMainActivity));
             }
         }
         if (mExecuteCounter == 0) {
@@ -144,6 +154,29 @@ public class FirstInitialize implements Request.RequestCallback {
         if (mExecuteCounter == 0) {
             mCallback.completed();
         }
+    }
+
+    public static final String SHARED_REGION = "region_shared_key";
+    public static final String SHARED_MY_SUMMONER = "my_summoner_shared_key";
+
+    public URIHelper.Region getRegion(Context context) {
+        URIHelper.Region region = URIHelper.Region.NA;
+        String regionString = SharedPrefsUtil.getSharedPrefs(SHARED_REGION, context);
+        if (!NullChecker.isNullOrEmpty(regionString)) {
+            return region.getFromString(region);
+        } else {//for first time
+            SharedPrefsUtil.saveSharedPrefs(SHARED_REGION, URIHelper.Region.NA.toString(), context);
+        }
+
+        return region;
+    }
+
+    public Summoner getMySummoner(Context context) {
+        String mySummoner = SharedPrefsUtil.getSharedPrefs(SHARED_MY_SUMMONER, context);
+        if (!NullChecker.isNullOrEmpty(mySummoner))
+            return Summoner.fromJson(mySummoner);
+
+        return null;
     }
 
     public interface Callback {

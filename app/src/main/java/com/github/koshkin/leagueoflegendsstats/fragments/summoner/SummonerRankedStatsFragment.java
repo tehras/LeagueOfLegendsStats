@@ -1,4 +1,4 @@
-package com.github.koshkin.leagueoflegendsstats.fragments;
+package com.github.koshkin.leagueoflegendsstats.fragments.summoner;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
@@ -18,11 +18,11 @@ import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.holders.ChampionHolder;
 import com.github.koshkin.leagueoflegendsstats.holders.GameHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Champion;
-import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
 import com.github.koshkin.leagueoflegendsstats.models.Game;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
 import com.github.koshkin.leagueoflegendsstats.models.RecentGames;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Stats;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;

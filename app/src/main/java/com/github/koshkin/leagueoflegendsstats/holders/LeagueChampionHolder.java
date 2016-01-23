@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
-import com.github.koshkin.leagueoflegendsstats.fragments.SummonerStatsFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.summoner.SummonerStatsFragment;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.RankedSummoner;
@@ -250,7 +250,7 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
         }
 
         for (RankedSummoner rankedSummoner : leagueStandings.getEntries()) {
-            if (rankedSummoner.getPlayerOrTeamName().equalsIgnoreCase(name) || (rankedSummoner.getSummoner() != null && rankedSummoner.getSummoner() != null && rankedSummoner.getSummoner().getSummonerInfo().getName().equalsIgnoreCase(name))) {
+            if (rankedSummoner.getPlayerOrTeamName().equalsIgnoreCase(name) || (rankedSummoner.getSummoner() != null && rankedSummoner.getSummoner().getSummonerInfo().getName().equalsIgnoreCase(name))) {
                 return rankedSummoner.getSummoner();
             }
         }

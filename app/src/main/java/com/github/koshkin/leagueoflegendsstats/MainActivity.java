@@ -1,10 +1,14 @@
 package com.github.koshkin.leagueoflegendsstats;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.DrawerLayout;
@@ -23,9 +27,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
-import com.github.koshkin.leagueoflegendsstats.fragments.HomeFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.home.HomeFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.settings.SettingsFragment;
+import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
+import com.github.koshkin.leagueoflegendsstats.models.Summoner;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingActionButtonViewHelper;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingFavoriteActionButtonHelper;
+import com.github.koshkin.leagueoflegendsstats.viewhelpers.LoaderHelper;
 import com.github.koshkin.leagueoflegendsstats.views.BlockableFloatingActionBar;
 import com.github.koshkin.leagueoflegendsstats.views.BlockableNestedScrollView;
 import com.github.koshkin.leagueoflegendsstats.views.RoundedImageView;
@@ -53,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     private boolean mIsPaused;
     private BlockableNestedScrollView mNestedScrollView;
     private BlockableFloatingActionBar mFavFab;
+    private NavigationView mNavigationView;
 
     @Override
     protected void onPause() {
@@ -117,8 +126,8 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
 
         mNestedScrollView = (BlockableNestedScrollView) findViewById(R.id.scroll_view_container);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
@@ -149,6 +158,44 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    public void updateNavigationView() {
+        View view = mNavigationView.getHeaderView(0);
+
+        final RoundedImageView imageView = (RoundedImageView) view.findViewById(R.id.imageView);
+        TextView level = (TextView) view.findViewById(R.id.nav_text_view_level);
+        TextView name = (TextView) view.findViewById(R.id.nav_text_view_name);
+
+        final Summoner summoner = StaticDataHolder.getInstance(this).getMySummoner();
+        if (summoner != null) {
+
+            name.setText(summoner.getSummonerInfo().getName());
+            level.setText("Level " + String.valueOf(summoner.getSummonerInfo().getSummonerLevel()));
+            new LoaderHelper() {
+
+                public Drawable mDrawable;
+
+                @Override
+                protected void postExecute() {
+                    if (mDrawable != null) {
+                        imageView.setImageDrawable(mDrawable);
+                    } else {
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_nav_default));
+                    }
+                }
+
+                @Override
+                protected void runInBackground() {
+                    mDrawable = StaticDataHolder.getInstance(MainActivity.this).getProfileIcon(summoner.getSummonerInfo().getProfileIconId());
+                }
+            }.execute();
+        } else {
+            imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_nav_default));
+            name.setText(getResources().getString(R.string.nav_summoner_text_not_found));
+            level.setText(getResources().getString(R.string.nav_summoner_text_not_found_2));
+        }
+    }
+
     int imageI = 0;
 
     private void changeName() {
@@ -158,13 +205,6 @@ public class MainActivity extends AppCompatActivity
         Log.e(getClass().getSimpleName(), "imageI - " + imageI);
         mLoadingText.setText(loadingText[imageI]);
         imageI++;
-    }
-
-    public void resetScrollView() {
-        if (mNestedScrollView != null) {
-            mNestedScrollView.scrollTo(0, 0);
-            allowScrollview();
-        }
     }
 
     public void blockScrollView(View.OnTouchListener onTouchListener) {
@@ -201,9 +241,12 @@ public class MainActivity extends AppCompatActivity
         if (thisActivity == null || mIsPaused)
             return;
 
+        if (isAlreadyShowing(fragmentClass))
+            return;
+
         try {
-            getFragmentManager().beginTransaction()
-                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                     .replace(R.id.fragment_container, fragmentClass.newInstance(), fragmentClass.getSimpleName())
                     .addToBackStack(fragmentClass.getSimpleName())
                     .commit();
@@ -213,12 +256,27 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private boolean isAlreadyShowing(Class<? extends BaseFragment> fragmentClass) {
+        FragmentManager supportManager = getSupportFragmentManager();
+
+        if (supportManager != null && supportManager.getFragments() != null && supportManager.getFragments().size() > 0) {
+            Fragment fragment = supportManager.getFragments().get(supportManager.getFragments().size() - 1);
+            if (fragment.getClass() == fragmentClass)
+                return true;
+        }
+
+        return false;
+    }
+
     public void startFragment(BaseFragment fragment) {
         if (thisActivity == null || mIsPaused)
             return;
 
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+        if (isAlreadyShowing(fragment.getClass()))
+            return;
+
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .replace(R.id.fragment_container, fragment, fragment.getClass().getSimpleName())
                 .addToBackStack(fragment.getClass().getSimpleName())
                 .commit();
@@ -233,8 +291,14 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else if (toolbarSearchView.getVisibility() == View.VISIBLE) {
             toolbarSearchView.backPressed();
-        } else if (getFragmentManager() != null) {
-            getFragmentManager().popBackStack();
+        } else if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            if (getSupportFragmentManager().getFragments().get(getSupportFragmentManager().getFragments().size() - 1) instanceof HomeFragment) {
+                if (StaticDataHolder.getInstance(this).needsRefresh()) {
+                    getSupportFragmentManager().popBackStackImmediate();
+                    startFragment(HomeFragment.class);
+                }
+            }
+            getSupportFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
@@ -274,18 +338,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_home) {
+            startFragment(HomeFragment.class);
+        } else if (id == R.id.nav_settings) {
+            startFragment(SettingsFragment.class);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -318,6 +374,8 @@ public class MainActivity extends AppCompatActivity
         Log.e(getClass().getSimpleName(), "Main Loading Layout is GONE");
         mMainLoadingLayout.setVisibility(View.GONE);
         startFragment(HomeFragment.class);
+
+        updateNavigationView();
     }
 
     public void showFaveFab(FloatingFavoriteActionButtonHelper.FavoriteCallback favoriteCallback, String summonerName) {

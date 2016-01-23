@@ -15,8 +15,38 @@ public class Champion implements Comparable<Champion> {
 
     @SerializedName("id")
     private int mId;
+    @SerializedName("championId")
+    private int mChampionId;
     @SerializedName("stats")
     private Stats mStats;
+    @SerializedName("pickTurn")
+    private int mPickTurn;
+    @SerializedName("teamId")
+    private TeamSide mTeamSide;
+
+    public TeamSide getTeamSide() {
+        return mTeamSide;
+    }
+
+    public void setTeamSide(TeamSide teamSide) {
+        mTeamSide = teamSide;
+    }
+
+    public int getChampionId() {
+        return mChampionId;
+    }
+
+    public void setChampionId(int championId) {
+        mChampionId = championId;
+    }
+
+    public int getPickTurn() {
+        return mPickTurn;
+    }
+
+    public void setPickTurn(int pickTurn) {
+        mPickTurn = pickTurn;
+    }
 
     public int getId() {
         return mId;

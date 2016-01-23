@@ -18,10 +18,10 @@ import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
 
-import java.util.ArrayList;
-
 /**
  * Created by tehras on 1/16/16.
+ * <p/>
+ * Custom spinner for dropdowns
  */
 public class CustomSpinner extends LinearLayout {
     private Context mContext;
@@ -43,11 +43,6 @@ public class CustomSpinner extends LinearLayout {
     public CustomSpinner(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
-    }
-
-    public CustomSpinner setChoices(ArrayList<String> strings) {
-        mChoices = (String[]) strings.toArray();
-        return this;
     }
 
     public CustomSpinner setChoices(String[] strings) {
@@ -113,7 +108,9 @@ public class CustomSpinner extends LinearLayout {
     private String mSelectedOption;
 
     public View getSpinnerPopupView(LayoutInflater inflater, final PopupWindow popup) {
-        @SuppressLint("InflateParams") ViewGroup view = (ViewGroup) inflater.inflate(R.layout.popup_spinner_layout, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.popup_spinner_layout, null);
+
+        LinearLayout container = (LinearLayout) view.findViewById(R.id.container);
 
         if (mChoices != null) {
             for (String text : mChoices) {
@@ -127,15 +124,11 @@ public class CustomSpinner extends LinearLayout {
                     m.setOnButtonClickListener(getSpinnerClickListener(popup, false, text));
                 }
 
-                view.addView(m);
+                container.addView(m);
             }
         }
 
         return view;
-    }
-
-    public String getSelectedOption() {
-        return mSelectedOption;
     }
 
     public OnClickListener getSpinnerClickListener(final PopupWindow popup, final boolean isActive, final String choice) {

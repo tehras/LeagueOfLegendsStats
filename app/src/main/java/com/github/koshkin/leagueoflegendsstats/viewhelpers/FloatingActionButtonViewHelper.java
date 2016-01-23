@@ -8,7 +8,7 @@ import android.view.animation.AnimationUtils;
 
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
-import com.github.koshkin.leagueoflegendsstats.fragments.SummonerStatsFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.summoner.SummonerStatsFragment;
 import com.github.koshkin.leagueoflegendsstats.models.AutoCompleteAdapterHolder;
 import com.github.koshkin.leagueoflegendsstats.models.RecentSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
