@@ -17,6 +17,7 @@ import com.github.koshkin.leagueoflegendsstats.models.RecentGames;
 import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Summoner;
+import com.github.koshkin.leagueoflegendsstats.models.SummonerLeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.match.FullMatch;
 import com.github.koshkin.leagueoflegendsstats.networking.Executor;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
@@ -52,7 +53,6 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
         if (getActivity() != null && getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).showFab();
             ((MainActivity) getActivity()).hideError();
-//            ((MainActivity) getActivity()).resetScrollView();
             if (showFab())
                 ((MainActivity) getActivity()).showFaveFab(this, getSummonerName());
             else
@@ -63,6 +63,8 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
     @Override
     public void onPause() {
         super.onPause();
+        if (getActivity() != null && getActivity() instanceof MainActivity)
+            ((MainActivity) getActivity()).scrollToTop();
     }
 
     protected String getSummonerName() {
@@ -136,6 +138,10 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
 
     protected void executeGetObservableGame(Request.RequestCallback requestCallback, String summonerId) {
         new Executor(new Request(Request.RequestType.GET, new ObservableGame(), requestCallback, URIHelper.GET_OBSERVABLE_GAME, URIHelper.PlatformId.getByRegion(URIHelper.getCurrentRegion()).toString(), summonerId), getActivity()).execute();
+    }
+
+    protected void executeGetLeagueBySummonerIds(Request.RequestCallback requestCallback, String summonerIds) {
+        new Executor(new Request(Request.RequestType.GET, new SummonerLeagueStandings(), requestCallback, URIHelper.GET_LEAGUE_BY_SUMMONERS, summonerIds), getActivity()).execute();
     }
 
     protected void initializeErrorLayout(CharSequence title, CharSequence body) {

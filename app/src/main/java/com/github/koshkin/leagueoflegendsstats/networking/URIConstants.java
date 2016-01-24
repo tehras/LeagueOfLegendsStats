@@ -11,8 +11,7 @@ public class URIConstants {
     public static final String API_KEY = "?api_key=47746efd-ea3c-4440-9c80-0f96a6797014";
 
     //BASE URI, diff for each region
-    public static final String NA_BASE_URI = "https://na.api.pvp.net";
-    public static final String NA_BASE_URI_WITH_REGION = "https://na.api.pvp.net";
+    public static final String NA_BASE_URI = "https://%s.api.pvp.net";
     public static String NA_STATIC_URI = "http://ddragon.leagueoflegends.com/cdn/6.1.1/img";
     public static String NA_STATIC_DATA_URI = "http://ddragon.leagueoflegends.com/cdn/6.1.1/data";
 
@@ -28,6 +27,7 @@ public class URIConstants {
 
     public static final String LEAGUE_CHALLENGER = "/api/lol/%s/v2.5/league/challenger?type=%s";
     public static final String LEAGUE_MASTER = "/api/lol/%s/v2.5/league/master?type=%s";
+    public static final String LEAGUE_BY_SUMMONERS = "/api/lol/%s/v2.5/league/by-summoner/%s";
 
     public static final String MATCH_STATS = "/api/lol/%s/v2.2/match/%s";
 

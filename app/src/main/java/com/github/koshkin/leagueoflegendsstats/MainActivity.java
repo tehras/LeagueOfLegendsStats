@@ -225,6 +225,11 @@ public class MainActivity extends AppCompatActivity
         mLastPopupWindow = lastPopupWindow;
     }
 
+    public void scrollToTop() {
+        if (mNestedScrollView != null)
+            mNestedScrollView.scrollTo(0, 0);
+    }
+
     private class MyTimerTask extends TimerTask {
         @Override
         public void run() {
@@ -261,7 +266,7 @@ public class MainActivity extends AppCompatActivity
 
         if (supportManager != null && supportManager.getFragments() != null && supportManager.getFragments().size() > 0) {
             Fragment fragment = supportManager.getFragments().get(supportManager.getFragments().size() - 1);
-            if (fragment.getClass() == fragmentClass)
+            if (fragment != null && fragment.getClass() == fragmentClass)
                 return true;
         }
 

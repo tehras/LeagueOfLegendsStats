@@ -2,6 +2,7 @@ package com.github.koshkin.leagueoflegendsstats.networking;
 
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.API_KEY;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.FEATURED_MATCHES;
+import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.LEAGUE_BY_SUMMONERS;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.LEAGUE_CHALLENGER;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.LEAGUE_MASTER;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.MATCH_STATS;
@@ -33,6 +34,7 @@ public enum URIHelper {
     GET_SPRITES(STATIC_SPRITE, NA_STATIC_URI, false, false),
     GET_CHALLENGER(LEAGUE_CHALLENGER, NA_BASE_URI, true, true),
     GET_MASTER(LEAGUE_MASTER, NA_BASE_URI, true, true),
+    GET_LEAGUE_BY_SUMMONERS(LEAGUE_BY_SUMMONERS, NA_BASE_URI, true, true),
     GET_MATCH_STATS(MATCH_STATS, NA_BASE_URI, true, true),
     GET_SUMMONER_BY_IDS(SUMMONER_BY_ID, NA_BASE_URI, true, true),
     GET_FEATURED_MATCHES(FEATURED_MATCHES, NA_BASE_URI, true, true),
@@ -62,7 +64,15 @@ public enum URIHelper {
     }
 
     public String getUrl(String... params) {
-        String url = mBaseUri + mOperationUrl;
+        String url;
+
+        if (mBaseUri.equalsIgnoreCase(NA_BASE_URI)) {
+            url = String.format(mBaseUri, getCurrentRegion().getRegionName().toLowerCase());
+        } else {
+            url = mBaseUri;
+        }
+
+        url = url + mOperationUrl;
 
         String apiKey = API_KEY;
         if (url.contains("?"))

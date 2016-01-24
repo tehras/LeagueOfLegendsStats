@@ -36,4 +36,12 @@ public class ObservableUtils {
 
         return Html.fromHtml("Game Started <b>" + (min > 0 ? String.valueOf(min) + "m " : "") + (seconds > 0 ? String.valueOf(seconds) + "s" : "") + "</b> ago");
     }
+
+    public static CharSequence getStartedText(long currentTime, long timeStarted) {
+
+        long totalTime = currentTime - timeStarted; //millies
+        totalTime = totalTime / 1000; //Seconds;
+
+        return getStartedText(totalTime);
+    }
 }

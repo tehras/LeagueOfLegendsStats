@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginBottom="@dimen/activity_vertical_margin_small"
+              android:layout_marginTop="@dimen/activity_vertical_margin_xsmall"
+              android:background="@color/elevation_background"
+              android:elevation="@dimen/medium_elevation"
+              android:orientation="vertical"
+              android:paddingEnd="@dimen/activity_vertical_margin_small"
+              android:paddingTop="@dimen/activity_vertical_margin_small">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/activity_vertical_margin_small"
+        android:text="@string/observable_game_title"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"/>
+
+    <include
+        layout="@layout/partial_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin_small"/>
+
+    <LinearLayout
+        android:id="@+id/observable_player_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <include
+            android:id="@+id/red_player_1"
+            layout="@layout/partial_observable_player_report"/>
+
+        <include
+            android:id="@+id/red_player_2"
+            layout="@layout/partial_observable_player_report"/>
+
+        <include
+            android:id="@+id/red_player_3"
+            layout="@layout/partial_observable_player_report"/>
+
+        <include
+            android:id="@+id/red_player_4"
+            layout="@layout/partial_observable_player_report"/>
+
+        <include
+            android:id="@+id/red_player_5"
+            layout="@layout/partial_observable_player_report"/>
+
+        <include
+            android:id="@+id/blue_player_1"
+            layout="@layout/partial_observable_player_report"/>
+
+        <include
+            android:id="@+id/blue_player_2"
+            layout="@layout/partial_observable_player_report"/>
+
+        <include
+            android:id="@+id/blue_player_3"
+            layout="@layout/partial_observable_player_report"/>
+
+        <include
+            android:id="@+id/blue_player_4"
+            layout="@layout/partial_observable_player_report"/>
+
+        <include
+            android:id="@+id/blue_player_5"
+            layout="@layout/partial_observable_player_report"/>
+
+    </LinearLayout>
+
+</LinearLayout>

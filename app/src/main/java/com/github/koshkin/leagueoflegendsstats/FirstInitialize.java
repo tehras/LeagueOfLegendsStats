@@ -5,7 +5,9 @@ import android.content.Context;
 import com.github.koshkin.leagueoflegendsstats.models.ChampionIcons;
 import com.github.koshkin.leagueoflegendsstats.models.DataParser;
 import com.github.koshkin.leagueoflegendsstats.models.ItemIcons;
+import com.github.koshkin.leagueoflegendsstats.models.MasteryIcons;
 import com.github.koshkin.leagueoflegendsstats.models.ProfileIcons;
+import com.github.koshkin.leagueoflegendsstats.models.RuneIcons;
 import com.github.koshkin.leagueoflegendsstats.models.SpellIcons;
 import com.github.koshkin.leagueoflegendsstats.models.SpriteHolder;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
@@ -25,7 +27,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Created by tehras on 1/14/16.
- * <p/>
+ * <p>
  * First Initialize
  */
 public class FirstInitialize implements Request.RequestCallback {
@@ -41,6 +43,8 @@ public class FirstInitialize implements Request.RequestCallback {
     public static final String CHAMPION_JSON = "champion.json";
     public static final String SPELL_JSON = "summoner.json";
     public static final String PROFILE_JSON = "profileicon.json";
+    public static final String RUNES_JSON = "runeicon.json";
+    public static final String MASTERIES_JSON = "masteryicon.json";
 
     public void initialize() {
         StaticDataHolder.getInstance(mMainActivity).init();
@@ -63,6 +67,8 @@ public class FirstInitialize implements Request.RequestCallback {
                 String championIcons = staticDataHolder.getChampionIcons().getVersion();
                 String profileIcons = staticDataHolder.getProfileIcons().getVersion();
                 String itemIcons = staticDataHolder.getItemIcons().getVersion();
+                String runeIcons = staticDataHolder.getRuneIcons().getVersion();
+                String masteryIcons = staticDataHolder.getMasteryIcons().getVersion();
 
                 URIConstants.NA_STATIC_URI = versionControl.getCdnUrl() + "/" + versionControl.getVersion() + "/img";
                 URIConstants.NA_STATIC_DATA_URI = versionControl.getCdnUrl() + "/" + versionControl.getVersion() + "/data";
@@ -97,6 +103,22 @@ public class FirstInitialize implements Request.RequestCallback {
                     for (int i = 0; i < 1; i++) {
                         mExecuteCounter++;
                         new Executor(new Request(Request.RequestType.GET_IMAGE, new SpriteHolder(Type.PROFILE), this, URIHelper.GET_SPRITES, "profileicon" + String.valueOf(i) + ".png"), mMainActivity).execute();
+                    }
+                }
+                if (!runeIcons.equalsIgnoreCase(getFromMap(versionControl, "rune"))) {
+                    mExecuteCounter++;
+                    new Executor(new Request(Request.RequestType.GET, new DataParser(Type.RUNES, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), RUNES_JSON), mMainActivity).execute();
+                    for (int i = 0; i < 1; i++) {
+                        mExecuteCounter++;
+                        new Executor(new Request(Request.RequestType.GET_IMAGE, new SpriteHolder(Type.RUNES), this, URIHelper.GET_SPRITES, "rune" + String.valueOf(i) + ".png"), mMainActivity).execute();
+                    }
+                }
+                if (!masteryIcons.equalsIgnoreCase(getFromMap(versionControl, "mastery"))) {
+                    mExecuteCounter++;
+                    new Executor(new Request(Request.RequestType.GET, new DataParser(Type.MASTERIES, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), MASTERIES_JSON), mMainActivity).execute();
+                    for (int i = 0; i < 1; i++) {
+                        mExecuteCounter++;
+                        new Executor(new Request(Request.RequestType.GET_IMAGE, new SpriteHolder(Type.MASTERIES), this, URIHelper.GET_SPRITES, "mastery" + String.valueOf(i) + ".png"), mMainActivity).execute();
                     }
                 }
 
@@ -145,6 +167,14 @@ public class FirstInitialize implements Request.RequestCallback {
                         case ITEM:
                             if (parser.getResponseObject() instanceof ItemIcons)
                                 StaticDataHolder.getInstance(mMainActivity).setItemIcons((ItemIcons) parser.getResponseObject());
+                            break;
+                        case RUNES:
+                            if (parser.getResponseObject() instanceof RuneIcons)
+                                StaticDataHolder.getInstance(mMainActivity).setRuneIcons((RuneIcons) parser.getResponseObject());
+                            break;
+                        case MASTERIES:
+                            if (parser.getResponseObject() instanceof MasteryIcons)
+                                StaticDataHolder.getInstance(mMainActivity).setMasteryIcons((MasteryIcons) parser.getResponseObject());
                             break;
                     }
                 break;

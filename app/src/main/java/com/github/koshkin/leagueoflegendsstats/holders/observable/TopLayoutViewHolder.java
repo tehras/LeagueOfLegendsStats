@@ -18,15 +18,21 @@ import com.github.koshkin.leagueoflegendsstats.viewhelpers.LoaderHelper;
 import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
+ * Top layout for the Observable games
+ * <p/>
  * Created by tehras on 1/23/16.
  */
 public class TopLayoutViewHolder {
 
     private final View mLeftPickView, mRightPickView, mLeftBanView, mRightbanView;
     private final TextView mBansText, mMatchMode, mMatchType, mMatchGameStarted;
+    private Timer mTimer;
 
     public TopLayoutViewHolder(View view) {
         mLeftPickView = view.findViewById(R.id.left_pick_ban);
@@ -49,7 +55,41 @@ public class TopLayoutViewHolder {
 
         mMatchType.setText(getMatchType(observableGame));
         mMatchMode.setText(getMatchMode(observableGame));
-        mMatchGameStarted.setText(ObservableUtils.getStartedText(observableGame.getGameLength()));
+        mMatchGameStarted.setText(ObservableUtils.getStartedText(Calendar.getInstance().getTimeInMillis(), observableGame.getGameStartTime()));
+
+        clickingGameTime(observableGame, activity);
+    }
+
+    public void stopTimer() {
+        if (mTimer != null)
+            mTimer.cancel();
+    }
+
+    private void clickingGameTime(ObservableGame observableGame, Activity activity) {
+        mTimer = new Timer();
+        UpdateTimerTask timerTask = new UpdateTimerTask(observableGame, activity);
+        mTimer.schedule(timerTask, 0, 1000);
+    }
+
+    private class UpdateTimerTask extends TimerTask {
+        private final ObservableGame mObservableGame;
+        private final Activity mActivity;
+
+        public UpdateTimerTask(ObservableGame observableGame, Activity activity) {
+            mObservableGame = observableGame;
+            mActivity = activity;
+        }
+
+        @Override
+        public void run() {
+            if (mActivity != null)
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMatchGameStarted.setText(ObservableUtils.getStartedText(Calendar.getInstance().getTimeInMillis(), mObservableGame.getGameStartTime()));
+                    }
+                });
+        }
     }
 
     private void populateBans(View view, ObservableGame observableGame, TeamSide side, final Activity activity) {
@@ -81,12 +121,12 @@ public class TopLayoutViewHolder {
 
             @Override
             protected void postExecute() {
-                populateThis(ban1, ban1Final, 0);
-                populateThis(ban2, ban2Final, 1);
-                populateThis(ban3, ban3Final, 2);
+                populateThis(ban1, ban1Final);
+                populateThis(ban2, ban2Final);
+                populateThis(ban3, ban3Final);
             }
 
-            private void populateThis(HashMap<Drawable, Boolean> ban, View banView, int i) {
+            private void populateThis(HashMap<Drawable, Boolean> ban, View banView) {
 
                 Drawable drawable = Iterables.get(ban.keySet(), 0);
                 boolean isBan = Iterables.get(ban.values(), 0);
@@ -94,7 +134,7 @@ public class TopLayoutViewHolder {
                 if (isBan) {
                     if (drawable != null)
                         ((ImageView) banView.findViewById(R.id.champion_image)).setImageDrawable(drawable);
-                    ((TextView) banView.findViewById(R.id.champion_pick_order)).setText(String.valueOf(i + 1));
+                    banView.findViewById(R.id.champion_pick_order).setVisibility(View.GONE);
                 } else {
                     banView.setVisibility(View.GONE);
                 }
@@ -126,7 +166,7 @@ public class TopLayoutViewHolder {
             }
 
             private Champion getChamp(int i) {
-                if (championArrayList.size() >= i) {
+                if (championArrayList.size() > i) {
                     return championArrayList.get(i);
                 } else
                     return null;

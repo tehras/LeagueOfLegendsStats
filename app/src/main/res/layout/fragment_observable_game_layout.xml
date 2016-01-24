@@ -9,4 +9,9 @@
         layout="@layout/partial_observable_game_top_view"
         />
 
+    <include
+        android:id="@+id/observable_game_main_layout"
+        layout="@layout/partial_observable_main_layout_view"
+        />
+
 </LinearLayout>

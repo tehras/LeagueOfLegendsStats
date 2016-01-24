@@ -29,10 +29,11 @@
         android:id="@+id/nav_text_view_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/activity_vertical_margin_small"
+        android:paddingTop="@dimen/activity_vertical_margin_xsmall"
         android:text="No Champion Selected"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_medium"
+        />
     <TextView
         android:id="@+id/nav_text_view_level"
         android:layout_width="wrap_content"

@@ -44,10 +44,21 @@ public class Participant {
     private Stats stats;
     @SerializedName("participantId")
     @Expose
-    private int participantId;
+    private long participantId;
+    @SerializedName("summonerId")
+    @Expose
+    private long summonerId;
     @SerializedName("runes")
     @Expose
     private List<Rune> runes = new ArrayList<Rune>();
+
+    public long getSummonerId() {
+        return summonerId;
+    }
+
+    public void setSummonerId(long summonerId) {
+        this.summonerId = summonerId;
+    }
 
     /**
      * @return The teamId
@@ -188,14 +199,14 @@ public class Participant {
     /**
      * @return The participantId
      */
-    public int getParticipantId() {
+    public long getParticipantId() {
         return participantId;
     }
 
     /**
      * @param participantId The participantId
      */
-    public void setParticipantId(int participantId) {
+    public void setParticipantId(long participantId) {
         this.participantId = participantId;
     }
 

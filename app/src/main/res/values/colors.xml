@@ -41,4 +41,8 @@
     <color name="blue_team_color">#2196F3</color>
 
     <color name="gold_color">#FF8F00</color>
+
+    <color name="ferocity">#F44336</color>
+    <color name="cunning">#1565C0</color>
+    <color name="resolve">#4CAF50</color>
 </resources>

@@ -7,7 +7,7 @@ public class Mastery {
 
     @SerializedName("masteryId")
     @Expose
-    private int masteryId;
+    private long masteryId;
     @SerializedName("rank")
     @Expose
     private int rank;
@@ -15,14 +15,14 @@ public class Mastery {
     /**
      * @return The masteryId
      */
-    public int getMasteryId() {
+    public long getMasteryId() {
         return masteryId;
     }
 
     /**
      * @param masteryId The masteryId
      */
-    public void setMasteryId(int masteryId) {
+    public void setMasteryId(long masteryId) {
         this.masteryId = masteryId;
     }
 

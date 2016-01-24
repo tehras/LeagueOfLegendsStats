@@ -7,7 +7,9 @@ import com.github.koshkin.leagueoflegendsstats.utils.SharedPrefsUtil;
 
 import static com.github.koshkin.leagueoflegendsstats.utils.AssetReaderUtil.CONSTANT_CHAMPION;
 import static com.github.koshkin.leagueoflegendsstats.utils.AssetReaderUtil.CONSTANT_ITEM;
+import static com.github.koshkin.leagueoflegendsstats.utils.AssetReaderUtil.CONSTANT_MASTERIES;
 import static com.github.koshkin.leagueoflegendsstats.utils.AssetReaderUtil.CONSTANT_PROFILE;
+import static com.github.koshkin.leagueoflegendsstats.utils.AssetReaderUtil.CONSTANT_RUNES;
 import static com.github.koshkin.leagueoflegendsstats.utils.AssetReaderUtil.CONSTANT_SUMMONER;
 
 /**
@@ -47,6 +49,14 @@ public class DataParser implements Request.ParserCallback<DataParser> {
             case ITEM:
                 SharedPrefsUtil.saveSharedPrefs(CONSTANT_ITEM, body, mContext);
                 mResponseObject = new ItemIcons().parse(body);
+                break;
+            case RUNES:
+                SharedPrefsUtil.saveSharedPrefs(CONSTANT_RUNES, body, mContext);
+                mResponseObject = new RuneIcons().parse(body);
+                break;
+            case MASTERIES:
+                SharedPrefsUtil.saveSharedPrefs(CONSTANT_MASTERIES, body, mContext);
+                mResponseObject = new MasteryIcons().parse(body);
                 break;
         }
         return this;
