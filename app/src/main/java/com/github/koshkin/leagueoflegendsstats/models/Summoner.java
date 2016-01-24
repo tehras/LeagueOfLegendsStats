@@ -28,6 +28,15 @@ public class Summoner implements Request.ParserCallback<Summoner> {
     private String mSummonerName;
     @SerializedName("summonerInfo")
     private SummonerInfo mSummonerInfo;
+    private PlayerRanked mPlayerRanked;
+
+    public PlayerRanked getPlayerRanked() {
+        return mPlayerRanked;
+    }
+
+    public void setPlayerRanked(PlayerRanked playerRanked) {
+        mPlayerRanked = playerRanked;
+    }
 
     public SummonerInfo getSummonerInfo() {
         return mSummonerInfo;

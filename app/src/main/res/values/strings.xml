@@ -71,4 +71,11 @@
     <string name="nav_welcome_back">Welcome back to Lol Stats</string>
     <string name="observable_game_title">Players</string>
     <string name="accessibility_summoner_icon">summoner icon</string>
+    <string name="my_summoner_title">My Summoner</string>
+    <string name="my_summoner_no_summoners_added_yet">No summoner added yet. Please go to \'Settings\' to add a summoner</string>
+    <string name="ranked_kills">Kills</string>
+    <string name="ranked_deaths">Deaths</string>
+    <string name="ranked_assists">Assists</string>
+    <string name="ranked_kda">KDA</string>
+    <string name="my_summoner_no_ranked_stats">No Ranked Stats found for this season. Please play some games, then this will be updated.</string>
 </resources>

@@ -14,20 +14,26 @@ import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.fragments.favorite.FavoritesFragment;
 import com.github.koshkin.leagueoflegendsstats.fragments.league.LeagueRankingFragment;
 import com.github.koshkin.leagueoflegendsstats.fragments.observable.ObservableFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.settings.SettingsFragment;
 import com.github.koshkin.leagueoflegendsstats.holders.FeaturedGameHolder;
 import com.github.koshkin.leagueoflegendsstats.holders.LeagueChampionHolder;
+import com.github.koshkin.leagueoflegendsstats.holders.MySummonerHolder;
 import com.github.koshkin.leagueoflegendsstats.models.FeaturedGames;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.ObservableGame;
+import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
 import com.github.koshkin.leagueoflegendsstats.models.RankedSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.SimpleSummonerComparator;
+import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
+import com.github.koshkin.leagueoflegendsstats.models.Summoner;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.networking.Response;
 import com.github.koshkin.leagueoflegendsstats.sqlite.FavoritesSqLiteHelper;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.LoaderHelper;
 import com.github.koshkin.leagueoflegendsstats.views.CustomCardView;
+import com.github.koshkin.leagueoflegendsstats.views.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,15 +52,33 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
     private boolean mFirstLoad = true;
     private FeaturedGames mFeaturedGames;
     private int mCallsToExecute;
+    private Summoner mMySummoner;
+
+    private CustomCardView mMySummonerLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //EXECUTE
-        mCallsToExecute = 2;
-        executeGetChallengerStandings(this, LeagueQueueType.RANKED_SOLO_5x5);
-        executeGetFeaturedGames(this);
-        showLoading();
+        mCallsToExecute = 0;
+        if (mLeagueStandings == null) {
+            mCallsToExecute++;
+            executeGetChallengerStandings(this, LeagueQueueType.RANKED_SOLO_5x5);
+        }
+        if (mMySummoner == null) {
+            mMySummoner = StaticDataHolder.getInstance(getActivity()).getMySummoner();
+            if (mMySummoner != null) {
+                mCallsToExecute++;
+                executeGetRankedStats(this, mMySummoner.getSummonerId());
+            }
+        }
+
+        if (mFeaturedGamesLayout == null) {
+            mCallsToExecute++;
+            executeGetFeaturedGames(this);
+        }
+        if (mCallsToExecute > 0)
+            showLoading();
     }
 
     @Override
@@ -82,6 +106,7 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
         initChallengerLayout(view);
         initFavoriteLayout(view);
         initFeaturedGames(view);
+        initMySummoner(view);
 
         populateFavoriteLayout();
         if (mLeagueStandings != null) {
@@ -89,11 +114,21 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
         } else
             challengerLayoutError();
 
+        if (mMySummoner != null)
+            populateMySummonerLayout();
+        else
+            populateErrorMySummonerLayout();
+
         if (mFeaturedGames != null) {
             populateObservableGames();
         }
 
         return view;
+    }
+
+    private void initMySummoner(View view) {
+        mMySummonerLayout = (CustomCardView) view.findViewById(R.id.my_summoner_layout);
+        mMySummonerLayout.hideViewAllView();
     }
 
     private void initChallengerLayout(View view) {
@@ -146,6 +181,16 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
                 mCallsToExecute--;
                 mViewsRefreshed--;
                 break;
+            case GET_SUMMONER_RANKED:
+                mCallsToExecute--;
+                if (response.getStatus() == Response.Status.SUCCESS) {
+                    PlayerRanked playerRanked = (PlayerRanked) response.getReturnedObject();
+                    mMySummoner.setPlayerRanked(playerRanked);
+                    populateMySummonerLayout();
+                } else {
+                    populateErrorMySummonerLayout();
+                }
+                break;
             case GET_SUMMONER_BY_IDS:
                 mCallsToExecute--;
                 mViewsRefreshed--;
@@ -169,6 +214,11 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
             stopRefreshing();
     }
 
+    private void populateErrorMySummonerLayout() {
+        mMySummonerLayout.clearViewsFromHolder();
+        mMySummonerLayout.addViewToHolder(getAddNewSummonerLayout());
+    }
+
     private int mViewsRefreshed = 0;
 
     @Override
@@ -176,6 +226,19 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
         mViewsRefreshed = 2;
         executeGetChallengerStandings(this, LeagueQueueType.RANKED_SOLO_5x5);
         executeGetFeaturedGames(this);
+    }
+
+    public View getAddNewSummonerLayout() {
+        View view = getActivity().getLayoutInflater().inflate(R.layout.partial_add_new_summoner, null);
+
+        MaterialButton materialButton = (MaterialButton) view.findViewById(R.id.go_to_settings);
+        materialButton.setOnButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).startFragment(SettingsFragment.class);
+            }
+        });
+        return view;
     }
 
     private class MyTimerTask extends TimerTask {
@@ -223,6 +286,21 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
             mFeaturedGamesLayout.showError();
             mFeaturedGamesLayout.hideViewAllView();
         }
+    }
+
+    private void populateMySummonerLayout() {
+        if (mMySummoner != null) {
+            mMySummonerLayout.clearViewsFromHolder();
+            mMySummonerLayout.addViewToHolder(viewMySummonerLayout());
+        } else {
+            populateErrorMySummonerLayout();
+        }
+    }
+
+    private View viewMySummonerLayout() {
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(getActivity()).inflate(R.layout.partial_my_summoner_layout, null, false);
+        new MySummonerHolder(view).populate(mMySummoner, getActivity());
+        return view;
     }
 
     private void populateFavoriteLayout() {

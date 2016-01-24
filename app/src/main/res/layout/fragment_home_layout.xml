@@ -6,6 +6,26 @@
                 android:orientation="vertical">
 
     <com.github.koshkin.leagueoflegendsstats.views.CustomCardView
+        android:id="@+id/my_summoner_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        customCard:applyMargin="false"
+        customCard:dataNotFound="@string/no_favorite_players_added_yet"
+        customCard:titleText="@string/my_summoner_title"
+        />
+
+    <com.github.koshkin.leagueoflegendsstats.views.CustomCardView
+        android:id="@+id/favorite_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/my_summoner_layout"
+        customCard:applyMargin="false"
+        customCard:dataNotFound="@string/no_favorite_players_added_yet"
+        customCard:titleText="@string/favorite_payer_title"
+        customCard:viewMoreText="@string/view_all_favorites"/>
+
+
+    <com.github.koshkin.leagueoflegendsstats.views.CustomCardView
         android:id="@+id/challenger_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,15 +34,6 @@
         customCard:dataNotFound="@string/no_challengers_found"
         customCard:titleText="@string/challenger_title"
         customCard:viewMoreText="@string/view_all_challengers"/>
-
-    <com.github.koshkin.leagueoflegendsstats.views.CustomCardView
-        android:id="@+id/favorite_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        customCard:applyMargin="false"
-        customCard:dataNotFound="@string/no_favorite_players_added_yet"
-        customCard:titleText="@string/favorite_payer_title"
-        customCard:viewMoreText="@string/view_all_favorites"/>
 
     <com.github.koshkin.leagueoflegendsstats.views.CustomCardView
         android:id="@+id/featured_layout"

@@ -90,7 +90,7 @@ public class RecentSummoner extends SugarRecord {
     }
 
     private void populateRankedWinsLossesAssists(PlayerStatSummaries playerStats) {
-        if (playerStats != null) {
+        if (playerStats != null && playerStats.getPlayerSummaries() != null) {
             ArrayList<PlayerSummary> playerSumaries = playerStats.getPlayerSummaries();
             for (PlayerSummary playerSummary : playerSumaries) {
                 if (playerSummary.getSummaryType() == PlayerSummary.SummaryType.RANKED_SOLO_5X) {
