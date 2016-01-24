@@ -50,6 +50,7 @@
                 android:layout_alignBottom="@id/extra_layout"
                 android:layout_alignParentEnd="true"
                 android:text="Started 12m ago"
+                android:textStyle="italic"
                 android:textSize="@dimen/text_size_small"/>
 
         </RelativeLayout>

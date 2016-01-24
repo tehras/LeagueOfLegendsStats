@@ -2,6 +2,7 @@ package com.github.koshkin.leagueoflegendsstats;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.ImageView;
@@ -63,8 +64,27 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
     @Override
     public void onPause() {
         super.onPause();
-        if (getActivity() != null && getActivity() instanceof MainActivity)
+        if (getActivity() != null && getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).scrollToTop();
+            ((MainActivity) getActivity()).removeSwipeToRefreshListener();
+        }
+    }
+
+    /**
+     * put it in onResume or else it won't work correctly
+     *
+     * @param swipeRefreshLayout OnRefreshListener
+     */
+    public void addOnSwipeToRefreshListener(SwipeRefreshLayout.OnRefreshListener swipeRefreshLayout) {
+        if (getActivity() != null && getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).addSwipeToRefreshListener(swipeRefreshLayout);
+        }
+    }
+
+    public void stopRefreshing() {
+        if (getActivity() != null && getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).stopRefreshing();
+        }
     }
 
     protected String getSummonerName() {

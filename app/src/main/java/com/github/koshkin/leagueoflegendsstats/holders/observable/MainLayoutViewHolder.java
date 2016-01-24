@@ -25,6 +25,7 @@ import com.github.koshkin.leagueoflegendsstats.models.Tier;
 import com.github.koshkin.leagueoflegendsstats.models.match.Mastery;
 import com.github.koshkin.leagueoflegendsstats.models.match.Participant;
 import com.github.koshkin.leagueoflegendsstats.models.match.Rune;
+import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
 import com.github.koshkin.leagueoflegendsstats.utils.NumberUtils;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.LoaderHelper;
 import com.github.koshkin.leagueoflegendsstats.views.RoundedImageView;
@@ -94,14 +95,14 @@ public class MainLayoutViewHolder {
             populateChampionAndSummonerIcons(participant, activity, view);
             populateRunes(participant, activity, view);
             populateMasteries(participant, activity, view);
-            populateDivison(participant, summonerLeagueStandings, activity, view);
+            populateDivision(participant, summonerLeagueStandings, activity, view);
         } else {
             view.setVisibility(View.GONE);
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private void populateDivison(Participant participant, SummonerLeagueStandings summonerLeagueStandings, final Activity activity, View view) {
+    private void populateDivision(Participant participant, SummonerLeagueStandings summonerLeagueStandings, final Activity activity, View view) {
         String id = String.valueOf(participant.getSummonerId());
 
         final ImageView divisionIcon = (ImageView) view.findViewById(R.id.division_icon);
@@ -120,12 +121,16 @@ public class MainLayoutViewHolder {
                     long wins = rankedSummoner.getWins();
                     long losses = rankedSummoner.getLosses();
                     long leaguePoints = rankedSummoner.getLeaguePoints();
-                    final String divison = rankedSummoner.getDivision();
+                    String division = rankedSummoner.getDivision();
                     final Tier tier = leagueStandings1.getTier();
+
+                    if (tier == Tier.CHALLENGER || tier == Tier.MASTER)
+                        division = "";
 
                     seasonWins.setText(String.valueOf(wins) + "W");
                     seasonLosses.setText(String.valueOf(losses) + "L");
-                    seasonRankings.setText(getRanking(divison, tier, leaguePoints));
+                    seasonRankings.setText(getRanking(division, tier, leaguePoints));
+                    final String finalDivision = division;
                     new LoaderHelper() {
 
                         private Drawable mDrawable;
@@ -141,7 +146,7 @@ public class MainLayoutViewHolder {
 
                         @Override
                         protected void runInBackground() {
-                            mDrawable = StaticDataHolder.getInstance(activity).getRankTier(tier, divison);
+                            mDrawable = StaticDataHolder.getInstance(activity).getRankTier(tier, finalDivision);
                         }
                     }.execute();
 
@@ -168,7 +173,7 @@ public class MainLayoutViewHolder {
     }
 
     private String getRanking(String divison, Tier tier, long leaguePoints) {
-        return tier.getName() + " " + divison + " (" + String.valueOf(leaguePoints) + "LP)";
+        return tier.getName() + (!NullChecker.isNullOrEmpty(divison) ? " " : "") + divison + " (" + String.valueOf(leaguePoints) + "LP)";
     }
 
     private RankedSummoner findIdInLeagueStandings(LeagueStandings leagueStandings, String id) {

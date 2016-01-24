@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -45,6 +46,7 @@ import java.util.TimerTask;
 
 import io.fabric.sdk.android.Fabric;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FirstInitialize.Callback {
 
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity
     private BlockableNestedScrollView mNestedScrollView;
     private BlockableFloatingActionBar mFavFab;
     private NavigationView mNavigationView;
+    private SwipeRefreshLayout mSwipeToRefresh;
 
     @Override
     protected void onPause() {
@@ -126,6 +129,9 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        mSwipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh);
+        initSwipeToRefresh();
+
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
 
@@ -155,6 +161,31 @@ public class MainActivity extends AppCompatActivity
                     new FirstInitialize(MainActivity.this, MainActivity.this).initialize();
                 }
             }.run();
+        }
+    }
+
+    private void initSwipeToRefresh() {
+        mSwipeToRefresh.setEnabled(false);
+        mSwipeToRefresh.setColorSchemeColors(this.getResources().getColor(R.color.role_color_adc), this.getResources().getColor(R.color.role_color_jg), this.getResources().getColor(R.color.role_color_mid), this.getResources().getColor(R.color.role_color_top), this.getResources().getColor(R.color.role_color_supp));
+    }
+
+    public void addSwipeToRefreshListener(SwipeRefreshLayout.OnRefreshListener onRefreshListener) {
+        if (mSwipeToRefresh != null) {
+            mSwipeToRefresh.setOnRefreshListener(onRefreshListener);
+            mSwipeToRefresh.setEnabled(true);
+        }
+    }
+
+    public void stopRefreshing() {
+        if (mSwipeToRefresh != null)
+            mSwipeToRefresh.setRefreshing(false);
+    }
+
+    public void removeSwipeToRefreshListener() {
+        if (mSwipeToRefresh != null) {
+            mSwipeToRefresh.setOnRefreshListener(null);
+            mSwipeToRefresh.setEnabled(false);
+            mSwipeToRefresh.setRefreshing(false);
         }
     }
 

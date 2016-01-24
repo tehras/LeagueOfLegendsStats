@@ -3,6 +3,7 @@ package com.github.koshkin.leagueoflegendsstats.fragments.home;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +34,12 @@ import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 /**
  * Created by tehras on 1/9/16.
  * <p/>
  * Home layout to pop up
  */
-public class HomeFragment extends BaseFragment implements Request.RequestCallback {
+public class HomeFragment extends BaseFragment implements Request.RequestCallback, SwipeRefreshLayout.OnRefreshListener {
 
     private CustomCardView mChallengerLayout, mFavoriteLayout, mFeaturedGamesLayout;
     private LeagueStandings mLeagueStandings;
@@ -64,6 +64,7 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
         if (!mFirstLoad) {
             populateFavoriteLayout();
         }
+        addOnSwipeToRefreshListener(this);
     }
 
     @Override
@@ -143,9 +144,11 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
                     challengerLayoutError();
                 }
                 mCallsToExecute--;
+                mViewsRefreshed--;
                 break;
             case GET_SUMMONER_BY_IDS:
                 mCallsToExecute--;
+                mViewsRefreshed--;
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     mLeagueStandings = (LeagueStandings) response.getReturnedObject();
                     updateChallengerLayout();
@@ -153,14 +156,26 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
                 break;
             case GET_FEATURED_MATCHES:
                 mCallsToExecute--;
+                mViewsRefreshed--;
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     mFeaturedGames = (FeaturedGames) response.getReturnedObject();
                     populateObservableGames();
                 }
                 break;
         }
-        if (mCallsToExecute == 0)
+        if (mCallsToExecute <= 0)
             new Timer().schedule(new MyTimerTask(), 500);
+        if (mViewsRefreshed <= 0)
+            stopRefreshing();
+    }
+
+    private int mViewsRefreshed = 0;
+
+    @Override
+    public void onRefresh() {
+        mViewsRefreshed = 2;
+        executeGetChallengerStandings(this, LeagueQueueType.RANKED_SOLO_5x5);
+        executeGetFeaturedGames(this);
     }
 
     private class MyTimerTask extends TimerTask {
@@ -189,6 +204,8 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
             ArrayList<ObservableGame> featuredGames = mFeaturedGames.getObservableGames();
             int i = 0;
             Collections.sort(featuredGames);
+
+            mFeaturedGamesLayout.clearViewsFromHolder();
             for (ObservableGame game : featuredGames) {
                 if (i == 1)
                     break;
@@ -264,6 +281,7 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
 
             Collections.sort(mLeagueStandings.getEntries());
 
+            mChallengerLayout.clearViewsFromHolder();
             for (RankedSummoner summoner : mLeagueStandings.getEntries()) {
                 if (i > 2)
                     break;

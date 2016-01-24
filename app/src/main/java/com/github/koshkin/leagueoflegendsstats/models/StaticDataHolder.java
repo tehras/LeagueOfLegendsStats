@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.github.koshkin.leagueoflegendsstats.FirstInitialize;
 import com.github.koshkin.leagueoflegendsstats.R;
@@ -182,11 +183,12 @@ public class StaticDataHolder {
     }
 
     public Drawable getRankTier(Tier tier, String division) {
-        if (tier == null || NullChecker.isNullOrEmpty(division))
+        if (tier == null)
             return null;
 
         int size = mContext.getResources().getDimensionPixelSize(R.dimen.profile_icon_size_xsmall);
-        return loadFromAssets(tier.getName().toLowerCase() + "_" + division.toLowerCase() + ".png", size, size);
+        String fileName = tier.getName().toLowerCase() + (NullChecker.isNullOrEmpty(division) ? "" : "_") + division.toLowerCase() + ".png";
+        return loadFromAssets(fileName, size, size);
     }
 
     public Drawable getProfileIcon(ProfileIcon profileIcon, boolean smallSize) {

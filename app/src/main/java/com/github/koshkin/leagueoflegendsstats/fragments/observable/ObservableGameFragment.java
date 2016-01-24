@@ -20,7 +20,7 @@ import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
 
 /**
  * Created by tehras on 1/23/16.
- * <p/>
+ * <p>
  * Observable Game Fragment
  */
 public class ObservableGameFragment extends BaseFragment implements Request.RequestCallback {
@@ -60,8 +60,6 @@ public class ObservableGameFragment extends BaseFragment implements Request.Requ
             executeObservableGame();
         else
             executeGetSummoner(this, summonerName);
-
-        showLoading();
     }
 
     private void executeObservableGame() {
@@ -77,10 +75,10 @@ public class ObservableGameFragment extends BaseFragment implements Request.Requ
         initializeTopView(rootView);
         initializeMainView(rootView);
 
-        showLoading();
-
         if (mObservableGame != null)
             populateObservableGameLayout();
+        else
+            showLoading();
 
         return rootView;
     }

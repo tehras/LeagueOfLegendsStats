@@ -44,21 +44,32 @@
         app:layout_behavior="com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingActionButtonBehavior"
         />
 
-    <com.github.koshkin.leagueoflegendsstats.views.BlockableNestedScrollView
-        android:id="@+id/scroll_view_container"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_to_refresh"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.github.koshkin.leagueoflegendsstats.MainActivity"
-        tools:showIn="@layout/app_bar_main">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/content_main"/>
+        <com.github.koshkin.leagueoflegendsstats.views.BlockableNestedScrollView
+            android:id="@+id/scroll_view_container"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            tools:context="com.github.koshkin.leagueoflegendsstats.MainActivity"
+            tools:showIn="@layout/app_bar_main">
 
-    </com.github.koshkin.leagueoflegendsstats.views.BlockableNestedScrollView>
+            <include layout="@layout/content_main"/>
 
+        </com.github.koshkin.leagueoflegendsstats.views.BlockableNestedScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include layout="@layout/partial_loading"/>
+
+    <include layout="@layout/partial_error_layout"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
