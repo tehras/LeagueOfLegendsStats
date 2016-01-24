@@ -42,6 +42,7 @@
         android:id="@+id/summoner_icons"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/profile_icon_size_small"
+        android:layout_marginEnd="1dp"
         android:layout_toStartOf="@+id/observable_profile_icon"
         android:gravity="center_vertical"
         android:orientation="vertical">
@@ -50,12 +51,15 @@
             android:id="@+id/observable_icon_1"
             android:layout_width="@dimen/small_icon_height"
             android:layout_height="@dimen/small_icon_height"
+            android:contentDescription="@string/accessibility_summoner_icon"
             android:src="@drawable/ic_wallpaper_black_48dp"/>
 
         <ImageView
             android:id="@+id/observable_icon_2"
             android:layout_width="@dimen/small_icon_height"
             android:layout_height="@dimen/small_icon_height"
+            android:layout_marginTop="1dp"
+            android:contentDescription="@string/accessibility_summoner_icon"
             android:src="@drawable/ic_wallpaper_black_48dp"/>
 
     </LinearLayout>
