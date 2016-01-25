@@ -2,6 +2,7 @@ package com.github.koshkin.leagueoflegendsstats.fragments.league;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,7 +35,7 @@ import static com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType.RAN
  * <p/>
  * Ranked play
  */
-public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implements Request.RequestCallback {
+public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implements Request.RequestCallback, SwipeRefreshLayout.OnRefreshListener {
 
     private LeagueStandings mLeagueStandings;
     private LeagueRankingAdapter mAdapter;
@@ -55,6 +56,17 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
             };
 
         return mAdapter;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        addOnSwipeToRefreshListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     @Override
@@ -101,7 +113,6 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
 
         if (thisSortBy != mSortBy) {
             mSortBy = thisSortBy;
-            Collections.sort(mLeagueStandings.getEntries(), getCorrectSortBy(mSortBy));
             updateAdapterAllNew(mLeagueStandings);
         }
 
@@ -154,17 +165,21 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
                 boolean isAllowed = showOrHideSubmitButton(originalQueue, originalTier, mSelectedQueue, mSelectedTier, button);
                 if (isAllowed) {
                     showLoading();
-                    if (mSelectedTier == Tier.MASTER) {
-                        executeGetMasterStandings(LeagueRankingFragment.this, mSelectedQueue);
-                    } else {
-                        executeGetChallengerStandings(LeagueRankingFragment.this, mSelectedQueue);
-                    }
+                    executeCall();
                 }
             }
         });
         showOrHideSubmitButton(originalQueue, originalTier, mSelectedQueue, mSelectedTier, button);
 
         return view;
+    }
+
+    private void executeCall() {
+        if (mSelectedTier == Tier.MASTER) {
+            executeGetMasterStandings(LeagueRankingFragment.this, mSelectedQueue);
+        } else {
+            executeGetChallengerStandings(LeagueRankingFragment.this, mSelectedQueue);
+        }
     }
 
     private boolean showOrHideSubmitButton(String originalQueue, String originalTier, LeagueQueueType selectedQueue, Tier selectedTier, MaterialButton button) {
@@ -223,8 +238,12 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
                     updateAdapterError();
                     initializeErrorLayout("Error", "Failed retrieving the data");
                 }
-
+                break;
         }
+        mOnRefreshListener--;
+        if (mOnRefreshListener <= 0)
+            stopRefreshing();
+
     }
 
     private void updateAdapter(LeagueStandings returnedObject) {
@@ -235,6 +254,7 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
 
     private void updateAdapterAllNew(LeagueStandings leagueStandings) {
         if (mAdapter != null) {
+            Collections.sort(mLeagueStandings.getEntries(), getCorrectSortBy(mSortBy));
             mAdapter.updateAllNew(leagueStandings);
         }
     }
@@ -243,5 +263,13 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
         if (mAdapter != null) {
             mAdapter.updateError();
         }
+    }
+
+    private int mOnRefreshListener;
+
+    @Override
+    public void onRefresh() {
+        mOnRefreshListener = 1;
+        executeCall();
     }
 }

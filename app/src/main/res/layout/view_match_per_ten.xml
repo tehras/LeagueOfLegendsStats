@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Creep Score Per Minute"
-        android:textSize="@dimen/text_size_medium"
+        android:textSize="@dimen/text_size_medium_small"
         android:textStyle="bold"/>
 
     <LinearLayout
@@ -34,14 +34,14 @@
                 android:lines="1"
                 android:text="+13"
                 android:textColor="@color/success_green"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_medium_small"
                 android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0-10 min"
-                android:textSize="@dimen/text_size_medium_small"/>
+                android:textSize="@dimen/text_size_small"/>
 
         </LinearLayout>
 
@@ -61,14 +61,14 @@
                 android:lines="1"
                 android:text="+13"
                 android:textColor="@color/success_green"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_medium_small"
                 android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="10-20 min"
-                android:textSize="@dimen/text_size_medium_small"/>
+                android:textSize="@dimen/text_size_small"/>
 
         </LinearLayout>
 
@@ -89,14 +89,14 @@
                 android:lines="1"
                 android:text="+13"
                 android:textColor="@color/success_green"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_medium_small"
                 android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="20-30 min"
-                android:textSize="@dimen/text_size_medium_small"/>
+                android:textSize="@dimen/text_size_small"/>
 
         </LinearLayout>
 
@@ -116,14 +116,14 @@
                 android:lines="1"
                 android:text="+13"
                 android:textColor="@color/success_green"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_medium_small"
                 android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="30+ min"
-                android:textSize="@dimen/text_size_medium_small"/>
+                android:textSize="@dimen/text_size_small"/>
 
         </LinearLayout>
 

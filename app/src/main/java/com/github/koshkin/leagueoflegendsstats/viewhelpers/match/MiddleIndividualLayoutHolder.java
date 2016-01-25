@@ -59,15 +59,15 @@ public class MiddleIndividualLayoutHolder {
 
             HashMap<Integer, RoleHelper> participantMap = fixParticipantsRoles(participants);
             //Inflate TOP
-            populatePlayerView(activity, getCorrectParticipant(participantMap, leftSide, 1), getCorrectParticipant(participantMap, rightSide, 1), currentPlayer, participantIdentities, mIndividualLayout1, leftSide, rightSide);
+            populatePlayerView(participants, activity, getCorrectParticipant(participantMap, leftSide, 1), getCorrectParticipant(participantMap, rightSide, 1), currentPlayer, participantIdentities, mIndividualLayout1, leftSide, rightSide);
             //Inflate Mid
-            populatePlayerView(activity, getCorrectParticipant(participantMap, leftSide, 2), getCorrectParticipant(participantMap, rightSide, 2), currentPlayer, participantIdentities, mIndividualLayout2, leftSide, rightSide);
+            populatePlayerView(participants, activity, getCorrectParticipant(participantMap, leftSide, 2), getCorrectParticipant(participantMap, rightSide, 2), currentPlayer, participantIdentities, mIndividualLayout2, leftSide, rightSide);
             //Inflate JG
-            populatePlayerView(activity, getCorrectParticipant(participantMap, leftSide, 3), getCorrectParticipant(participantMap, rightSide, 3), currentPlayer, participantIdentities, mIndividualLayout3, leftSide, rightSide);
+            populatePlayerView(participants, activity, getCorrectParticipant(participantMap, leftSide, 3), getCorrectParticipant(participantMap, rightSide, 3), currentPlayer, participantIdentities, mIndividualLayout3, leftSide, rightSide);
             //Inflate ADC
-            populatePlayerView(activity, getCorrectParticipant(participantMap, leftSide, 4), getCorrectParticipant(participantMap, rightSide, 4), currentPlayer, participantIdentities, mIndividualLayout4, leftSide, rightSide);
+            populatePlayerView(participants, activity, getCorrectParticipant(participantMap, leftSide, 4), getCorrectParticipant(participantMap, rightSide, 4), currentPlayer, participantIdentities, mIndividualLayout4, leftSide, rightSide);
             //Inflate SUPP
-            populatePlayerView(activity, getCorrectParticipant(participantMap, leftSide, 5), getCorrectParticipant(participantMap, rightSide, 5), currentPlayer, participantIdentities, mIndividualLayout5, leftSide, rightSide);
+            populatePlayerView(participants, activity, getCorrectParticipant(participantMap, leftSide, 5), getCorrectParticipant(participantMap, rightSide, 5), currentPlayer, participantIdentities, mIndividualLayout5, leftSide, rightSide);
         }
 
         //TODO show Error Message
@@ -176,7 +176,7 @@ public class MiddleIndividualLayoutHolder {
 
     }
 
-    private void populatePlayerView(Activity activity, Participant leftParticipant, Participant rightParticipant, ParticipantIdentity mainParticipant, List<ParticipantIdentity> participantIdentities, ViewGroup view, TeamSide leftSide, TeamSide rightSide) {
+    private void populatePlayerView(List<Participant> participants, Activity activity, Participant leftParticipant, Participant rightParticipant, ParticipantIdentity mainParticipant, List<ParticipantIdentity> participantIdentities, ViewGroup view, TeamSide leftSide, TeamSide rightSide) {
 
         ParticipantIdentity leftParticipantIdentity = getParticipantIdenityFromParticipant(participantIdentities, leftParticipant);
         ParticipantIdentity rightParticipantIdentity = getParticipantIdenityFromParticipant(participantIdentities, rightParticipant);
@@ -197,8 +197,8 @@ public class MiddleIndividualLayoutHolder {
                 rightView.setBackground(activity.getResources().getDrawable(R.color.red_team_color));
             }
 
-            new LongHoldHelper(activity, leftView, leftParticipant, leftParticipantIdentity).init();
-            new LongHoldHelper(activity, rightView, rightParticipant, rightParticipantIdentity).init();
+            new LongHoldHelper(activity, leftView, leftParticipant, leftParticipantIdentity, participants).init();
+            new LongHoldHelper(activity, rightView, rightParticipant, rightParticipantIdentity, participants).init();
 
             //POPULATES LEFT AND RIGHT SIDE
             leftSideName.setText(MatchUtils.getName(leftParticipantIdentity));

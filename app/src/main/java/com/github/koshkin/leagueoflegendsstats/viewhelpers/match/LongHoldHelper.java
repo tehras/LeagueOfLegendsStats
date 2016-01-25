@@ -13,6 +13,8 @@ import com.github.koshkin.leagueoflegendsstats.dialogs.MatchInDepthStatsDialog;
 import com.github.koshkin.leagueoflegendsstats.models.match.Participant;
 import com.github.koshkin.leagueoflegendsstats.models.match.ParticipantIdentity;
 
+import java.util.List;
+
 /**
  * Created by tehras on 1/18/16.
  * <p/>
@@ -25,13 +27,15 @@ public class LongHoldHelper implements View.OnTouchListener {
     private final Activity mActivity;
     private final Participant mParticipant;
     private final ParticipantIdentity mParticipantIdentity;
+    private final List<Participant> mParticipants;
     private MatchInDepthStatsDialog mEditDialog;
 
-    public LongHoldHelper(Activity activity, View viewGroup, Participant participant, ParticipantIdentity participantIdentity) {
+    public LongHoldHelper(Activity activity, View viewGroup, Participant participant, ParticipantIdentity participantIdentity, List<Participant> participants) {
         mActivity = activity;
         mViewGroup = viewGroup;
         mParticipant = participant;
         mParticipantIdentity = participantIdentity;
+        mParticipants = participants;
     }
 
     public void init() {
@@ -102,7 +106,7 @@ public class LongHoldHelper implements View.OnTouchListener {
         mViewGroup.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
 
         FragmentManager fm = mActivity.getFragmentManager();
-        mEditDialog = MatchInDepthStatsDialog.getInstance(mParticipant, mParticipantIdentity);
+        mEditDialog = MatchInDepthStatsDialog.getInstance(mParticipant, mParticipantIdentity, mParticipants);
         mEditDialog.show(fm, "fragment_edit_name");
     }
 

@@ -131,5 +131,68 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin_small"
+        android:layout_marginTop="@dimen/activity_vertical_margin_small"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/match_color_description"
+            android:textAlignment="textEnd"
+            android:textSize="@dimen/text_size_xsmall"
+            android:textStyle="italic"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_xsmall"
+                android:layout_marginStart="@dimen/activity_horizontal_margin_xsmall"
+                android:text="@string/great"
+                android:textColor="@color/great"
+                android:textSize="@dimen/text_size_xsmall"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_xsmall"
+                android:layout_marginStart="@dimen/activity_horizontal_margin_xsmall"
+                android:text="@string/good"
+                android:textColor="@color/good"
+                android:textSize="@dimen/text_size_xsmall"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_xsmall"
+                android:layout_marginStart="@dimen/activity_horizontal_margin_xsmall"
+                android:text="@string/average"
+                android:textColor="@color/average"
+                android:textSize="@dimen/text_size_xsmall"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_xsmall"
+                android:layout_marginStart="@dimen/activity_horizontal_margin_xsmall"
+                android:text="@string/bad"
+                android:textColor="@color/bad"
+                android:textSize="@dimen/text_size_xsmall"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

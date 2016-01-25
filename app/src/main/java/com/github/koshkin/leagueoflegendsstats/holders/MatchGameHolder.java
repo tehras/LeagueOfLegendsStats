@@ -86,6 +86,6 @@ public class MatchGameHolder extends RecyclerView.ViewHolder {
         this.gameWardsTv.setText(MatchUtils.gameWards(participant));
         this.killPartTv.setText(MatchUtils.dmgDealt(participant));
 
-        this.champNameTv.setText(MatchUtils.getName(participantIdentity));
+        this.mSummonerName.setText(MatchUtils.getName(participantIdentity));
     }
 }

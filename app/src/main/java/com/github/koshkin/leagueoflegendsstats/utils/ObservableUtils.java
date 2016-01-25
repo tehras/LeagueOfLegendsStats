@@ -39,7 +39,7 @@ public class ObservableUtils {
 
     public static CharSequence getStartedText(long currentTime, long timeStarted) {
 
-        long totalTime = currentTime - timeStarted; //millies
+        long totalTime = currentTime - timeStarted; //millis
         totalTime = totalTime / 1000; //Seconds;
 
         return getStartedText(totalTime);

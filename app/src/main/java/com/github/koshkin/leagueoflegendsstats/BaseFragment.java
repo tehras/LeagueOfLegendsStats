@@ -1,10 +1,13 @@
 package com.github.koshkin.leagueoflegendsstats;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
 import com.github.koshkin.leagueoflegendsstats.models.FeaturedGames;
@@ -54,7 +57,7 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
         if (getActivity() != null && getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).showFab();
             ((MainActivity) getActivity()).hideError();
-            if (showFab())
+            if (showFab() && isNotMySummoner())
                 ((MainActivity) getActivity()).showFaveFab(this, getSummonerName());
             else
                 ((MainActivity) getActivity()).hideFaveFab();
@@ -209,5 +212,22 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
     @Override
     public SimpleSummoner getFavorite() {
         return null;
+    }
+
+    public boolean isNotMySummoner() {
+        Summoner mySummoner = StaticDataHolder.getInstance(getActivity()).getMySummoner();
+
+        return mySummoner == null || !getSummonerName().equalsIgnoreCase(mySummoner.getSummonerInfo().getName());
+    }
+
+    protected void hideKeyboard() {
+        if (this.getActivity() == null)
+            return;
+
+        View view = this.getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

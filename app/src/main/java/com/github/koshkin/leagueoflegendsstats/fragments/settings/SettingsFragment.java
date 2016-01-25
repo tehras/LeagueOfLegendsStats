@@ -73,6 +73,7 @@ public class SettingsFragment extends BaseFragment implements Request.RequestCal
 
             @Override
             public void onClick(View v) {
+                hideKeyboard();
                 if (materialButton.getText().toString().equalsIgnoreCase(BUTTON_TEXT_EDIT)) {
                     materialButton.setText(BUTTON_TEXT_UPDATE);
                     tv.setVisibility(View.INVISIBLE);

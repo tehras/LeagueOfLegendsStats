@@ -88,14 +88,14 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
         if (!mFirstLoad) {
             populateFavoriteLayout();
         }
+        mFirstLoad = false;
+
         addOnSwipeToRefreshListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
-        mFirstLoad = false;
     }
 
     @Nullable
@@ -229,7 +229,7 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
     }
 
     public View getAddNewSummonerLayout() {
-        View view = getActivity().getLayoutInflater().inflate(R.layout.partial_add_new_summoner, null);
+        @SuppressLint("InflateParams") View view = getActivity().getLayoutInflater().inflate(R.layout.partial_add_new_summoner, null);
 
         MaterialButton materialButton = (MaterialButton) view.findViewById(R.id.go_to_settings);
         materialButton.setOnButtonClickListener(new View.OnClickListener() {
@@ -292,6 +292,8 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
         if (mMySummoner != null) {
             mMySummonerLayout.clearViewsFromHolder();
             mMySummonerLayout.addViewToHolder(viewMySummonerLayout());
+
+            mMySummonerLayout.hideViewAllView();
         } else {
             populateErrorMySummonerLayout();
         }

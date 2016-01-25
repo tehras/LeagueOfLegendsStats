@@ -67,6 +67,8 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <include layout="@layout/partial_froth_effect"/>
+
     <include layout="@layout/partial_loading"/>
 
     <include layout="@layout/partial_error_layout"/>

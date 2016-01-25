@@ -56,8 +56,9 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
     private Summoner mSummoner;
     private String mSummonerId;
 
-    public void setSummoner(Summoner summoner) {
+    public SummonerStatsFragment setSummoner(Summoner summoner) {
         mSummoner = summoner;
+        return this;
     }
 
     public static SummonerStatsFragment getInstance(String summonerName, String summonerId) {
@@ -375,7 +376,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
             public void onClick(View v) {
                 if (mSummonerAggregateObject != null && mSummonerAggregateObject.getSummoner() != null && mSummonerAggregateObject.getSummoner().getSummonerInfo() != null) {
                     String summonerId = mSummonerAggregateObject.getSummoner().getSummonerId();
-                    int summonerIconId = 0;
+                    int summonerIconId;
                     summonerIconId = mSummonerAggregateObject.getSummoner().getSummonerInfo().getProfileIconId();
                     String summonerName = mSummonerAggregateObject.getSummoner().getSummonerInfo().getName();
 

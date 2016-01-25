@@ -35,20 +35,20 @@ public class MatchPerTenView extends LinearLayout {
         init(context, attrs);
     }
 
-    public MatchPerTenView setZeroToTen(CharSequence string, boolean isPositive) {
-        return assignText(string, isPositive, mZeroToTenTV);
+    public MatchPerTenView setZeroToTen(CharSequence string, MatchColor matchColor) {
+        return assignText(string, matchColor, mZeroToTenTV);
     }
 
-    public MatchPerTenView setTenToTwenty(CharSequence string, boolean isPositive) {
-        return assignText(string, isPositive, mTenToTwentyTV);
+    public MatchPerTenView setTenToTwenty(CharSequence string, MatchColor matchColor) {
+        return assignText(string, matchColor, mTenToTwentyTV);
     }
 
-    public MatchPerTenView setTwentyToThirty(CharSequence string, boolean isPositive) {
-        return assignText(string, isPositive, mTwentyToThirtyTV);
+    public MatchPerTenView setTwentyToThirty(CharSequence string, MatchColor matchColor) {
+        return assignText(string, matchColor, mTwentyToThirtyTV);
     }
 
-    public MatchPerTenView setThirtyPlus(CharSequence string, boolean isPositive) {
-        return assignText(string, isPositive, mThirtyPlusTV);
+    public MatchPerTenView setThirtyPlus(CharSequence string, MatchColor matchColor) {
+        return assignText(string, matchColor, mThirtyPlusTV);
     }
 
     public MatchPerTenView setTitleText(CharSequence string) {
@@ -56,14 +56,22 @@ public class MatchPerTenView extends LinearLayout {
         return this;
     }
 
-    private MatchPerTenView assignText(CharSequence string, boolean isPositive, TextView textView) {
+    public enum MatchColor {
+        BAD(R.color.bad), NEUTRAL(R.color.average), GOOD(R.color.good), GREAT(R.color.great);
+
+        private final int mColor;
+
+        MatchColor(int color) {
+            mColor = color;
+        }
+    }
+
+    private MatchPerTenView assignText(CharSequence string, MatchColor matchColor, TextView textView) {
         textView.setText(string);
         if (string == Utils.NOT_AVAILABLE || ((String) string).contains("-0.00"))
             textView.setTextColor(mContext.getResources().getColor(R.color.text_color_grey));
-        else if (isPositive)
-            textView.setTextColor(mContext.getResources().getColor(R.color.success_green));
         else
-            textView.setTextColor(mContext.getResources().getColor(R.color.failed_red));
+            textView.setTextColor(mContext.getResources().getColor(matchColor.mColor));
 
         return this;
     }

@@ -78,4 +78,12 @@
     <string name="ranked_assists">Assists</string>
     <string name="ranked_kda">KDA</string>
     <string name="my_summoner_no_ranked_stats">No Ranked Stats found for this season. Please play some games, then this will be updated.</string>
+    <string name="my_summoner_note">*Stats above are the reflection of the most recent season selected</string>
+    <string name="my_summoner_favorite_champions">Favorite Champions</string>
+    <string name="accessibility_champion_icon">Champion Icon</string>
+    <string name="match_color_description">*Colors indicate performance vs the rest of the players</string>
+    <string name="great">Great</string>
+    <string name="bad">Bad</string>
+    <string name="average">Average</string>
+    <string name="good">Good</string>
 </resources>

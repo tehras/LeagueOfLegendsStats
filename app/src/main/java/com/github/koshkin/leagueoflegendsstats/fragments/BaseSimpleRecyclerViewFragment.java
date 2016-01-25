@@ -4,6 +4,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +18,41 @@ import com.github.koshkin.leagueoflegendsstats.utils.Utils;
 
 /**
  * Created by tehras on 1/13/16.
+ * <p/>
+ * Simple Recycler View base
  */
+@SuppressWarnings("deprecation")
 public abstract class BaseSimpleRecyclerViewFragment extends BaseFragment {
 
     private LinearLayout mExtraLayout;
+    private SwipeRefreshLayout mRefreshLayout;
 
     protected void toggleLayout() {
         if (mExtraLayout.getVisibility() == View.VISIBLE)
             hideExtraLayout();
         else
             showExtraLayout();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (mRefreshLayout != null)
+            mRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void addOnSwipeToRefreshListener(SwipeRefreshLayout.OnRefreshListener swipeRefreshLayout) {
+        mRefreshLayout.setEnabled(true);
+        mRefreshLayout.setColorSchemeColors(this.getResources().getColor(R.color.role_color_adc), this.getResources().getColor(R.color.role_color_jg), this.getResources().getColor(R.color.role_color_mid), this.getResources().getColor(R.color.role_color_top), this.getResources().getColor(R.color.role_color_supp));
+        mRefreshLayout.setOnRefreshListener(swipeRefreshLayout);
+    }
+
+    @Override
+    public void stopRefreshing() {
+        if (mRefreshLayout != null)
+            mRefreshLayout.setRefreshing(false);
     }
 
     protected void showExtraLayout() {
@@ -44,7 +70,10 @@ public abstract class BaseSimpleRecyclerViewFragment extends BaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_ranked_champons_layout, container, false);
 
         final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        Utils.setUpRecyclerView(recyclerView);
+        Utils.setUpRecyclerView(recyclerView, getActivity(), mRefreshLayout);
+
+        mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_to_refresh);
+        mRefreshLayout.setEnabled(false);
 
         recyclerView.setAdapter(getAdapter());
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {

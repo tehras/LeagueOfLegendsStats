@@ -2,6 +2,7 @@ package com.github.koshkin.leagueoflegendsstats.holders;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import com.github.koshkin.leagueoflegendsstats.viewhelpers.LoaderHelper;
 import com.github.koshkin.leagueoflegendsstats.views.RoundedImageView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static com.github.koshkin.leagueoflegendsstats.utils.ObservableUtils.getFromGameMode;
 import static com.github.koshkin.leagueoflegendsstats.utils.ObservableUtils.getFromGameType;
@@ -35,6 +37,7 @@ public class FeaturedGameHolder extends RecyclerView.ViewHolder {
     private final View mClickableView;
     private final TextView mGameMode;
     private View mFirstLayout, mSecondLayout, mThirdLayout, mFourthLayout, mFifthLayout;
+    private ObservableGame mObservableGame;
 
     public FeaturedGameHolder(View view) {
         super(view);
@@ -54,6 +57,8 @@ public class FeaturedGameHolder extends RecyclerView.ViewHolder {
     }
 
     public void populate(ObservableGame observableGame, final Activity activity, boolean showDivider) {
+        mObservableGame = observableGame;
+
         final ArrayList<Participant> participants = observableGame.getParticipants();
 
         populateView(mFirstLayout, participants, activity, 1);
@@ -64,7 +69,8 @@ public class FeaturedGameHolder extends RecyclerView.ViewHolder {
 
         mGameType.setText(getFromGameType(observableGame.getGameType()));
         mGameMode.setText(getFromGameMode(observableGame.getGameMode()));
-        mStartedText.setText(getStartedText(observableGame.getGameLength()));
+        mStartedText.setText(getStartedText(Calendar.getInstance().getTimeInMillis(), observableGame.getGameStartTime()));
+        mTimer.start();
 
         if (showDivider)
             mDivider.setVisibility(View.VISIBLE);
@@ -113,6 +119,21 @@ public class FeaturedGameHolder extends RecyclerView.ViewHolder {
 
         return null;
     }
+
+    private static final int TOTAL_TIME = 1000 * 60;
+    private static final int TICK = 1000;
+    private CountDownTimer mTimer = new CountDownTimer(TOTAL_TIME, TICK) {
+        public void onTick(long millisUntilFinished) {
+            Calendar c = Calendar.getInstance();
+            if (mObservableGame != null) {
+                mStartedText.setText(getStartedText(c.getTimeInMillis(), mObservableGame.getGameStartTime()));
+            }
+        }
+
+        public void onFinish() {
+
+        }
+    };
 
     private void populateRightOrLeftView(View view, final Participant participant, final Activity activity) {
         TextView summonerName = (TextView) view.findViewById(R.id.observable_summoner_name);

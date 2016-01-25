@@ -2,8 +2,9 @@ package com.github.koshkin.leagueoflegendsstats.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -105,11 +106,18 @@ public class Utils {
         textView.setTextColor(context.getResources().getColor(colorId));
     }
 
-    public static void setUpRecyclerView(RecyclerView recyclerView) {
+    public static void setUpRecyclerView(RecyclerView recyclerView, Activity activity, final SwipeRefreshLayout refreshLayout) {
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
-
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+        final LinearLayoutManager layoutParams = new LinearLayoutManager(activity);
+        recyclerView.setLayoutManager(layoutParams);
+//        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                refreshLayout.setEnabled(layoutParams.findFirstCompletelyVisibleItemPosition() == 0);
+//            }
+//        });
     }
 }

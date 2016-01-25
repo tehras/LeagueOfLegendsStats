@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!--android:background="@drawable/background_red_blue"-->
 
             <com.balysv.materialripple.MaterialRippleLayout
                 android:id="@+id/match_left_side_container"
@@ -36,7 +35,7 @@
                     android:id="@+id/match_individual_left_player"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin_xsmall"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin_xsmall"
                     android:background="@color/elevation_background"
                     android:gravity="center_vertical|start"
                     android:orientation="vertical"
@@ -56,7 +55,7 @@
                             android:id="@+id/left_match_individual_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentStart="true"
                             android:ellipsize="end"
                             android:lines="1"
                             android:text="Tehras"
@@ -67,9 +66,9 @@
                             android:id="@+id/left_first_kill"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/activity_horizontal_margin_small"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin_small"
                             android:layout_marginTop="2dp"
-                            android:layout_toStartOf="@+id/left_match_individual_name"
+                            android:layout_toEndOf="@+id/left_match_individual_name"
                             android:background="@drawable/background_rounded_rectangle_red_small">
 
                             <TextView
@@ -86,9 +85,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:layout_marginEnd="@dimen/activity_horizontal_margin_small"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin_small"
                             android:layout_marginTop="2dp"
-                            android:layout_toStartOf="@+id/left_first_kill"
+                            android:layout_toEndOf="@+id/left_first_kill"
                             android:background="@drawable/background_small_adc">
 
                             <TextView
@@ -111,17 +110,18 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:id="@+id/left_right_layout"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="30"
-                            android:gravity="center_vertical|start">
+                            android:gravity="center_vertical|start"
+                            android:orientation="vertical">
 
                             <include
-                                android:id="@+id/match_individual_left_spells"
-                                layout="@layout/partial_match_individual_bought_icons_layout_reversed"/>
+                                android:id="@+id/match_individual_left_icons"
+                                layout="@layout/partial_match_individual_icons_layout_small"/>
 
                         </LinearLayout>
+
 
                         <LinearLayout
                             android:id="@+id/left_match_individual_middle_layout"
@@ -138,60 +138,18 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/left_right_layout"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="30"
-                            android:gravity="center_vertical|end"
-                            android:orientation="vertical">
+                            android:gravity="center_vertical|end">
 
                             <include
-                                android:id="@+id/match_individual_left_icons"
-                                layout="@layout/partial_match_individual_icons_layout_small_reverse"
-                                />
+                                android:id="@+id/match_individual_left_spells"
+                                layout="@layout/partial_match_individual_bought_icons_layout"/>
 
                         </LinearLayout>
-
-                        <!--<LinearLayout-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="30"-->
-                        <!--android:gravity="center_vertical|start"-->
-                        <!--android:orientation="vertical">-->
-
-                        <!--<include-->
-                        <!--android:id="@+id/match_individual_left_spells"-->
-                        <!--layout="@layout/partial_match_individual_icons_layout_small"/>-->
-
-                        <!--</LinearLayout>-->
-
-
-                        <!--<LinearLayout-->
-                        <!--android:id="@+id/left_match_individual_middle_layout"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_gravity="center_vertical"-->
-                        <!--android:layout_weight="37"-->
-                        <!--android:gravity="center_horizontal">-->
-
-                        <!--<include-->
-                        <!--android:id="@+id/match_individual_left_stats"-->
-                        <!--layout="@layout/partial_match_individual_kda_layout_small"/>-->
-
-                        <!--</LinearLayout>-->
-
-                        <!--<LinearLayout-->
-                        <!--android:id="@+id/left_right_layout"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_gravity="center_vertical"-->
-                        <!--android:layout_weight="30"-->
-                        <!--android:gravity="center_vertical|end">-->
-
-                        <!--<include-->
-                        <!--android:id="@+id/match_individual_left_spells"-->
-                        <!--layout="@layout/partial_match_individual_bought_icons_layout"/>-->
-
-                        <!--</LinearLayout>-->
 
                     </LinearLayout>
                 </LinearLayout>
@@ -217,7 +175,7 @@
                     android:id="@+id/match_individual_right_player"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin_xsmall"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin_xsmall"
                     android:background="@color/elevation_background"
                     android:gravity="center_vertical|end"
                     android:orientation="vertical"
@@ -236,21 +194,20 @@
                             android:id="@+id/right_match_individual_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentStart="true"
                             android:ellipsize="end"
                             android:lines="1"
                             android:text="Tehras"
                             android:textSize="@dimen/text_size_medium"
                             android:textStyle="bold"/>
 
-
                         <RelativeLayout
                             android:id="@+id/right_first_kill"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/activity_horizontal_margin_small"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin_small"
                             android:layout_marginTop="2dp"
-                            android:layout_toStartOf="@+id/right_match_individual_name"
+                            android:layout_toEndOf="@+id/right_match_individual_name"
                             android:background="@drawable/background_rounded_rectangle_red_small">
 
                             <TextView
@@ -267,9 +224,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:layout_marginEnd="@dimen/activity_horizontal_margin_small"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin_small"
                             android:layout_marginTop="2dp"
-                            android:layout_toStartOf="@+id/right_first_kill"
+                            android:layout_toEndOf="@+id/right_first_kill"
                             android:background="@drawable/background_small_adc">
 
                             <TextView
@@ -289,18 +246,20 @@
                         android:layout_height="wrap_content"
                         android:baselineAligned="false">
 
+
                         <LinearLayout
-                            android:id="@+id/right_right_layout"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="30"
-                            android:gravity="center_vertical|start">
+                            android:gravity="center_vertical|start"
+                            android:orientation="vertical">
 
                             <include
-                                android:id="@+id/match_individual_right_spells"
-                                layout="@layout/partial_match_individual_bought_icons_layout_reversed"/>
+                                android:id="@+id/match_individual_right_icons"
+                                layout="@layout/partial_match_individual_icons_layout_small"/>
 
                         </LinearLayout>
+
 
                         <LinearLayout
                             android:id="@+id/right_match_individual_middle_layout"
@@ -317,20 +276,19 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/right_right_layout"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="30"
-                            android:gravity="center_vertical|end"
-                            android:orientation="vertical">
+                            android:gravity="center_vertical|end">
 
                             <include
-                                android:id="@+id/match_individual_right_icons"
-                                layout="@layout/partial_match_individual_icons_layout_small_reverse"
-                                />
+                                android:id="@+id/match_individual_right_spells"
+                                layout="@layout/partial_match_individual_bought_icons_layout"/>
 
                         </LinearLayout>
-
-
+                        
                     </LinearLayout>
 
                 </LinearLayout>

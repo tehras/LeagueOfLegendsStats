@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity
     private BlockableFloatingActionBar mFavFab;
     private NavigationView mNavigationView;
     private SwipeRefreshLayout mSwipeToRefresh;
+    private View mFrothLayout;
 
     @Override
     protected void onPause() {
@@ -142,6 +143,9 @@ public class MainActivity extends AppCompatActivity
         mProgressLayout = (RelativeLayout) findViewById(R.id.loading_layout);
         mErrorLayout = findViewById(R.id.error_layout_layout);
 
+        mFrothLayout = findViewById(R.id.froth_effect);
+        initFrothLayout();
+
         mMainLoadingLayout = findViewById(R.id.loading_layout_full_screen);
         mLoadingText = (TextView) findViewById(R.id.loading_text);
         RoundedImageView loadingImage = (RoundedImageView) findViewById(R.id.main_rounded_image);
@@ -161,6 +165,25 @@ public class MainActivity extends AppCompatActivity
                     new FirstInitialize(MainActivity.this, MainActivity.this).initialize();
                 }
             }.run();
+        }
+    }
+
+    private void initFrothLayout() {
+        mFrothLayout.setBackground(getResources().getDrawable(R.color.darkened_background));
+        mFrothLayout.setVisibility(View.GONE);
+    }
+
+    public void showFroth() {
+        if (mFrothLayout != null) {
+            mFrothLayout.setVisibility(View.VISIBLE);
+            mFrothLayout.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+        }
+    }
+
+    public void hideFroth() {
+        if (mFrothLayout != null) {
+            mFrothLayout.setVisibility(View.GONE);
+            mFrothLayout.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
         }
     }
 
