@@ -20,7 +20,7 @@ import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
 
 /**
  * Created by tehras on 1/23/16.
- * <p>
+ * <p/>
  * Observable Game Fragment
  */
 public class ObservableGameFragment extends BaseFragment implements Request.RequestCallback {
@@ -146,8 +146,8 @@ public class ObservableGameFragment extends BaseFragment implements Request.Requ
     private void populateObservableGameLayout() {
         hideLoading();
         if (mTopLayoutHolder == null)
-            mTopLayoutHolder = new TopLayoutViewHolder(mTopLayout);
-        mTopLayoutHolder.populate(mObservableGame, getActivity());
+            mTopLayoutHolder = new TopLayoutViewHolder();
+        mTopLayoutHolder.init(mTopLayout).populate(mObservableGame, getActivity());
         new MainLayoutViewHolder(mMiddleLayout).populate(mObservableGame, mSummonerLeagues, getActivity());
     }
 

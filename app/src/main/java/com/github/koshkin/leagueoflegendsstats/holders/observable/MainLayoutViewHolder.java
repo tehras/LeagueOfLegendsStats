@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
+import com.github.koshkin.leagueoflegendsstats.fragments.summoner.SummonerStatsFragment;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.MasteryIcons;
@@ -34,14 +36,18 @@ import java.util.ArrayList;
 
 /**
  * Created by tehras on 1/23/16.
+ * <p/>
+ * Main layout for Observable Game
  */
 @SuppressWarnings("deprecation")
 public class MainLayoutViewHolder {
 
     private final View playerLayout;
+    private final View errorLayout;
 
     public MainLayoutViewHolder(View view) {
         playerLayout = view.findViewById(R.id.observable_player_layout);
+        errorLayout = view.findViewById(R.id.error_layout);
     }
 
     @SuppressLint("CutPasteId")
@@ -50,6 +56,9 @@ public class MainLayoutViewHolder {
         ArrayList<Participant> participants = observableGame.getParticipants();
 
         if (participants != null) {
+            playerLayout.setVisibility(View.VISIBLE);
+            errorLayout.setVisibility(View.GONE);
+
             View redLayout1 = playerLayout.findViewById(R.id.red_player_1);
             View redLayout2 = playerLayout.findViewById(R.id.red_player_2);
             View redLayout3 = playerLayout.findViewById(R.id.red_player_3);
@@ -76,7 +85,8 @@ public class MainLayoutViewHolder {
             populateView(redParticipants.get(3), summonerLeagueStandings, redLayout4, activity);
             populateView(redParticipants.get(4), summonerLeagueStandings, redLayout5, activity);
         } else {
-            //todo show error
+            errorLayout.setVisibility(View.VISIBLE);
+            playerLayout.setVisibility(View.GONE);
         }
     }
 
@@ -96,9 +106,23 @@ public class MainLayoutViewHolder {
             populateRunes(participant, activity, view);
             populateMasteries(participant, activity, view);
             populateDivision(participant, summonerLeagueStandings, activity, view);
+
+            view.findViewById(R.id.material_ripple_layout). //start summoner fragment
+                    setOnClickListener(startSummonerFragment(activity, participant));
         } else {
             view.setVisibility(View.GONE);
         }
+    }
+
+    private View.OnClickListener startSummonerFragment(final Activity activity, final Participant participant) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (activity != null && activity instanceof MainActivity) {
+                    ((MainActivity) activity).startFragment(SummonerStatsFragment.getInstance(participant.getSummonerName(), null));
+                }
+            }
+        };
     }
 
     @SuppressLint("SetTextI18n")

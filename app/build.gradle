@@ -50,7 +50,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.1.1'
 
     //Ok http for network calls
-    compile 'com.squareup.okhttp3:okhttp:3.0.0-RC1'
+    compile 'com.squareup.okhttp3:okhttp:3.0.1'
 
     //GSON for parsing
     compile 'com.google.code.gson:gson:2.5'

@@ -1,5 +1,7 @@
 package com.github.koshkin.leagueoflegendsstats.networking;
 
+import android.content.Context;
+
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +21,10 @@ public class Request {
     private RequestCallback mRequestCallback;
     private URIHelper mURIHelper;
     private Map<String, String> mExtraParams;
+    private Context mContext;
 
-    public Request(RequestType requestType, ParserCallback parserCallback, RequestCallback requestCallback, URIHelper uriHelper, String... params) {
+    public Request(Context context, RequestType requestType, ParserCallback parserCallback, RequestCallback requestCallback, URIHelper uriHelper, String... params) {
+        mContext = context;
         mRequestType = requestType;
         mParserCallback = parserCallback;
         mRequestCallback = requestCallback;
@@ -61,7 +65,8 @@ public class Request {
     }
 
     public void finished(Response response) {
-        mRequestCallback.finished(response, this);
+        if (this.mContext != null)
+            mRequestCallback.finished(response, this);
     }
 
     public enum RequestType {

@@ -30,8 +30,10 @@ import android.widget.TextView;
 import com.crashlytics.android.Crashlytics;
 import com.github.koshkin.leagueoflegendsstats.fragments.home.HomeFragment;
 import com.github.koshkin.leagueoflegendsstats.fragments.settings.SettingsFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.summoner.SummonerStatsFragment;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Summoner;
+import com.github.koshkin.leagueoflegendsstats.networking.Manager;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingActionButtonViewHelper;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingFavoriteActionButtonHelper;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.LoaderHelper;
@@ -316,6 +318,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private boolean isAlreadyShowing(Class<? extends BaseFragment> fragmentClass) {
+        //Exceptio to the rule
+        if (fragmentClass == SummonerStatsFragment.class)
+            return false;
+
         FragmentManager supportManager = getSupportFragmentManager();
 
         if (supportManager != null && supportManager.getFragments() != null && supportManager.getFragments().size() > 0) {
@@ -351,6 +357,9 @@ public class MainActivity extends AppCompatActivity
         } else if (toolbarSearchView.getVisibility() == View.VISIBLE) {
             toolbarSearchView.backPressed();
         } else if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            //Stop client and stop loading
+            Manager.getClient().dispatcher().cancelAll();
+            hideLoading();
             if (getSupportFragmentManager().getFragments().get(getSupportFragmentManager().getFragments().size() - 1) instanceof HomeFragment) {
                 if (StaticDataHolder.getInstance(this).needsRefresh()) {
                     getSupportFragmentManager().popBackStackImmediate();

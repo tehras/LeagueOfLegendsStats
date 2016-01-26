@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/loading_layout_full_screen"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorAccent"
-                android:elevation="16dp"
-                android:orientation="vertical">
+<RelativeLayout
+    android:id="@+id/loading_layout_full_screen"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:elevation="16dp"
+    android:orientation="vertical">
 
     <com.github.koshkin.leagueoflegendsstats.views.RoundedImageView
         android:id="@+id/main_rounded_image"
@@ -20,22 +21,10 @@
         android:id="@+id/loading_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/app_name"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:text="Setting Up"
         android:textAlignment="center"
-        android:textColor="@color/colorAccent"/>
-
-    <TextView
-        android:id="@+id/app_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:text="@string/app_name"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/text_size_large"
-        android:textStyle="bold"/>
+        android:textColor="@color/elevation_background"/>
 
 </RelativeLayout>

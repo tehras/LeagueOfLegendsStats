@@ -21,6 +21,7 @@ import okhttp3.Response;
  * <p/>
  * Manager for request / response
  */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class Manager {
 
     private static final String IMAGE_NAME_DEFAULT = "temp_image.png";
@@ -46,11 +47,11 @@ public class Manager {
     }
 
     private com.github.koshkin.leagueoflegendsstats.networking.Response<Object> post() {
-        return null; //todo implement
+        return null;
     }
 
     public com.github.koshkin.leagueoflegendsstats.networking.Response<Object> getImage() {
-        com.github.koshkin.leagueoflegendsstats.networking.Response<Object> response = new com.github.koshkin.leagueoflegendsstats.networking.Response<Object>();
+        com.github.koshkin.leagueoflegendsstats.networking.Response<Object> response = new com.github.koshkin.leagueoflegendsstats.networking.Response<>();
         try {
             Map<String, String> map = mRequest.getExtraParams();
 
@@ -83,7 +84,7 @@ public class Manager {
                     .url(mRequest.getUrl())
                     .build();
 
-            Response okResponse = mClient.newCall(request).execute();
+            Response okResponse = getClient().newCall(request).execute();
 
             if (okResponse.isSuccessful()) {
                 Bitmap bitmap = BitmapFactory.decodeStream(okResponse.body().byteStream());
@@ -108,7 +109,7 @@ public class Manager {
     }
 
     private com.github.koshkin.leagueoflegendsstats.networking.Response<Object> get() {
-        com.github.koshkin.leagueoflegendsstats.networking.Response<Object> response = new com.github.koshkin.leagueoflegendsstats.networking.Response<Object>();
+        com.github.koshkin.leagueoflegendsstats.networking.Response<Object> response = new com.github.koshkin.leagueoflegendsstats.networking.Response<>();
         try {
 
             okhttp3.Request request = new okhttp3.Request.Builder()
@@ -117,7 +118,7 @@ public class Manager {
 
             Log.v(getClass().getSimpleName(), "URL to execute - " + mRequest.getUrl());
 
-            Response okResponse = mClient.newCall(request).execute();
+            Response okResponse = getClient().newCall(request).execute();
 
             if (okResponse.isSuccessful()) {
                 String body = okResponse.body().string();
@@ -153,6 +154,12 @@ public class Manager {
         }
     }
 
-    private final OkHttpClient mClient = new OkHttpClient();
+    public static OkHttpClient getClient() {
+        if (sClient == null)
+            sClient = new OkHttpClient();
 
+        return sClient;
+    }
+
+    private static OkHttpClient sClient;
 }

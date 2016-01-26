@@ -108,11 +108,11 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
     protected static final String ARG_SUMMONER_LOSSES = "ranked_losses";
 
     protected void executeGetSummoner(Request.RequestCallback requestCallback, String summonerName) {
-        new Executor(new Request(Request.RequestType.GET, new Summoner(summonerName.toLowerCase()), requestCallback, URIHelper.GET_SUMMONER, summonerName), getActivity()).execute();
+        new Executor(new Request(getActivity(), Request.RequestType.GET, new Summoner(summonerName.toLowerCase()), requestCallback, URIHelper.GET_SUMMONER, summonerName), getActivity()).execute();
     }
 
     protected void executeGetSummonersById(Request.RequestCallback requestCallback, ArrayList<String> summonerIds, LeagueStandings leagueStandings) {
-        new Executor(new Request(Request.RequestType.GET, leagueStandings, requestCallback, URIHelper.GET_SUMMONER_BY_IDS, commaSeparatedSummonerIds(summonerIds)), getActivity()).execute();
+        new Executor(new Request(getActivity(), Request.RequestType.GET, leagueStandings, requestCallback, URIHelper.GET_SUMMONER_BY_IDS, commaSeparatedSummonerIds(summonerIds)), getActivity()).execute();
     }
 
     private String commaSeparatedSummonerIds(ArrayList<String> summonerIds) {
@@ -128,43 +128,43 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
     }
 
     protected void executeGetStats(Request.RequestCallback requestCallback, String summonerId) {
-        new Executor(new Request(Request.RequestType.GET, new PlayerStatSummaries(), requestCallback, URIHelper.GET_SUMMONER_SUMMARY, summonerId), getActivity()).execute();
+        new Executor(new Request(getActivity(), Request.RequestType.GET, new PlayerStatSummaries(), requestCallback, URIHelper.GET_SUMMONER_SUMMARY, summonerId), getActivity()).execute();
     }
 
     protected void executeGetRankedStats(Request.RequestCallback requestCallback, String summonerId) {
-        new Executor(new Request(Request.RequestType.GET, new PlayerRanked(), requestCallback, URIHelper.GET_SUMMONER_RANKED, summonerId), getActivity()).execute();
+        new Executor(new Request(getActivity(), Request.RequestType.GET, new PlayerRanked(), requestCallback, URIHelper.GET_SUMMONER_RANKED, summonerId), getActivity()).execute();
     }
 
     protected void executeGetChallengerStandings(Request.RequestCallback requestCallback, LeagueQueueType type) {
-        new Executor(new Request(Request.RequestType.GET, new LeagueStandings(), requestCallback, URIHelper.GET_CHALLENGER, type.name()), getActivity()).execute();
+        new Executor(new Request(getActivity(), Request.RequestType.GET, new LeagueStandings(), requestCallback, URIHelper.GET_CHALLENGER, type.name()), getActivity()).execute();
     }
 
     protected void executeGetMasterStandings(Request.RequestCallback requestCallback, LeagueQueueType type) {
-        new Executor(new Request(Request.RequestType.GET, new LeagueStandings(), requestCallback, URIHelper.GET_MASTER, type.name()), getActivity()).execute();
+        new Executor(new Request(getActivity(), Request.RequestType.GET, new LeagueStandings(), requestCallback, URIHelper.GET_MASTER, type.name()), getActivity()).execute();
     }
 
     protected void executeGetRankeGameHistory(Request.RequestCallback requestCallback, String summonerId) {
-        new Executor(new Request(Request.RequestType.GET, new RecentGames(), requestCallback, URIHelper.GET_SUMMONER_RANKED_GAMES, summonerId), getActivity()).execute();
+        new Executor(new Request(getActivity(), Request.RequestType.GET, new RecentGames(), requestCallback, URIHelper.GET_SUMMONER_RANKED_GAMES, summonerId), getActivity()).execute();
     }
 
     protected void executeGetProfileImage(Request.RequestCallback requestCallback, String imageName) {
-        new Executor(new Request(Request.RequestType.GET_IMAGE, new RecentGames(), requestCallback, URIHelper.GET_PROFILE_URI, imageName).addExtraParam(Request.KEY_IMAGE_NAME, imageName), getActivity()).execute();
+        new Executor(new Request(getActivity(), Request.RequestType.GET_IMAGE, new RecentGames(), requestCallback, URIHelper.GET_PROFILE_URI, imageName).addExtraParam(Request.KEY_IMAGE_NAME, imageName), getActivity()).execute();
     }
 
     protected void executeGetMatchData(Request.RequestCallback requestCallback, String matchId) {
-        new Executor(new Request(Request.RequestType.GET, new FullMatch(), requestCallback, URIHelper.GET_MATCH_STATS, matchId), getActivity()).execute();
+        new Executor(new Request(getActivity(), Request.RequestType.GET, new FullMatch(), requestCallback, URIHelper.GET_MATCH_STATS, matchId), getActivity()).execute();
     }
 
     protected void executeGetFeaturedGames(Request.RequestCallback requestCallback) {
-        new Executor(new Request(Request.RequestType.GET, new FeaturedGames(), requestCallback, URIHelper.GET_FEATURED_MATCHES), getActivity()).execute();
+        new Executor(new Request(getActivity(), Request.RequestType.GET, new FeaturedGames(), requestCallback, URIHelper.GET_FEATURED_MATCHES), getActivity()).execute();
     }
 
     protected void executeGetObservableGame(Request.RequestCallback requestCallback, String summonerId) {
-        new Executor(new Request(Request.RequestType.GET, new ObservableGame(), requestCallback, URIHelper.GET_OBSERVABLE_GAME, URIHelper.PlatformId.getByRegion(URIHelper.getCurrentRegion()).toString(), summonerId), getActivity()).execute();
+        new Executor(new Request(getActivity(), Request.RequestType.GET, new ObservableGame(), requestCallback, URIHelper.GET_OBSERVABLE_GAME, URIHelper.PlatformId.getByRegion(URIHelper.getCurrentRegion()).toString(), summonerId), getActivity()).execute();
     }
 
     protected void executeGetLeagueBySummonerIds(Request.RequestCallback requestCallback, String summonerIds) {
-        new Executor(new Request(Request.RequestType.GET, new SummonerLeagueStandings(), requestCallback, URIHelper.GET_LEAGUE_BY_SUMMONERS, summonerIds), getActivity()).execute();
+        new Executor(new Request(getActivity(), Request.RequestType.GET, new SummonerLeagueStandings(), requestCallback, URIHelper.GET_LEAGUE_BY_SUMMONERS, summonerIds), getActivity()).execute();
     }
 
     protected void initializeErrorLayout(CharSequence title, CharSequence body) {

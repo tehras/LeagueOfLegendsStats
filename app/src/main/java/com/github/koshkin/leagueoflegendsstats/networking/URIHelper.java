@@ -1,5 +1,7 @@
 package com.github.koshkin.leagueoflegendsstats.networking;
 
+import android.util.Log;
+
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.API_KEY;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.FEATURED_MATCHES;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.LEAGUE_BY_SUMMONERS;
@@ -78,6 +80,8 @@ public enum URIHelper {
         if (url.contains("?"))
             apiKey = apiKey.replace("?", "&");
         url = url + (mRequiresApiString ? apiKey : "");
+
+        Log.e("TARAS", "url-" + url);
 
         if (mIsNonStaticContent)
             url = url.replaceFirst("%s", sRegion.getRegionName());

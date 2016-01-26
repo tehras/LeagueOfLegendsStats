@@ -27,7 +27,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Created by tehras on 1/14/16.
- * <p>
+ * <p/>
  * First Initialize
  */
 public class FirstInitialize implements Request.RequestCallback {
@@ -54,7 +54,7 @@ public class FirstInitialize implements Request.RequestCallback {
 
         Response response;
         try {
-            response = new Executor(new Request(Request.RequestType.GET, new VersionControl(), this, URIHelper.GET_REALM), mMainActivity).execute().get();
+            response = new Executor(new Request(mMainActivity, Request.RequestType.GET, new VersionControl(), this, URIHelper.GET_REALM), mMainActivity).execute().get();
         } catch (InterruptedException | ExecutionException e) {
             mCallback.completed();
             return;
@@ -75,50 +75,50 @@ public class FirstInitialize implements Request.RequestCallback {
 
                 if (!spellIconVersion.equalsIgnoreCase(getFromMap(versionControl, "summoner"))) {
                     mExecuteCounter++;
-                    new Executor(new Request(Request.RequestType.GET, new DataParser(Type.SUMMONER, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), SPELL_JSON), mMainActivity).execute();
+                    new Executor(new Request(mMainActivity, Request.RequestType.GET, new DataParser(Type.SUMMONER, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), SPELL_JSON), mMainActivity).execute();
                     for (int i = 0; i < 15; i++) {
                         mExecuteCounter++;
-                        new Executor(new Request(Request.RequestType.GET_IMAGE, new SpriteHolder(Type.SUMMONER), this, URIHelper.GET_SPRITES, "spell" + String.valueOf(i) + ".png"), mMainActivity).execute();
+                        new Executor(new Request(mMainActivity, Request.RequestType.GET_IMAGE, new SpriteHolder(Type.SUMMONER), this, URIHelper.GET_SPRITES, "spell" + String.valueOf(i) + ".png"), mMainActivity).execute();
                     }
                 }
                 if (!itemIcons.equalsIgnoreCase(getFromMap(versionControl, "profileicon"))) {
                     mExecuteCounter++;
-                    new Executor(new Request(Request.RequestType.GET, new DataParser(Type.ITEM, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), SPELL_JSON), mMainActivity).execute();
+                    new Executor(new Request(mMainActivity, Request.RequestType.GET, new DataParser(Type.ITEM, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), SPELL_JSON), mMainActivity).execute();
                     for (int i = 0; i < 4; i++) {
                         mExecuteCounter++;
-                        new Executor(new Request(Request.RequestType.GET_IMAGE, new SpriteHolder(Type.ITEM), this, URIHelper.GET_SPRITES, "item" + String.valueOf(i) + ".png"), mMainActivity).execute();
+                        new Executor(new Request(mMainActivity, Request.RequestType.GET_IMAGE, new SpriteHolder(Type.ITEM), this, URIHelper.GET_SPRITES, "item" + String.valueOf(i) + ".png"), mMainActivity).execute();
                     }
                 }
                 if (!championIcons.equalsIgnoreCase(getFromMap(versionControl, "champion"))) {
                     mExecuteCounter++;
-                    new Executor(new Request(Request.RequestType.GET, new DataParser(Type.CHAMPION, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), CHAMPION_JSON), mMainActivity).execute();
+                    new Executor(new Request(mMainActivity, Request.RequestType.GET, new DataParser(Type.CHAMPION, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), CHAMPION_JSON), mMainActivity).execute();
                     for (int i = 0; i < 5; i++) {
                         mExecuteCounter++;
-                        new Executor(new Request(Request.RequestType.GET_IMAGE, new SpriteHolder(Type.CHAMPION), this, URIHelper.GET_SPRITES, "champion" + String.valueOf(i) + ".png"), mMainActivity).execute();
+                        new Executor(new Request(mMainActivity, Request.RequestType.GET_IMAGE, new SpriteHolder(Type.CHAMPION), this, URIHelper.GET_SPRITES, "champion" + String.valueOf(i) + ".png"), mMainActivity).execute();
                     }
                 }
                 if (!profileIcons.equalsIgnoreCase(getFromMap(versionControl, "item"))) {
                     mExecuteCounter++;
-                    new Executor(new Request(Request.RequestType.GET, new DataParser(Type.PROFILE, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), PROFILE_JSON), mMainActivity).execute();
+                    new Executor(new Request(mMainActivity, Request.RequestType.GET, new DataParser(Type.PROFILE, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), PROFILE_JSON), mMainActivity).execute();
                     for (int i = 0; i < 1; i++) {
                         mExecuteCounter++;
-                        new Executor(new Request(Request.RequestType.GET_IMAGE, new SpriteHolder(Type.PROFILE), this, URIHelper.GET_SPRITES, "profileicon" + String.valueOf(i) + ".png"), mMainActivity).execute();
+                        new Executor(new Request(mMainActivity, Request.RequestType.GET_IMAGE, new SpriteHolder(Type.PROFILE), this, URIHelper.GET_SPRITES, "profileicon" + String.valueOf(i) + ".png"), mMainActivity).execute();
                     }
                 }
                 if (!runeIcons.equalsIgnoreCase(getFromMap(versionControl, "rune"))) {
                     mExecuteCounter++;
-                    new Executor(new Request(Request.RequestType.GET, new DataParser(Type.RUNES, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), RUNES_JSON), mMainActivity).execute();
+                    new Executor(new Request(mMainActivity, Request.RequestType.GET, new DataParser(Type.RUNES, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), RUNES_JSON), mMainActivity).execute();
                     for (int i = 0; i < 1; i++) {
                         mExecuteCounter++;
-                        new Executor(new Request(Request.RequestType.GET_IMAGE, new SpriteHolder(Type.RUNES), this, URIHelper.GET_SPRITES, "rune" + String.valueOf(i) + ".png"), mMainActivity).execute();
+                        new Executor(new Request(mMainActivity, Request.RequestType.GET_IMAGE, new SpriteHolder(Type.RUNES), this, URIHelper.GET_SPRITES, "rune" + String.valueOf(i) + ".png"), mMainActivity).execute();
                     }
                 }
                 if (!masteryIcons.equalsIgnoreCase(getFromMap(versionControl, "mastery"))) {
                     mExecuteCounter++;
-                    new Executor(new Request(Request.RequestType.GET, new DataParser(Type.MASTERIES, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), MASTERIES_JSON), mMainActivity).execute();
+                    new Executor(new Request(mMainActivity, Request.RequestType.GET, new DataParser(Type.MASTERIES, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), MASTERIES_JSON), mMainActivity).execute();
                     for (int i = 0; i < 1; i++) {
                         mExecuteCounter++;
-                        new Executor(new Request(Request.RequestType.GET_IMAGE, new SpriteHolder(Type.MASTERIES), this, URIHelper.GET_SPRITES, "mastery" + String.valueOf(i) + ".png"), mMainActivity).execute();
+                        new Executor(new Request(mMainActivity, Request.RequestType.GET_IMAGE, new SpriteHolder(Type.MASTERIES), this, URIHelper.GET_SPRITES, "mastery" + String.valueOf(i) + ".png"), mMainActivity).execute();
                     }
                 }
 

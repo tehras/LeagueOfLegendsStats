@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,9 @@ import android.widget.TextView;
 import com.github.koshkin.leagueoflegendsstats.BaseFragment;
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
+import com.github.koshkin.leagueoflegendsstats.holders.FeaturedGameHolder;
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
+import com.github.koshkin.leagueoflegendsstats.models.ObservableGame;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerStatSummaries;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerSummary;
 import com.github.koshkin.leagueoflegendsstats.models.RecentSummoner;
@@ -31,6 +34,7 @@ import com.github.koshkin.leagueoflegendsstats.networking.Response;
 import com.github.koshkin.leagueoflegendsstats.sqlite.RecentSearchSqlLiteHelper;
 import com.github.koshkin.leagueoflegendsstats.utils.NumberUtils;
 import com.github.koshkin.leagueoflegendsstats.utils.Utils;
+import com.github.koshkin.leagueoflegendsstats.views.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,6 +59,11 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
     private FileHandler mProfFileHandler;
     private Summoner mSummoner;
     private String mSummonerId;
+
+    private ObservableGame mObservableGame;
+    private View mObservableClickToRetry, mObservableCheckLayout;
+    private ViewGroup mObservableGameContainer;
+    private ContentLoadingProgressBar mObservableTryLoader, mObservableRetryLoader;
 
     public SummonerStatsFragment setSummoner(Summoner summoner) {
         mSummoner = summoner;
@@ -99,6 +108,10 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
 
         initializeSummaryElements(rootView);
         initializeSelectLayout(rootView);
+        initializeObservableLayout(rootView);
+
+        //to check if some object is true
+        populateObservableGameLayout();
 
         if (mSummonerAggregateObject != null) {
             if (mSummonerAggregateObject.getStatus() == Response.Status.SUCCESS) {
@@ -115,6 +128,88 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
             showLoading();
         }
         return rootView;
+    }
+
+    private boolean mObservableGameChecked = false;
+
+    private void populateObservableGameLayout() {
+        hideLoaders();
+
+        if (mObservableGame != null) {
+            mObservableCheckLayout.setVisibility(View.GONE);
+            mObservableClickToRetry.setVisibility(View.GONE);
+            mObservableGameContainer.setVisibility(View.VISIBLE);
+
+            populateObservableGame(mObservableGameContainer, mObservableGame);
+        } else if (mObservableGameChecked) {
+            mObservableClickToRetry.setVisibility(View.VISIBLE);
+            mObservableCheckLayout.setVisibility(View.GONE);
+            mObservableGameContainer.setVisibility(View.GONE);
+
+            mObservableClickToRetry.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
+            MaterialButton button = (MaterialButton) mObservableClickToRetry.findViewById(R.id.observable_click_to_retry_button);
+            button.setOnButtonClickListener(callToGetObservableGame());
+        } else {
+            mObservableClickToRetry.setVisibility(View.GONE);
+            mObservableCheckLayout.setVisibility(View.VISIBLE);
+            mObservableGameContainer.setVisibility(View.GONE);
+
+            mObservableCheckLayout.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
+            MaterialButton button = (MaterialButton) mObservableCheckLayout.findViewById(R.id.observable_check_for_game_button);
+            button.setOnButtonClickListener(callToGetObservableGame());
+        }
+
+    }
+
+    private void hideLoaders() {
+        ((View) mObservableRetryLoader.getParent()).setVisibility(View.GONE);
+        ((View) mObservableTryLoader.getParent()).setVisibility(View.GONE);
+        mObservableRetryLoader.hide();
+        mObservableTryLoader.hide();
+    }
+
+    private void showTryLoader() {
+        ((View) mObservableTryLoader.getParent()).setVisibility(View.VISIBLE);
+        mObservableTryLoader.show();
+    }
+
+    private void showReTryLoader() {
+        ((View) mObservableRetryLoader.getParent()).setVisibility(View.VISIBLE);
+        mObservableRetryLoader.show();
+    }
+
+    private void populateObservableGame(ViewGroup observableGameContainer, ObservableGame observableGame) {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.partial_featured_game, null, false);
+        new FeaturedGameHolder(view).setSummonerId(mSummonerAggregateObject.getSummoner().getSummonerId()).populate(observableGame, getActivity(), true);
+
+        //remove all views
+        observableGameContainer.removeAllViews();
+        //add this one and lets animate
+        view.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
+        observableGameContainer.addView(view);
+    }
+
+    private View.OnClickListener callToGetObservableGame() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mObservableGameChecked)
+                    showReTryLoader();
+                else
+                    showTryLoader();
+                executeGetObservableGame(SummonerStatsFragment.this, mSummonerAggregateObject.getSummoner().getSummonerId());
+            }
+        };
+    }
+
+    private void initializeObservableLayout(View rootView) {
+        mObservableCheckLayout = rootView.findViewById(R.id.observable_click_to_check);
+        mObservableClickToRetry = rootView.findViewById(R.id.observable_click_to_retry);
+        mObservableGameContainer = (ViewGroup) rootView.findViewById(R.id.observable_game_container);
+
+        mObservableTryLoader = (ContentLoadingProgressBar) rootView.findViewById(R.id.observable_try_loaded);
+        mObservableRetryLoader = (ContentLoadingProgressBar) rootView.findViewById(R.id.observable_retry_loaded);
     }
 
     private void initializeSelectLayout(View rootView) {
@@ -146,7 +241,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                 View child = selectContainer.getChildAt(i);
 
                 Animation slideInAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_right);
-                slideInAnim.setDuration((long) (200 + (250 * Math.random())));
+                slideInAnim.setDuration((long) (200 + (50 * i)));
 
                 child.startAnimation(slideInAnim);
             }
@@ -154,7 +249,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
     }
 
     private TextView mSummaryName, mSummaryWins, mSummaryLosses, mSummaryWinPercentage;
-    private ImageView mSummaryIcon; //TODO implement this
+    private ImageView mSummaryIcon;
 
     private void initializeSummaryElements(View rootView) {
         mSummaryName = (TextView) rootView.findViewById(R.id.summoner_name);
@@ -222,6 +317,13 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                 } else {
                     generalException();
                 }
+                break;
+            case GET_OBSERVABLE_GAME:
+                mObservableGameChecked = true;
+                if (response.getStatus() == Response.Status.SUCCESS) {
+                    mObservableGame = (ObservableGame) response.getReturnedObject();
+                }
+                populateObservableGameLayout();
                 break;
             case GET_SUMMONER_SUMMARY:
                 if (response.getStatus() == Response.Status.SUCCESS) {

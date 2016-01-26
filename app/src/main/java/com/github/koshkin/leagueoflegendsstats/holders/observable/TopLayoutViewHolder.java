@@ -30,20 +30,31 @@ import java.util.TimerTask;
  */
 public class TopLayoutViewHolder {
 
-    private final View mLeftPickView, mRightPickView, mLeftBanView, mRightbanView;
-    private final TextView mBansText, mMatchMode, mMatchType, mMatchGameStarted;
+    private View mLeftPickView;
+    private View mRightPickView;
+    private View mLeftBanView;
+    private View mRightBanView;
+    private TextView mBansText, mMatchMode, mMatchType, mMatchGameStarted;
     private Timer mTimer;
 
-    public TopLayoutViewHolder(View view) {
+    /**
+     * Had to create init because of the Timer
+     *
+     * @param view View normally passed in the constructor
+     * @return this object
+     */
+    public TopLayoutViewHolder init(View view) {
         mLeftPickView = view.findViewById(R.id.left_pick_ban);
         mRightPickView = view.findViewById(R.id.right_pick_ban);
         mLeftBanView = view.findViewById(R.id.left_ban);
-        mRightbanView = view.findViewById(R.id.right_ban);
+        mRightBanView = view.findViewById(R.id.right_ban);
 
         mBansText = (TextView) view.findViewById(R.id.observable_game_bans);
         mMatchType = (TextView) view.findViewById(R.id.observable_game_type);
         mMatchMode = (TextView) view.findViewById(R.id.observable_game_mode);
         mMatchGameStarted = (TextView) view.findViewById(R.id.observable_game_start);
+
+        return this;
     }
 
     public void populate(ObservableGame observableGame, Activity activity) {
@@ -51,7 +62,7 @@ public class TopLayoutViewHolder {
         populatePicks(mRightPickView, observableGame, TeamSide.RED, activity);
 
         populateBans(mLeftBanView, observableGame, TeamSide.BLUE, activity);
-        populateBans(mRightbanView, observableGame, TeamSide.RED, activity);
+        populateBans(mRightBanView, observableGame, TeamSide.RED, activity);
 
         mMatchType.setText(getMatchType(observableGame));
         mMatchMode.setText(getMatchMode(observableGame));

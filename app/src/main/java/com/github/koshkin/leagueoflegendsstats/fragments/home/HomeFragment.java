@@ -187,9 +187,11 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
                     PlayerRanked playerRanked = (PlayerRanked) response.getReturnedObject();
                     mMySummoner.setPlayerRanked(playerRanked);
                     populateMySummonerLayout();
-                } else {
+                } else if (response.getStatus() == Response.Status.NOT_FOUND)
+                    populateMySummonerLayout();
+                else
                     populateErrorMySummonerLayout();
-                }
+
                 break;
             case GET_SUMMONER_BY_IDS:
                 mCallsToExecute--;
@@ -208,6 +210,7 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
                 }
                 break;
         }
+
         if (mCallsToExecute <= 0)
             new Timer().schedule(new MyTimerTask(), 500);
         if (mViewsRefreshed <= 0)
@@ -217,6 +220,7 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
     private void populateErrorMySummonerLayout() {
         mMySummonerLayout.clearViewsFromHolder();
         mMySummonerLayout.addViewToHolder(getAddNewSummonerLayout());
+        mMySummonerLayout.hideViewAllView();
     }
 
     private int mViewsRefreshed = 0;
@@ -252,6 +256,7 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
                     }
                 });
         }
+
     }
 
     private void updateChallengerLayout() {

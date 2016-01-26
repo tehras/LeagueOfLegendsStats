@@ -15,6 +15,7 @@ import com.github.koshkin.leagueoflegendsstats.models.ObservableGame;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.TeamSide;
 import com.github.koshkin.leagueoflegendsstats.models.match.Participant;
+import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.LoaderHelper;
 import com.github.koshkin.leagueoflegendsstats.views.RoundedImageView;
 
@@ -38,6 +39,7 @@ public class FeaturedGameHolder extends RecyclerView.ViewHolder {
     private final TextView mGameMode;
     private View mFirstLayout, mSecondLayout, mThirdLayout, mFourthLayout, mFifthLayout;
     private ObservableGame mObservableGame;
+    private String mSummonerId;
 
     public FeaturedGameHolder(View view) {
         super(view);
@@ -144,6 +146,10 @@ public class FeaturedGameHolder extends RecyclerView.ViewHolder {
         final ImageView itemIcon2View = (ImageView) view.findViewById(R.id.observable_icon_2);
 
         summonerName.setText(participant.getSummonerName());
+        if (!NullChecker.isNullOrEmpty(mSummonerId) && mSummonerId.equalsIgnoreCase(String.valueOf(participant.getSummonerId()))) {
+            summonerName.setTextColor(activity.getResources().getColor(R.color.success_green));
+        }
+
         championName.setText(StaticDataHolder.getInstance(activity).getChampionName(participant.getChampionId()));
 
 
@@ -176,4 +182,8 @@ public class FeaturedGameHolder extends RecyclerView.ViewHolder {
 
     }
 
+    public FeaturedGameHolder setSummonerId(String summonerId) {
+        mSummonerId = summonerId;
+        return this;
+    }
 }

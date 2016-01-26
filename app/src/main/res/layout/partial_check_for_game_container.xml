@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:button="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="@dimen/activity_vertical_margin_small"
+              android:background="@color/elevation_background"
+              android:elevation="@dimen/medium_elevation"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/observable_game_title_summoner_stats"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"/>
+
+        <include
+            layout="@layout/partial_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_small"
+            android:layout_marginTop="@dimen/activity_vertical_margin_small"/>
+
+        <RelativeLayout
+            android:id="@+id/observable_click_to_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="UselessParent">
+
+            <com.github.koshkin.leagueoflegendsstats.views.MaterialButton
+                android:id="@+id/observable_check_for_game_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                button:buttonText="@string/observable_button_check"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/observable_check_for_game_button"
+                android:layout_alignEnd="@+id/observable_check_for_game_button"
+                android:layout_alignStart="@+id/observable_check_for_game_button"
+                android:layout_alignTop="@+id/observable_check_for_game_button"
+                android:background="@color/elevation_background"
+                android:gravity="center">
+
+                <android.support.v4.widget.ContentLoadingProgressBar
+                    android:id="@+id/observable_try_loaded"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_xsmall"
+                android:layout_toStartOf="@+id/observable_check_for_game_button"
+                android:text="@string/observable_check_for_game_text"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="italic"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/observable_click_to_retry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="UselessParent">
+
+            <com.github.koshkin.leagueoflegendsstats.views.MaterialButton
+                android:id="@+id/observable_click_to_retry_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                button:buttonText="@string/observable_button_retry"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_xsmall"
+                android:layout_toStartOf="@+id/observable_click_to_retry_button"
+                android:text="@string/observable_check_for_game_text"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="italic"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/observable_click_to_retry_button"
+                android:layout_alignEnd="@+id/observable_click_to_retry_button"
+                android:layout_alignStart="@+id/observable_click_to_retry_button"
+                android:layout_alignTop="@+id/observable_click_to_retry_button"
+                android:background="@color/elevation_background"
+                android:gravity="center">
+
+                <android.support.v4.widget.ContentLoadingProgressBar
+                    android:id="@+id/observable_retry_loaded"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/observable_game_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin_negating"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_negating"
+            android:orientation="vertical"/>
+
+    </LinearLayout>
+
+</LinearLayout>
