@@ -228,12 +228,12 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         if (mSummonerAggregateObject != null && mSummonerAggregateObject.getPlayerStatSummaries().getPlayerSummaries() != null) {
-            ArrayList<PlayerSummary> playerSummeries = mSummonerAggregateObject.getPlayerStatSummaries().getPlayerSummaries();
+            ArrayList<PlayerSummary> playerSummaries = mSummonerAggregateObject.getPlayerStatSummaries().getPlayerSummaries();
             //Sorts the collection
-            Collections.sort(playerSummeries);
+            Collections.sort(playerSummaries);
 
             mSelectContainer.removeAllViews();//removes before adding
-            for (PlayerSummary playerSummary : playerSummeries) {
+            for (PlayerSummary playerSummary : playerSummaries) {
                 addToLayout(mSelectContainer, getSelectableView(inflater, playerSummary));
             }
 

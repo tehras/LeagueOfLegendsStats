@@ -237,6 +237,7 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         ArrayList<Game> games = mRecentGames.getGames();
         if (games != null && games.size() > 0) {
 
+            mViewAllMatches.removeAllViews(); //remove views before populating
             int matchesShown = 0; //counter - we only want to show top 5??
             for (Game game : games) {
                 if (game.getChampionId() == 0)
@@ -270,6 +271,8 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         ArrayList<Champion> champs = mRankedStats.getChampions();
         if (champs != null && champs.size() > 0) {
             Collections.sort(champs);
+
+            mTopChampsLayout.removeAllViews();//remove views before populating
             int champInt = 0;
             for (Champion champion : champs) {
                 if (champion.getId() == 0)

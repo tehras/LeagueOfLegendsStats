@@ -23,8 +23,8 @@ android {
         applicationId "com.github.koshkin.leagueoflegendsstats"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 100015 //TODO auto versioning
-        versionName "1.0.15" //TODO auto versioning
+        versionCode 100017 //TODO auto versioning
+        versionName "1.0.17" //TODO auto versioning
     }
     buildTypes {
         release {
