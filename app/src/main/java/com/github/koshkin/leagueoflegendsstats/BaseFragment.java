@@ -244,6 +244,14 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
         return mySummoner == null || !getSummonerName().equalsIgnoreCase(mySummoner.getSummonerInfo().getName());
     }
 
+    protected void showKeyboard() {
+        if (this.getActivity() == null)
+            return;
+
+        InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
     protected void hideKeyboard() {
         if (this.getActivity() == null)
             return;

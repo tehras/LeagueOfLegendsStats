@@ -53,11 +53,6 @@ public class MaterialButton extends RelativeLayout {
         return this;
     }
 
-    public MaterialButton setTextColorResource(int textColorResource) {
-        mText.setTextColor(textColorResource);
-        return this;
-    }
-
     public CharSequence getText() {
         return mText.getText();
     }

@@ -87,11 +87,21 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
 
         if (!mFirstLoad) {
             populateFavoriteLayout();
-            populateMySummonerLayout();
+            populateMySummoner();
         }
         mFirstLoad = false;
 
         addOnSwipeToRefreshListener(this);
+    }
+
+    private void populateMySummoner() {
+        if (mMySummoner == null) {
+            mMySummoner = StaticDataHolder.getInstance(getActivity()).getMySummoner();
+            if (mMySummoner != null) {
+                mCallsToExecute++;
+                executeGetRankedStats(this, mMySummoner.getSummonerId());
+            }
+        }
     }
 
     @Override

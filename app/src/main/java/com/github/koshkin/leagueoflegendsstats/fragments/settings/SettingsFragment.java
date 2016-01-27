@@ -3,10 +3,12 @@ package com.github.koshkin.leagueoflegendsstats.fragments.settings;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,6 +67,16 @@ public class SettingsFragment extends BaseFragment implements Request.RequestCal
             editText.setText(summoner.getSummonerInfo().getName());
             tv.setText(String.format(SUMMONER, summoner.getSummonerInfo().getName()));
         }
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    performSearchClick();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         materialButton.setText(BUTTON_TEXT_EDIT);
         editTextContainer.setVisibility(View.INVISIBLE);
@@ -72,31 +84,41 @@ public class SettingsFragment extends BaseFragment implements Request.RequestCal
         progressBar.setVisibility(View.INVISIBLE);
         materialButton.setVisibility(View.VISIBLE);
         materialButton.setOnButtonClickListener(new View.OnClickListener() {
-            public boolean isEditTextViable(EditText editText1) {
-                return editText1.getText().toString().length() > 1;
-            }
-
             @Override
             public void onClick(View v) {
                 hideKeyboard();
                 if (materialButton.getText().toString().equalsIgnoreCase(BUTTON_TEXT_EDIT)) {
-                    materialButton.setText(BUTTON_TEXT_UPDATE);
-                    tv.setVisibility(View.INVISIBLE);
-                    editTextContainer.setVisibility(View.VISIBLE);
-                    editTextContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_from_top));
+                    performEditClick();
                 } else {
-                    if (isEditTextViable(editText)) {
-                        materialButton.setVisibility(View.INVISIBLE);
-                        progressBar.setVisibility(View.VISIBLE);
-                        progressBar.show();
-                        executeGetSummoner(SettingsFragment.this, editText.getText().toString());
-                    } else {
-                        switchToEditSummonerText();
-                    }
+                    performSearchClick();
                 }
             }
         });
 
+    }
+
+    public boolean isEditTextViable(EditText editText1) {
+        return editText1.getText().toString().length() > 1;
+    }
+
+    private void performSearchClick() {
+        if (isEditTextViable(editText)) {
+            hideKeyboard();
+            materialButton.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.show();
+            executeGetSummoner(SettingsFragment.this, editText.getText().toString());
+        } else {
+            switchToEditSummonerText();
+        }
+    }
+
+    private void performEditClick() {
+        materialButton.setText(BUTTON_TEXT_UPDATE);
+        tv.setVisibility(View.INVISIBLE);
+        editTextContainer.setVisibility(View.VISIBLE);
+        showKeyboard();
+        editTextContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_from_top));
     }
 
     private void switchToEditSummonerText() {
