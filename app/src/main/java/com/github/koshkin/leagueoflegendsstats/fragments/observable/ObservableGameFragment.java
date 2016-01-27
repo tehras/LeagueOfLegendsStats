@@ -148,7 +148,7 @@ public class ObservableGameFragment extends BaseFragment implements Request.Requ
         if (mTopLayoutHolder == null)
             mTopLayoutHolder = new TopLayoutViewHolder();
         mTopLayoutHolder.init(mTopLayout).populate(mObservableGame, getActivity());
-        new MainLayoutViewHolder(mMiddleLayout).populate(mObservableGame, mSummonerLeagues, getActivity());
+        new MainLayoutViewHolder(mMiddleLayout).setSummonerId(mSummonerId).populate(mObservableGame, mSummonerLeagues, getActivity());
     }
 
     private void showError() {
