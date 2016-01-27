@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +63,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
     private View mObservableClickToRetry, mObservableCheckLayout;
     private ViewGroup mObservableGameContainer;
     private ContentLoadingProgressBar mObservableTryLoader, mObservableRetryLoader;
+    private int mToExecute;
 
     public SummonerStatsFragment setSummoner(Summoner summoner) {
         mSummoner = summoner;
@@ -308,6 +308,8 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                             getProfileImage(summoner.getSummonerInfo());
                         }
 
+                        mToExecute = 2;
+                        executeGetObservableGame(this, summoner.getSummonerId());
                         executeGetStats(this, summoner.getSummonerId());
                     } else {
                         generalException();
@@ -319,13 +321,17 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                 }
                 break;
             case GET_OBSERVABLE_GAME:
+                mToExecute--;
                 mObservableGameChecked = true;
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     mObservableGame = (ObservableGame) response.getReturnedObject();
                 }
                 populateObservableGameLayout();
+                if (mToExecute <= 0)
+                    hideLoading();
                 break;
             case GET_SUMMONER_SUMMARY:
+                mToExecute--;
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     PlayerStatSummaries playerStatSummaries = (PlayerStatSummaries) response.getReturnedObject();
                     if (playerStatSummaries != null) {
@@ -334,7 +340,6 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                             mSummonerAggregateObject.setStatus(Response.Status.SUCCESS);
                         }
                         mSummonerAggregateObject.setPlayerStatSummaries(playerStatSummaries);
-                        hideLoading();
                         populateSummaryLayout();
                         populateSelectLayout();
                     } else {
@@ -345,6 +350,8 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                 } else {
                     generalException();
                 }
+                if (mToExecute <= 0)
+                    hideLoading();
                 break;
         }
         addToRecent(mSummonerAggregateObject);
@@ -375,14 +382,14 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
         hideLoading();
         hideHeaderLayout();
 
-        initializeErrorLayout(getResources().getString(R.string.no_record_found_title), getResources().getString(R.string.no_record_found_body));
+//        initializeErrorLayout(getResources().getString(R.string.no_record_found_title), getResources().getString(R.string.no_record_found_body));
     }
 
     private void userNotFound() {
         hideLoading();
         hideHeaderLayout();
 
-        initializeErrorLayout(getActivity().getResources().getText(R.string.no_user_found_title).toString(), Html.fromHtml(String.format(getActivity().getResources().getText(R.string.no_user_found_message).toString(), mSummonerName)));
+//        initializeErrorLayout(getActivity().getResources().getText(R.string.no_user_found_title).toString(), Html.fromHtml(String.format(getActivity().getResources().getText(R.string.no_user_found_message).toString(), mSummonerName)));
     }
 
     private void populateSummaryLayout() {

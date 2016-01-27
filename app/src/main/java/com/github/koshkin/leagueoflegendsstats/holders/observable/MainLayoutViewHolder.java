@@ -44,10 +44,16 @@ public class MainLayoutViewHolder {
 
     private final View playerLayout;
     private final View errorLayout;
+    private String mSummonerId;
 
     public MainLayoutViewHolder(View view) {
         playerLayout = view.findViewById(R.id.observable_player_layout);
         errorLayout = view.findViewById(R.id.error_layout);
+    }
+
+    public MainLayoutViewHolder setSummonerId(String summonerId) {
+        mSummonerId = summonerId;
+        return this;
     }
 
     @SuppressLint("CutPasteId")
@@ -100,6 +106,8 @@ public class MainLayoutViewHolder {
             TextView summonerName = (TextView) view.findViewById(R.id.summoner_name);
             TextView championName = (TextView) view.findViewById(R.id.champion_name);
             summonerName.setText(participant.getSummonerName());
+            if (!NullChecker.isNullOrEmpty(mSummonerId) && mSummonerId.equalsIgnoreCase(String.valueOf(participant.getParticipantId())))
+                summonerName.setTextColor(activity.getResources().getColor(R.color.success_green));
             championName.setText(StaticDataHolder.getInstance(activity).getChampionName(participant.getChampionId()));
 
             populateChampionAndSummonerIcons(participant, activity, view);

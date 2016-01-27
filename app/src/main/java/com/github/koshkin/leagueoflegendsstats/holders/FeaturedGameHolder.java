@@ -82,7 +82,7 @@ public class FeaturedGameHolder extends RecyclerView.ViewHolder {
         mClickableView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) activity).startFragment(ObservableGameFragment.getInstance(null, participants.get(0).getSummonerName()));
+                ((MainActivity) activity).startFragment(ObservableGameFragment.getInstance(mSummonerId, participants.get(0).getSummonerName()));
             }
         });
     }

@@ -14,6 +14,7 @@ import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Stats;
 import com.github.koshkin.leagueoflegendsstats.models.Summoner;
+import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
 import com.github.koshkin.leagueoflegendsstats.utils.NumberUtils;
 import com.github.koshkin.leagueoflegendsstats.utils.Utils;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.LoaderHelper;
@@ -83,17 +84,19 @@ public class MySummonerHolder {
 
             populateChampions(summoner, activity);
 
+        } else {
+            mRankedErrorLayout.setVisibility(View.VISIBLE);
+            mRankedStatsLayout.setVisibility(View.GONE);
+            mWinsLossesLayout.setVisibility(View.GONE);
+        }
+
+        if (!NullChecker.isNullOrEmpty(summoner.getSummonerInfo().getName()))
             mClickableView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ((MainActivity) activity).startFragment(SummonerStatsFragment.getInstance(summoner.getSummonerInfo().getName(), summoner.getSummonerInfo().getId()).setSummoner(summoner));
                 }
             });
-        } else {
-            mRankedErrorLayout.setVisibility(View.VISIBLE);
-            mRankedStatsLayout.setVisibility(View.GONE);
-            mWinsLossesLayout.setVisibility(View.GONE);
-        }
 
     }
 
