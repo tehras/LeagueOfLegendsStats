@@ -180,7 +180,7 @@ public class MySummonerHolder {
 
         //0th will be overall
 
-        return String.valueOf(champs.get(0).getStats().getTotalSessionsLost()) + "W";
+        return String.valueOf(champs.get(0).getStats().getTotalSessionsLost()) + "L";
     }
 
     private String getKdaText(TextView rankedKda, PlayerRanked playerRanked, Activity activity) {
