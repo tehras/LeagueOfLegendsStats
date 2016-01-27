@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -50,10 +51,27 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
         hideErrorLayout();
     }
 
+    /**
+     * Decided to wait till onViewCreated because onCreate way TOO early
+     *
+     * @param view               view
+     * @param savedInstanceState savedInstanceState
+     */
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (getActivity() != null && getActivity() instanceof MainActivity) {
+            Toolbar toolbar = ((MainActivity) getActivity()).getToolbar();
+            setToolbar(toolbar);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
 
+        //hide errors and show/fab
         if (getActivity() != null && getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).showFab();
             ((MainActivity) getActivity()).hideError();
@@ -62,6 +80,9 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
             else
                 ((MainActivity) getActivity()).hideFaveFab();
         }
+
+        if (mSwipeListener != null) //this is to make sure add on swipe listener gets added back
+            addOnSwipeToRefreshListener(mSwipeListener);
     }
 
     @Override
@@ -73,6 +94,8 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
         }
     }
 
+    private SwipeRefreshLayout.OnRefreshListener mSwipeListener = null;
+
     /**
      * put it in onResume or else it won't work correctly
      *
@@ -81,6 +104,7 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
     public void addOnSwipeToRefreshListener(SwipeRefreshLayout.OnRefreshListener swipeRefreshLayout) {
         if (getActivity() != null && getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).addSwipeToRefreshListener(swipeRefreshLayout);
+            mSwipeListener = swipeRefreshLayout;
         }
     }
 
@@ -229,5 +253,20 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
             InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    protected void setToolbar(Toolbar toolbar) {
+        toolbar.setTitle(getToolbarTitle());
+    }
+
+    /**
+     * Override this method in order to change the toolbar name.
+     * <p/>
+     * By default it'll be the app name
+     *
+     * @return toolbar name
+     */
+    protected String getToolbarTitle() {
+        return getActivity().getResources().getString(R.string.app_name);
     }
 }

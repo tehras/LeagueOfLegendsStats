@@ -80,6 +80,11 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
     }
 
     @Override
+    protected String getToolbarTitle() {
+        return getActivity().getResources().getString(R.string.fragment_title_highest_ranked);
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.league_standings, menu);
         super.onCreateOptionsMenu(menu, inflater);

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,12 +44,13 @@ import static com.github.koshkin.leagueoflegendsstats.utils.Utils.addToLayout;
 import static com.github.koshkin.leagueoflegendsstats.utils.Utils.getRankedStats;
 import static com.github.koshkin.leagueoflegendsstats.utils.Utils.getTextSafely;
 
+
 /**
  * Created by tehras on 1/10/16.
  * <p/>
  * This fragment will show the stats
  */
-public class SummonerStatsFragment extends BaseFragment implements Request.RequestCallback {
+public class SummonerStatsFragment extends BaseFragment implements Request.RequestCallback, SwipeRefreshLayout.OnRefreshListener {
 
     private SummonerAggregateObject mSummonerAggregateObject;
     private LinearLayout mSelectContainer;
@@ -64,6 +66,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
     private ViewGroup mObservableGameContainer;
     private ContentLoadingProgressBar mObservableTryLoader, mObservableRetryLoader;
     private int mToExecute;
+    private int mSwipeToRefresh;
 
     public SummonerStatsFragment setSummoner(Summoner summoner) {
         mSummoner = summoner;
@@ -79,6 +82,11 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        return getActivity().getResources().getString(R.string.fragment_title_summoner_stats);
     }
 
     @Override
@@ -181,7 +189,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
     private void populateObservableGame(ViewGroup observableGameContainer, ObservableGame observableGame) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.partial_featured_game, null, false);
-        new FeaturedGameHolder(view).setSummonerId(mSummonerAggregateObject.getSummoner().getSummonerId()).populate(observableGame, getActivity(), true);
+        new FeaturedGameHolder(view).setSummonerId(mSummonerAggregateObject.getSummoner().getSummonerInfo().getId()).populate(observableGame, getActivity(), true);
 
         //remove all views
         observableGameContainer.removeAllViews();
@@ -224,6 +232,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
             //Sorts the collection
             Collections.sort(playerSummeries);
 
+            mSelectContainer.removeAllViews();//removes before adding
             for (PlayerSummary playerSummary : playerSummeries) {
                 addToLayout(mSelectContainer, getSelectableView(inflater, playerSummary));
             }
@@ -274,6 +283,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
             if (mSummonerId == null || mSummoner == null)
                 executeGetSummoner(this, mSummonerName);
             else {
+                addOnSwipeToRefreshListener(this);
                 if (mSummoner.getSummonerInfo() != null) {
                     getProfileImage(mSummoner.getSummonerInfo());
                 }
@@ -308,9 +318,10 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                             getProfileImage(summoner.getSummonerInfo());
                         }
 
-                        mToExecute = 2;
-                        executeGetObservableGame(this, summoner.getSummonerId());
-                        executeGetStats(this, summoner.getSummonerId());
+                        //enable refresh
+                        addOnSwipeToRefreshListener(this);
+                        //execute remaining calls
+                        executeRemainingCalls(summoner.getSummonerId());
                     } else {
                         generalException();
                     }
@@ -321,6 +332,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                 }
                 break;
             case GET_OBSERVABLE_GAME:
+                mSwipeToRefresh--;
                 mToExecute--;
                 mObservableGameChecked = true;
                 if (response.getStatus() == Response.Status.SUCCESS) {
@@ -331,6 +343,7 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                     hideLoading();
                 break;
             case GET_SUMMONER_SUMMARY:
+                mSwipeToRefresh--;
                 mToExecute--;
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     PlayerStatSummaries playerStatSummaries = (PlayerStatSummaries) response.getReturnedObject();
@@ -355,6 +368,14 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                 break;
         }
         addToRecent(mSummonerAggregateObject);
+        if (mSwipeToRefresh <= 0)
+            stopRefreshing();
+    }
+
+    private void executeRemainingCalls(String summonerId) {
+        mToExecute = 2;
+        executeGetObservableGame(this, summonerId);
+        executeGetStats(this, summonerId);
     }
 
     private void addToRecent(SummonerAggregateObject summoner) {
@@ -493,5 +514,11 @@ public class SummonerStatsFragment extends BaseFragment implements Request.Reque
                 }
             }
         };
+    }
+
+    @Override
+    public void onRefresh() {
+        mSwipeToRefresh = 2;
+        executeRemainingCalls(mSummonerAggregateObject.getSummoner().getSummonerId());
     }
 }

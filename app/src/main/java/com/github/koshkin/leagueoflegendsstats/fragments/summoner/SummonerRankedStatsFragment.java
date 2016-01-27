@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ import static com.github.koshkin.leagueoflegendsstats.utils.Utils.getKDAColor;
  * <p/>
  * This will show stats
  */
-public class SummonerRankedStatsFragment extends BaseFragment implements Request.RequestCallback {
+public class SummonerRankedStatsFragment extends BaseFragment implements Request.RequestCallback, SwipeRefreshLayout.OnRefreshListener {
 
     private String mWins;
     private String mLosses;
@@ -55,6 +56,7 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
     private View mNoMatchesLayout;
     private RecentGames mRecentGames;
     private FileHandler mProfFileHandler;
+    private int mSwipeToRefresh;
 
     public static SummonerRankedStatsFragment getInstance(int summonerIconId, String summonerId, String summonerName, String wins, String losses) {
         Bundle args = new Bundle();
@@ -68,6 +70,11 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        return getActivity().getResources().getString(R.string.fragment_title_ranked_stats);
     }
 
     @Override
@@ -163,6 +170,10 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         if (name != null)
             executeGetProfileImage(this, name);
 
+        executeRemainingCalls();
+    }
+
+    private void executeRemainingCalls() {
         executeGetRankedStats(this, mSummonerId);
         executeGetRankeGameHistory(this, mSummonerId);
     }
@@ -181,11 +192,14 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
                 break;
             case GET_SUMMONER_RANKED:
                 resultsReturned++;
+                mSwipeToRefresh--;
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     PlayerRanked rankedStats = (PlayerRanked) response.getReturnedObject();
 
                     if (rankedStats != null) {
                         mRankedStats = rankedStats;
+
+                        addOnSwipeToRefreshListener(this);
 
                         populateRankedHeader();
                         populateTopChampionsLayout();
@@ -198,6 +212,7 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
                 break;
             case GET_SUMMONER_RANKED_GAMES:
                 resultsReturned++;
+                mSwipeToRefresh--;
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     RecentGames recentGames = (RecentGames) response.getReturnedObject();
 
@@ -214,6 +229,8 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         }
         if (resultsReturned == 2)
             hideLoading();
+        if (mSwipeToRefresh <= 0)
+            stopRefreshing();
     }
 
     private void populateMatchHistory() {
@@ -382,5 +399,11 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
                 }
             }
         };
+    }
+
+    @Override
+    public void onRefresh() {
+        mSwipeToRefresh = 2;
+        executeRemainingCalls();
     }
 }

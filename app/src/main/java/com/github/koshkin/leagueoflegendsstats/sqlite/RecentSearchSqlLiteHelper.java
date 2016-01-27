@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * Created by tehras on 1/20/16.
+ * <p/>
+ * Recent Search SQL Helper
  */
 public class RecentSearchSqlLiteHelper {
 
@@ -41,28 +43,13 @@ public class RecentSearchSqlLiteHelper {
         return null;
     }
 
-    //Delete SimpleSummoner
-    public static boolean deleteRecent(RecentSummoner simpleSummoner) {
-        if (simpleSummoner == null)
-            return false;
-
-        boolean hasDeleted = false;
-
-        List<RecentSummoner> simpleSummoners = RecentSummoner.find(RecentSummoner.class, "name = ?", simpleSummoner.getName());
-        if (simpleSummoners != null && simpleSummoners.size() > 0) {
-            for (RecentSummoner fav : simpleSummoners)
-                RecentSummoner.delete(fav);
-
-            hasDeleted = true;
-        }
-
-        return hasDeleted;
-    }
-
     //Put SimpleSummoner
     public static RecentSummoner addRecent(RecentSummoner simpleSummoner) {
-        deleteRecent(simpleSummoner);
-        simpleSummoner.save();
+        List<RecentSummoner> simpleSummoners = RecentSummoner.find(RecentSummoner.class, "name = ?", simpleSummoner.getName());
+        if (simpleSummoners != null && simpleSummoners.size() > 0) {
+            updateRecent(simpleSummoner);
+        } else
+            simpleSummoner.save();
 
         return simpleSummoner;
     }

@@ -62,6 +62,11 @@ public class ObservableGameFragment extends BaseFragment implements Request.Requ
             executeGetSummoner(this, summonerName);
     }
 
+    @Override
+    protected String getToolbarTitle() {
+        return getActivity().getResources().getString(R.string.fragment_title_observable_game);
+    }
+
     private void executeObservableGame() {
         executeGetObservableGame(this, mSummonerId);
     }

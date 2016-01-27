@@ -3,6 +3,7 @@ package com.github.koshkin.leagueoflegendsstats.fragments.summoner;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
+import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.adapters.GameHistoryAdapter;
 import com.github.koshkin.leagueoflegendsstats.fragments.BaseSimpleRecyclerViewFragment;
 import com.github.koshkin.leagueoflegendsstats.models.Game;
@@ -29,6 +30,11 @@ public class SummonerRankedGamesFragment extends BaseSimpleRecyclerViewFragment 
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        return getActivity().getResources().getString(R.string.fragment_title_match_history);
     }
 
     @Override

@@ -91,4 +91,13 @@
     <string name="observable_button_retry">Retry .</string>
     <string name="observable_button_check">Check For Game</string>
     <string name="observable_game_title_summoner_stats">Current Game</string>
+    <string name="fragment_title_summoner_stats">Summoner Stats</string>
+    <string name="fragment_title_ranked_stats">Ranked Stats</string>
+    <string name="fragment_title_observable_game">Current Game</string>
+    <string name="fragment_title_favorites">Favorite Summoners</string>
+    <string name="fragment_title_highest_ranked">Summoner Ranks</string>
+    <string name="fragment_title_match_stats">Match Statistics</string>
+    <string name="fragment_title_featured_games">Featured Games</string>
+    <string name="fragment_title_settings">Settings</string>
+    <string name="fragment_title_match_history">Recent Matches</string>
 </resources>

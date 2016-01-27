@@ -87,6 +87,7 @@ public class HomeFragment extends BaseFragment implements Request.RequestCallbac
 
         if (!mFirstLoad) {
             populateFavoriteLayout();
+            populateMySummonerLayout();
         }
         mFirstLoad = false;
 

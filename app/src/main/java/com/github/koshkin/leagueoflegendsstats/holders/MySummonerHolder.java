@@ -119,13 +119,13 @@ public class MySummonerHolder {
         ((View) mChampionIcon1.getParent()).setVisibility(View.GONE);
         ((View) mChampionIcon2.getParent()).setVisibility(View.GONE);
         ((View) mChampionIcon3.getParent()).setVisibility(View.GONE);
-        if (champions.size() >= 1) {
+        if (champions.size() > 1) {
             populateChampion(mChampionIcon1, mChampionKDA1, champions.get(1), activity);
         }
-        if (champions.size() >= 2) {
+        if (champions.size() > 2) {
             populateChampion(mChampionIcon2, mChampionKDA2, champions.get(2), activity);
         }
-        if (champions.size() >= 3) {
+        if (champions.size() > 3) {
             populateChampion(mChampionIcon3, mChampionKDA3, champions.get(3), activity);
         }
 
