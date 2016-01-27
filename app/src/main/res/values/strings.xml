@@ -88,7 +88,7 @@
     <string name="good">Good</string>
     <string name="error_loading_players">Error loading players. Please try another game.</string>
     <string name="observable_check_for_game_text">To view if the summoner is currently in a game please press the button on the right</string>
-    <string name="observable_button_retry">Retry .</string>
+    <string name="observable_button_retry">Retry</string>
     <string name="observable_button_check">Check For Game</string>
     <string name="observable_game_title_summoner_stats">Current Game</string>
     <string name="fragment_title_summoner_stats">Summoner Stats</string>
