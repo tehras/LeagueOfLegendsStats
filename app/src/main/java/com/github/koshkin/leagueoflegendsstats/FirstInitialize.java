@@ -43,8 +43,8 @@ public class FirstInitialize implements Request.RequestCallback {
     public static final String CHAMPION_JSON = "champion.json";
     public static final String SPELL_JSON = "summoner.json";
     public static final String PROFILE_JSON = "profileicon.json";
-    public static final String RUNES_JSON = "runeicon.json";
-    public static final String MASTERIES_JSON = "masteryicon.json";
+    public static final String RUNES_JSON = "rune.json";
+    public static final String MASTERIES_JSON = "mastery.json";
 
     public void initialize() {
         StaticDataHolder.getInstance(mMainActivity).init();
@@ -149,34 +149,36 @@ public class FirstInitialize implements Request.RequestCallback {
                 break;
             case GET_JSON:
                 mExecuteCounter--;
-                DataParser parser = (DataParser) response.getReturnedObject();
-                if (parser.getResponseObject() != null)
-                    switch (parser.getType()) {
-                        case CHAMPION:
-                            if (parser.getResponseObject() instanceof ChampionIcons)
-                                StaticDataHolder.getInstance(mMainActivity).setChampionIcons((ChampionIcons) parser.getResponseObject());
-                            break;
-                        case SUMMONER:
-                            if (parser.getResponseObject() instanceof SpellIcons)
-                                StaticDataHolder.getInstance(mMainActivity).setSpellIcons((SpellIcons) parser.getResponseObject());
-                            break;
-                        case PROFILE:
-                            if (parser.getResponseObject() instanceof ProfileIcons)
-                                StaticDataHolder.getInstance(mMainActivity).setProfileIcons((ProfileIcons) parser.getResponseObject());
-                            break;
-                        case ITEM:
-                            if (parser.getResponseObject() instanceof ItemIcons)
-                                StaticDataHolder.getInstance(mMainActivity).setItemIcons((ItemIcons) parser.getResponseObject());
-                            break;
-                        case RUNES:
-                            if (parser.getResponseObject() instanceof RuneIcons)
-                                StaticDataHolder.getInstance(mMainActivity).setRuneIcons((RuneIcons) parser.getResponseObject());
-                            break;
-                        case MASTERIES:
-                            if (parser.getResponseObject() instanceof MasteryIcons)
-                                StaticDataHolder.getInstance(mMainActivity).setMasteryIcons((MasteryIcons) parser.getResponseObject());
-                            break;
-                    }
+                if (response.getStatus() == Response.Status.SUCCESS) {
+                    DataParser parser = (DataParser) response.getReturnedObject();
+                    if (parser.getResponseObject() != null)
+                        switch (parser.getType()) {
+                            case CHAMPION:
+                                if (parser.getResponseObject() instanceof ChampionIcons)
+                                    StaticDataHolder.getInstance(mMainActivity).setChampionIcons((ChampionIcons) parser.getResponseObject());
+                                break;
+                            case SUMMONER:
+                                if (parser.getResponseObject() instanceof SpellIcons)
+                                    StaticDataHolder.getInstance(mMainActivity).setSpellIcons((SpellIcons) parser.getResponseObject());
+                                break;
+                            case PROFILE:
+                                if (parser.getResponseObject() instanceof ProfileIcons)
+                                    StaticDataHolder.getInstance(mMainActivity).setProfileIcons((ProfileIcons) parser.getResponseObject());
+                                break;
+                            case ITEM:
+                                if (parser.getResponseObject() instanceof ItemIcons)
+                                    StaticDataHolder.getInstance(mMainActivity).setItemIcons((ItemIcons) parser.getResponseObject());
+                                break;
+                            case RUNES:
+                                if (parser.getResponseObject() instanceof RuneIcons)
+                                    StaticDataHolder.getInstance(mMainActivity).setRuneIcons((RuneIcons) parser.getResponseObject());
+                                break;
+                            case MASTERIES:
+                                if (parser.getResponseObject() instanceof MasteryIcons)
+                                    StaticDataHolder.getInstance(mMainActivity).setMasteryIcons((MasteryIcons) parser.getResponseObject());
+                                break;
+                        }
+                }
                 break;
         }
 
