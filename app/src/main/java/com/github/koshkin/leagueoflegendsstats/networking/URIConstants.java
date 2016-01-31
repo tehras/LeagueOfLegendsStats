@@ -12,8 +12,8 @@ public class URIConstants {
 
     //BASE URI, diff for each region
     public static final String NA_BASE_URI = "https://%s.api.pvp.net";
-    public static String NA_STATIC_URI = "http://ddragon.leagueoflegends.com/cdn/6.1.1/img";
-    public static String NA_STATIC_DATA_URI = "http://ddragon.leagueoflegends.com/cdn/6.1.1/data";
+    public static String NA_STATIC_URI = "http://ddragon.leagueoflegends.com/cdn/" + URIHelper.VERSION_FILL + "/img";
+    public static String NA_STATIC_DATA_URI = "http://ddragon.leagueoflegends.com/cdn/" + URIHelper.VERSION_FILL + "/data";
 
     //API STATIC
     public static final String PROFILE_ICON = "/profileicon/%s";

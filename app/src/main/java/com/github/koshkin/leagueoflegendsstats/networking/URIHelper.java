@@ -53,6 +53,14 @@ public enum URIHelper {
         mRequiresApiString = b1;
     }
 
+    public static final String VERSION_FILL = "<version>";
+
+    public static String sVersion = "6.1.1";
+
+    public static void setVersion(String version) {
+        sVersion = version;
+    }
+
     public static Region sRegion = Region.NA;
 
     public static Region getCurrentRegion() {
@@ -69,7 +77,7 @@ public enum URIHelper {
         if (mBaseUri.equalsIgnoreCase(NA_BASE_URI)) {
             url = String.format(mBaseUri, getCurrentRegion().getRegionName().toLowerCase());
         } else {
-            url = mBaseUri;
+            url = mBaseUri.replaceAll(VERSION_FILL, sVersion);
         }
 
         url = url + mOperationUrl;

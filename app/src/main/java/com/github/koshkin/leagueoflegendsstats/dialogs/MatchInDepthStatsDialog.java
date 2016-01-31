@@ -110,16 +110,22 @@ public class MatchInDepthStatsDialog extends DialogFragment {
             creepsPerTenView.setVisibility(View.GONE);
 
         CsDiffPerMinDeltas csDiffPerMinDeltas = mParticipant.getTimeline().getCsDiffPerMinDeltas();
-        creepsPerTenDiffView.setZeroToTen(getCorrectCreepsPerTen(csDiffPerMinDeltas.getZeroToTen()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getZeroToTen(), 0))
-                .setTenToTwenty(getCorrectCreepsPerTen(csDiffPerMinDeltas.getTenToTwenty()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getTenToTwenty(), 1))
-                .setTwentyToThirty(getCorrectCreepsPerTen(csDiffPerMinDeltas.getTwentyToThirty()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getTwentyToThirty(), 2))
-                .setThirtyPlus(getCorrectCreepsPerTen(csDiffPerMinDeltas.getThirtyToEnd()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getThirtyToEnd(), 3));
+        if (csDiffPerMinDeltas != null)
+            creepsPerTenDiffView.setZeroToTen(getCorrectCreepsPerTen(csDiffPerMinDeltas.getZeroToTen()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getZeroToTen(), 0))
+                    .setTenToTwenty(getCorrectCreepsPerTen(csDiffPerMinDeltas.getTenToTwenty()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getTenToTwenty(), 1))
+                    .setTwentyToThirty(getCorrectCreepsPerTen(csDiffPerMinDeltas.getTwentyToThirty()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getTwentyToThirty(), 2))
+                    .setThirtyPlus(getCorrectCreepsPerTen(csDiffPerMinDeltas.getThirtyToEnd()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getThirtyToEnd(), 3));
+        else
+            creepsPerTenDiffView.setVisibility(View.GONE);
 
         XpDiffPerMinDeltas xpDiffPerMinDeltas = mParticipant.getTimeline().getXpDiffPerMinDeltas();
-        matchPerTenView.setZeroToTen(getCorrectCreepsPerTen(xpDiffPerMinDeltas.getZeroToTen()), matchColocsXpDiffPerMinDeltas(xpDiffPerMinDeltas.getZeroToTen(), 0))
-                .setTenToTwenty(getCorrectCreepsPerTen(xpDiffPerMinDeltas.getTenToTwenty()), matchColocsXpDiffPerMinDeltas(xpDiffPerMinDeltas.getTenToTwenty(), 1))
-                .setTwentyToThirty(getCorrectCreepsPerTen(xpDiffPerMinDeltas.getTwentyToThirty()), matchColocsXpDiffPerMinDeltas(xpDiffPerMinDeltas.getTwentyToThirty(), 2))
-                .setThirtyPlus(getCorrectCreepsPerTen(xpDiffPerMinDeltas.getThirtyToEnd()), matchColocsXpDiffPerMinDeltas(xpDiffPerMinDeltas.getThirtyToEnd(), 3));
+        if (xpDiffPerMinDeltas != null)
+            matchPerTenView.setZeroToTen(getCorrectCreepsPerTen(xpDiffPerMinDeltas.getZeroToTen()), matchColocsXpDiffPerMinDeltas(xpDiffPerMinDeltas.getZeroToTen(), 0))
+                    .setTenToTwenty(getCorrectCreepsPerTen(xpDiffPerMinDeltas.getTenToTwenty()), matchColocsXpDiffPerMinDeltas(xpDiffPerMinDeltas.getTenToTwenty(), 1))
+                    .setTwentyToThirty(getCorrectCreepsPerTen(xpDiffPerMinDeltas.getTwentyToThirty()), matchColocsXpDiffPerMinDeltas(xpDiffPerMinDeltas.getTwentyToThirty(), 2))
+                    .setThirtyPlus(getCorrectCreepsPerTen(xpDiffPerMinDeltas.getThirtyToEnd()), matchColocsXpDiffPerMinDeltas(xpDiffPerMinDeltas.getThirtyToEnd(), 3));
+        else
+            matchPerTenView.setVisibility(View.GONE);
     }
 
     //0-10 == 0, 10-20 == 1, 20-30 == 2, 30+ == 3
