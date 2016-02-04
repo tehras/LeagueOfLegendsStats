@@ -6,6 +6,8 @@
 
     <include layout="@layout/partial_ranked_top_header"/>
 
+    <include layout="@layout/partial_ranked_division"/>
+
     <include layout="@layout/partial_ranked_most_played_champs"/>
 
     <include layout="@layout/partial_ranked_match_history"/>

@@ -66,51 +66,7 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
 
     @SuppressLint("SetTextI18n")
     public void populate(final RankedSummoner summoner, final MainActivity activity, LeagueQueueType queueType, boolean t) {
-        mWins.setText(String.valueOf(summoner.getWins()));
-        mLosses.setText(String.valueOf(summoner.getLosses()));
-
-        double winPercentage = ((double) summoner.getWins() * 100) / (((double) summoner.getLosses() + (double) summoner.getWins()));
-        Utils.assignWinPercentageColor(mWinP, winPercentage, activity);
-        mWinP.setText(NumberUtils.oneDecimalSafely(winPercentage) + "%");
-
-        mPoints.setText(String.valueOf(summoner.getLeaguePoints()) + " Points");
-        mName.setText(summoner.getPlayerOrTeamName());
-        mName.setSelected(true);
-
-        mRank.setText(Html.fromHtml("Rank <b>" + String.valueOf(summoner.getRank()) + "</b>"));
-
-        if (summoner.isFreshBlood())
-            mNewPlayer.setVisibility(View.VISIBLE);
-        else
-            mNewPlayer.setVisibility(View.GONE);
-
-        if (summoner.isVeteran())
-            mVeteran.setVisibility(View.VISIBLE);
-        else
-            mVeteran.setVisibility(View.GONE);
-
-        if (summoner.isHotStreak())
-            mFreshBlood.setVisibility(View.VISIBLE);
-        else
-            mFreshBlood.setVisibility(View.GONE);
-
-        if (t)
-            mDivider.setVisibility(View.GONE);
-
-        if (summoner.getSummoner() != null) {
-            populateImage(summoner.getSummoner(), activity);
-        } else if (queueType == LeagueQueueType.RANKED_SOLO_5x5) {
-            mIcon.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_account_circle_black_48dp, null));
-        } else {
-            mIcon.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_social_group, null));
-        }
-
-        mTotalView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startSummonerLayout(summoner, activity);
-            }
-        });
+        populate(summoner, activity, queueType, t, null);
     }
 
     @SuppressLint("SetTextI18n")
@@ -256,5 +212,58 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
         }
 
         return null;
+    }
+
+    public void populate(final RankedSummoner summoner, final MainActivity activity, LeagueQueueType queueType, boolean t, String summonerId) {
+        mWins.setText(String.valueOf(summoner.getWins()));
+        mLosses.setText(String.valueOf(summoner.getLosses()));
+
+        double winPercentage = ((double) summoner.getWins() * 100) / (((double) summoner.getLosses() + (double) summoner.getWins()));
+        Utils.assignWinPercentageColor(mWinP, winPercentage, activity);
+        mWinP.setText(NumberUtils.oneDecimalSafely(winPercentage) + "%");
+
+        mPoints.setText(String.valueOf(summoner.getLeaguePoints()) + " Points");
+        mName.setText(summoner.getPlayerOrTeamName());
+        mName.setSelected(true);
+
+        if (summonerId != null && summoner.getPlayerOrTeamId().equalsIgnoreCase(summonerId))
+            mName.setTextColor(activity.getResources().getColor(R.color.success_green));
+        else
+            mName.setTextColor(activity.getResources().getColor(R.color.colorPrimary ));
+
+        mRank.setText(Html.fromHtml("Rank <b>" + String.valueOf(summoner.getRank()) + "</b>"));
+
+        if (summoner.isFreshBlood())
+            mNewPlayer.setVisibility(View.VISIBLE);
+        else
+            mNewPlayer.setVisibility(View.GONE);
+
+        if (summoner.isVeteran())
+            mVeteran.setVisibility(View.VISIBLE);
+        else
+            mVeteran.setVisibility(View.GONE);
+
+        if (summoner.isHotStreak())
+            mFreshBlood.setVisibility(View.VISIBLE);
+        else
+            mFreshBlood.setVisibility(View.GONE);
+
+        if (t)
+            mDivider.setVisibility(View.GONE);
+
+        if (summoner.getSummoner() != null) {
+            populateImage(summoner.getSummoner(), activity);
+        } else if (queueType == LeagueQueueType.RANKED_SOLO_5x5) {
+            mIcon.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_account_circle_black_48dp, null));
+        } else {
+            mIcon.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_social_group, null));
+        }
+
+        mTotalView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startSummonerLayout(summoner, activity);
+            }
+        });
     }
 }

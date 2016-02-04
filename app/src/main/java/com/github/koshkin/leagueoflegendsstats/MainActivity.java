@@ -26,14 +26,19 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.github.koshkin.leagueoflegendsstats.fragments.favorite.FavoritesFragment;
 import com.github.koshkin.leagueoflegendsstats.fragments.home.HomeFragment;
 import com.github.koshkin.leagueoflegendsstats.fragments.settings.SettingsFragment;
 import com.github.koshkin.leagueoflegendsstats.fragments.summoner.SummonerStatsFragment;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummonerComparator;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Summoner;
 import com.github.koshkin.leagueoflegendsstats.networking.Manager;
+import com.github.koshkin.leagueoflegendsstats.sqlite.FavoritesSqLiteHelper;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingActionButtonViewHelper;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingFavoriteActionButtonHelper;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.LoaderHelper;
@@ -43,6 +48,8 @@ import com.github.koshkin.leagueoflegendsstats.views.RoundedImageView;
 import com.github.koshkin.leagueoflegendsstats.views.ToolbarSearchView;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -410,11 +417,46 @@ public class MainActivity extends AppCompatActivity
             startFragment(HomeFragment.class);
         } else if (id == R.id.nav_settings) {
             startFragment(SettingsFragment.class);
+        } else if (id == R.id.nav_my_summoner) {
+            startMySummoner();
+        } else if (id == R.id.nav_my_favorites) {
+            startFavorites();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void startMySummoner() {
+        Summoner summoner = StaticDataHolder.getInstance(this).getMySummoner();
+        if (summoner != null) {
+            startFragment(SummonerStatsFragment.getInstance(summoner.getSummonerInfo().getName(), summoner.getSummonerId()));
+        } else {
+            Toast.makeText(MainActivity.this, "Go to settings to add a summoner", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void startFavorites() {
+        new LoaderHelper() {
+            public ArrayList<SimpleSummoner> mSimpleSummoners;
+
+            @Override
+            protected void postExecute() {
+                if (mSimpleSummoners != null && mSimpleSummoners.size() > 0) {
+                    Collections.sort(mSimpleSummoners, new SimpleSummonerComparator().new DateAddedComparator());
+                    startFragment(FavoritesFragment.getInstance(mSimpleSummoners));
+                } else {
+                    Toast.makeText(MainActivity.this, "No Favorites Found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            protected void runInBackground() {
+                mSimpleSummoners = new ArrayList<>();
+                mSimpleSummoners = (ArrayList<SimpleSummoner>) FavoritesSqLiteHelper.getAllFavorites();
+            }
+        }.execute();
     }
 
     public Toolbar getToolbar() {

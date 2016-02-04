@@ -18,14 +18,18 @@ import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.holders.ChampionHolder;
 import com.github.koshkin.leagueoflegendsstats.holders.GameHolder;
+import com.github.koshkin.leagueoflegendsstats.holders.RankedDivisionHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Champion;
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
 import com.github.koshkin.leagueoflegendsstats.models.Game;
+import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
+import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
 import com.github.koshkin.leagueoflegendsstats.models.RecentGames;
 import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Stats;
+import com.github.koshkin.leagueoflegendsstats.models.SummonerLeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.networking.Response;
 import com.github.koshkin.leagueoflegendsstats.utils.NumberUtils;
@@ -57,6 +61,7 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
     private RecentGames mRecentGames;
     private FileHandler mProfFileHandler;
     private int mSwipeToRefresh;
+    private View mDivisionLayout;
 
     public static SummonerRankedStatsFragment getInstance(int summonerIconId, String summonerId, String summonerName, String wins, String losses) {
         Bundle args = new Bundle();
@@ -99,9 +104,11 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
 
         //Header Layout - Card1
         initializeHeaderLayout(rootView);
-        //Champ Layout - Card2
+        //Ranked Layout - Card2
+        initializeRankedLayout(rootView);
+        //Champ Layout - Card3
         initializeTopChampsLayout(rootView);
-        //History Layout - Card3
+        //History Layout - Card4
         initializeMatchHistoryLayout(rootView);
 
         if (mRankedStats == null)
@@ -111,11 +118,16 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
             populateTopChampionsLayout();
         }
 
+        if (mLeagueStandings != null)
+            populateLeagueLayout();
+
         if (mRecentGames != null)
             populateMatchHistory();
 
         return rootView;
     }
+
+    private LeagueStandings mLeagueStandings;
 
     /**
      * layout for the bottom match history layout
@@ -140,20 +152,23 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
     }
 
     private TextView mRankedKills, mRankedDeaths, mRankedAssists, mRankedKDA, mRankedSummonerName, mRankedWins, mRankedLosses;
-    private ImageView mRankedIcon; //TODO later
+    private ImageView mRankedIcon;
 
     private void initializeHeaderLayout(View rootView) {
         mRankedKills = (TextView) rootView.findViewById(R.id.ranked_kills);
         mRankedDeaths = (TextView) rootView.findViewById(R.id.ranked_deaths);
         mRankedAssists = (TextView) rootView.findViewById(R.id.ranked_assists);
         mRankedKDA = (TextView) rootView.findViewById(R.id.ranked_kda);
-        mRankedWins = (TextView) rootView.findViewById(R.id.ranked_wins);
-        mRankedLosses = (TextView) rootView.findViewById(R.id.ranked_losses);
         mRankedSummonerName = (TextView) rootView.findViewById(R.id.ranked_summoner_name);
 
         mRankedIcon = (ImageView) rootView.findViewById(R.id.ranked_logo);
 
         mRankedHeader = rootView.findViewById(R.id.ranked_header);
+    }
+
+    private void initializeRankedLayout(View rootView) {
+        mDivisionLayout = rootView.findViewById(R.id.ranked_division_layout);
+        mDivisionLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -176,6 +191,7 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
     private void executeRemainingCalls() {
         executeGetRankedStats(this, mSummonerId);
         executeGetRankeGameHistory(this, mSummonerId);
+        executeGetLeagueBySummonerIds(this, mSummonerId);
     }
 
     private int resultsReturned = 0;
@@ -226,11 +242,45 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
                     populateMatchHistoryError();
                 }
                 break;
+            case GET_LEAGUE_BY_SUMMONERS:
+                resultsReturned++;
+                mSwipeToRefresh--;
+                if (response.getStatus() == Response.Status.SUCCESS) {
+                    mLeagueStandings = getLeagueStanding((SummonerLeagueStandings) response.getReturnedObject());
+
+                    if (mLeagueStandings != null)
+                        populateLeagueLayout();
+                }
+                break;
         }
         if (resultsReturned == 2)
             hideLoading();
         if (mSwipeToRefresh <= 0)
             stopRefreshing();
+    }
+
+    private LeagueStandings getLeagueStanding(SummonerLeagueStandings leagueStandings) {
+        if (leagueStandings == null || leagueStandings.getLeagueStandingsHashMap() == null || leagueStandings.getLeagueStandingsHashMap().size() == 0)
+            return null;
+
+        for (String key : leagueStandings.getLeagueStandingsHashMap().keySet()) {
+            if (key.equalsIgnoreCase(mSummonerId)) {
+                ArrayList<LeagueStandings> array = leagueStandings.getLeagueStandingsHashMap().get(key);
+                for (LeagueStandings standings : array) {
+                    if (standings.getQueueType() == LeagueQueueType.RANKED_SOLO_5x5)
+                        return standings;
+                }
+                break;
+            }
+        }
+
+        return null;
+    }
+
+    private void populateLeagueLayout() {
+        mDivisionLayout.setVisibility(View.VISIBLE);
+
+        new RankedDivisionHolder(mDivisionLayout).populate(getActivity(), mLeagueStandings, mSummonerId);
     }
 
     private void populateMatchHistory() {
@@ -330,9 +380,6 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         mRankedAssists.setText(NumberUtils.twoDecimalsSafely(mRankedStats.getAssists()));
         mRankedKDA.setText(NumberUtils.twoDecimalsSafely(mRankedStats.getKDA()));
 
-        mRankedWins.setText(mWins + "W");
-        mRankedLosses.setText(mLosses + "L");
-
         mRankedKDA.setTextColor(getKDAColor(mRankedStats.getKDA(), getActivity()));
 
         mRankedSummonerName.setText(mSummonerName);
@@ -406,7 +453,7 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
 
     @Override
     public void onRefresh() {
-        mSwipeToRefresh = 2;
+        mSwipeToRefresh = 3;
         executeRemainingCalls();
     }
 }

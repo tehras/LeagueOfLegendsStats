@@ -274,11 +274,15 @@ public class StaticDataHolder {
         }
         Drawable drawable = null;
         if (bm != null) {
-            Bitmap sprite = Bitmap.createBitmap(bm, image.getX(), image.getY(), image.getW(), image.getH());
-            sprite = Bitmap.createScaledBitmap(sprite, width, height, false);
+            try {
+                Bitmap sprite = Bitmap.createBitmap(bm, image.getX(), image.getY(), image.getW(), image.getH());
+                sprite = Bitmap.createScaledBitmap(sprite, width, height, false);
 
-            drawable = new BitmapDrawable(mContext.getResources(), sprite);
-            bm.recycle();
+                drawable = new BitmapDrawable(mContext.getResources(), sprite);
+                bm.recycle();
+            } catch (IllegalArgumentException e) {
+                //leave blank
+            }
         }
 
         if (mLoadedImages == null)

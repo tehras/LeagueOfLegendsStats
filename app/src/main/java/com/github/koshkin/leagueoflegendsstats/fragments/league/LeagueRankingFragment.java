@@ -41,11 +41,12 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
     private LeagueRankingAdapter mAdapter;
     private LeagueQueueType mSelectedQueue;
     private Tier mSelectedTier;
+    private String mSummonerId;
 
     @Override
     public RecyclerView.Adapter getAdapter() {
         if (mAdapter == null)
-            mAdapter = new LeagueRankingAdapter(mLeagueStandings, getActivity(), mSelectedQueue) {
+            mAdapter = new LeagueRankingAdapter(mLeagueStandings, getActivity(), mSelectedQueue, mSummonerId) {
                 @Override
                 public void getMoreItems(ArrayList<RankedSummoner> arrayToExecute, boolean isFirst) {
                     if (isFirst)
@@ -61,7 +62,8 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
     @Override
     public void onResume() {
         super.onResume();
-        addOnSwipeToRefreshListener(this);
+        if (mSummonerId == null)
+            addOnSwipeToRefreshListener(this);
     }
 
     @Override
@@ -73,6 +75,8 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        mSummonerId = getArguments().getString(ARG_SUMMONER_ID, null);
 
         mSelectedQueue = LeagueQueueType.RANKED_SOLO_5x5;
         mSelectedTier = Tier.CHALLENGER;
@@ -86,7 +90,8 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.league_standings, menu);
+        if (mSummonerId == null)
+            inflater.inflate(R.menu.league_standings, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -207,8 +212,19 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
     }
 
     public static LeagueRankingFragment getInstance(LeagueStandings leagueStandings) {
+        return getInstance(leagueStandings, null);
+    }
+
+    public static LeagueRankingFragment getInstance(LeagueStandings leagueStandings, String summonerId) {
         LeagueRankingFragment fragment = new LeagueRankingFragment();
         fragment.setLeagueStandings(leagueStandings);
+
+        if (summonerId != null) {
+            Bundle args = new Bundle();
+            args.putString(ARG_SUMMONER_ID, summonerId);
+
+            fragment.setArguments(args);
+        }
 
         return fragment;
     }
