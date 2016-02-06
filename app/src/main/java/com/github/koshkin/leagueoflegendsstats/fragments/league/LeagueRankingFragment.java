@@ -76,7 +76,8 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        mSummonerId = getArguments().getString(ARG_SUMMONER_ID, null);
+        if (getArguments() != null)
+            mSummonerId = getArguments().getString(ARG_SUMMONER_ID, null);
 
         mSelectedQueue = LeagueQueueType.RANKED_SOLO_5x5;
         mSelectedTier = Tier.CHALLENGER;

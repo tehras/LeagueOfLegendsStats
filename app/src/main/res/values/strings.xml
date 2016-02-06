@@ -101,4 +101,14 @@
     <string name="fragment_title_settings">Settings</string>
     <string name="fragment_title_match_history">Recent Matches</string>
     <string name="division_rank_title">Division</string>
+
+    <string name="lol_agreement">LoL Stats isn\'t endorsed by Riot Games and doesn\'t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</string>
+    <string name="lol_agreement_full">For full terms please visit <a href="https://developer.riotgames.com/terms#statement">League of Legends Term</a></string>
+    <string name="about_special_thanks">Special Thanks to the following libraries that are used in this app:</string>
+    <string name="about_ok_http">OkHttp</string>
+    <string name="about_gson">Gson</string>
+    <string name="about_material_ripple">com.balysv:material-ripple</string>
+    <string name="about_ok_sugar">Sugar</string>
+    <string name="apache_agreenment">Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at     http://www.apache.org/licenses/LICENSE-2.0  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</string>
+    <string name="about_about_title">About This App</string>
 </resources>

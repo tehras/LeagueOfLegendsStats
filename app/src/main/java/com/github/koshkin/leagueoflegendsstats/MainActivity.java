@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.github.koshkin.leagueoflegendsstats.fragments.about.AboutFragment;
 import com.github.koshkin.leagueoflegendsstats.fragments.favorite.FavoritesFragment;
 import com.github.koshkin.leagueoflegendsstats.fragments.home.HomeFragment;
 import com.github.koshkin.leagueoflegendsstats.fragments.settings.SettingsFragment;
@@ -421,6 +422,8 @@ public class MainActivity extends AppCompatActivity
             startMySummoner();
         } else if (id == R.id.nav_my_favorites) {
             startFavorites();
+        } else if (id == R.id.nav_about) {
+            startFragment(AboutFragment.class);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
