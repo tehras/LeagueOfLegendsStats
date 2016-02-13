@@ -37,7 +37,7 @@ public class SettingsFragment extends BaseFragment implements Request.RequestCal
     private EditText editText;
 
     @Override
-    protected String getToolbarTitle() {
+    public String getToolbarTitle() {
         return getActivity().getResources().getString(R.string.fragment_title_settings);
     }
 

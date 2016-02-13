@@ -38,7 +38,7 @@ public class MatchFragment extends BaseFragment implements Request.RequestCallba
     }
 
     @Override
-    protected String getToolbarTitle() {
+    public String getToolbarTitle() {
         return getActivity().getResources().getString(R.string.fragment_title_match_stats);
     }
 

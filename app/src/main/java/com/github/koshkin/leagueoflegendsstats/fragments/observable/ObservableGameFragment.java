@@ -2,6 +2,7 @@ package com.github.koshkin.leagueoflegendsstats.fragments.observable;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +24,11 @@ import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
  * <p/>
  * Observable Game Fragment
  */
-public class ObservableGameFragment extends BaseFragment implements Request.RequestCallback {
+public class ObservableGameFragment extends BaseFragment implements Request.RequestCallback, SwipeRefreshLayout.OnRefreshListener {
     private View mTopLayout, mMiddleLayout;
     private SummonerLeagueStandings mSummonerLeagues;
     private TopLayoutViewHolder mTopLayoutHolder;
+    private View mObservableCheckLayout;
 
     /**
      * You can pass either
@@ -63,8 +65,10 @@ public class ObservableGameFragment extends BaseFragment implements Request.Requ
     }
 
     @Override
-    protected String getToolbarTitle() {
-        return getActivity().getResources().getString(R.string.fragment_title_observable_game);
+    public String getToolbarTitle() {
+        if (getParentFragment() == null || !(getParentFragment() instanceof BaseFragment))
+            return getActivity().getResources().getString(R.string.fragment_title_observable_game);
+        return ((BaseFragment) getParentFragment()).getToolbarTitle();
     }
 
     private void executeObservableGame() {
@@ -80,12 +84,22 @@ public class ObservableGameFragment extends BaseFragment implements Request.Requ
         initializeTopView(rootView);
         initializeMainView(rootView);
 
+        initializeErrorScenario(rootView);
+
         if (mObservableGame != null)
             populateObservableGameLayout();
-        else
-            showLoading();
+        else {
+            mTopLayout.setVisibility(View.GONE);
+            mMiddleLayout.setVisibility(View.GONE);
+            showNoGamesFound();
+        }
 
         return rootView;
+    }
+
+
+    private void initializeErrorScenario(View rootView) {
+        mObservableCheckLayout = rootView.findViewById(R.id.observable_check_for_game_button);
     }
 
     private void initializeMainView(View rootView) {
@@ -106,13 +120,15 @@ public class ObservableGameFragment extends BaseFragment implements Request.Requ
                         mSummonerId = summoner.getSummonerId();
                         executeObservableGame();
                     } else {
-                        showError();
+                        showNoGamesFound();
                     }
                 } else {
-                    showError();
+                    showNoGamesFound();
                 }
                 break;
             case GET_OBSERVABLE_GAME:
+                stopRefreshing();
+
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     mObservableGame = (ObservableGame) response.getReturnedObject();
                     String participantIds = getSummonerIds(mObservableGame);
@@ -121,7 +137,7 @@ public class ObservableGameFragment extends BaseFragment implements Request.Requ
                     else
                         populateObservableGameLayout();
                 } else {
-                    showError();
+                    showNoGamesFound();
                 }
                 break;
             case GET_LEAGUE_BY_SUMMONERS:
@@ -131,6 +147,14 @@ public class ObservableGameFragment extends BaseFragment implements Request.Requ
                 populateObservableGameLayout();
                 break;
         }
+    }
+
+    private void showNoGamesFound() {
+        hideLoading();
+        mTopLayout.setVisibility(View.GONE);
+        mMiddleLayout.setVisibility(View.GONE);
+
+        mObservableCheckLayout.setVisibility(View.VISIBLE);
     }
 
     private String getSummonerIds(ObservableGame observableGame) {
@@ -152,15 +176,13 @@ public class ObservableGameFragment extends BaseFragment implements Request.Requ
         hideLoading();
         if (mTopLayoutHolder == null)
             mTopLayoutHolder = new TopLayoutViewHolder();
+
+        mObservableCheckLayout.setVisibility(View.GONE);
+        mTopLayout.setVisibility(View.VISIBLE);
+        mMiddleLayout.setVisibility(View.VISIBLE);
+
         mTopLayoutHolder.init(mTopLayout).populate(mObservableGame, getActivity());
         new MainLayoutViewHolder(mMiddleLayout).setSummonerId(mSummonerId).populate(mObservableGame, mSummonerLeagues, getActivity());
-    }
-
-    private void showError() {
-        hideLoading();
-        mTopLayout.setVisibility(View.GONE);
-        mMiddleLayout.setVisibility(View.GONE);
-        initializeErrorLayout("Sorry", "Game data could not be retrieved");
     }
 
     @Override
@@ -169,5 +191,10 @@ public class ObservableGameFragment extends BaseFragment implements Request.Requ
 
         if (mTopLayoutHolder != null)
             mTopLayoutHolder.stopTimer();
+    }
+
+    @Override
+    public void onRefresh() {
+        executeGetObservableGame(ObservableGameFragment.this, mSummonerId);
     }
 }

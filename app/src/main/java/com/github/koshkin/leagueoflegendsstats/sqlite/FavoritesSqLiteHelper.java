@@ -72,6 +72,18 @@ public class FavoritesSqLiteHelper {
         return simpleSummoner;
     }
 
+    //Update favorites if exists already
+    public static void updateFavoriteIfAlreadyExists(SimpleSummoner simpleSummoner) {
+        if (simpleSummoner == null)
+            return;
+
+        SimpleSummoner fav = getFavorite(simpleSummoner.getName());
+        if (fav != null) {
+            fav.updateFavorite(simpleSummoner);
+            fav.save();
+        }
+    }
+
     //Update SimpleSummoner
     public static SimpleSummoner updateFavorite(SimpleSummoner simpleSummoner) {
         if (simpleSummoner == null)

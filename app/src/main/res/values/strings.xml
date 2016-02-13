@@ -53,7 +53,7 @@
     <string name="menu_sort_by_games">Games</string>
     <string name="no_favorite_players_added_yet">No Favorite players chosen yet</string>
     <string name="favorite_payer_title">Favorite Summoners</string>
-    <string name="view_all_favorites">View All Favorite Champions</string>
+    <string name="view_all_favorites">View All Favorite Summoners</string>
     <string name="menu_sort_by_alphabetical">Alphabetical</string>
     <string name="menu_sort_by_date_added">Date Updated</string>
     <string name="featured_games_error">No Featured Games Not Found</string>
@@ -62,7 +62,7 @@
     <string name="observable_game_pick">Picks</string>
     <string name="observable_game_bans">Bans</string>
     <string name="observable_game_blue_team">Blue Team</string>
-    <string name="observable_game_red_team">Red Tam</string>
+    <string name="observable_game_red_team">Red Team</string>
     <string name="settings_main_header">General Settings</string>
     <string name="settings_champion_header">My Summoner Settings</string>
     <string name="summoner_name">Summoner Name</string>
@@ -87,8 +87,7 @@
     <string name="average">Average</string>
     <string name="good">Good</string>
     <string name="error_loading_players">Error loading players. Please try another game.</string>
-    <string name="observable_check_for_game_text">To view if the summoner is currently in a game please press the button on the right</string>
-    <string name="observable_button_retry">Retry</string>
+    <string name="observable_check_for_game_text">To view if the summoner is currently in a game please swipe to refresh</string>
     <string name="observable_button_check">Check For Game</string>
     <string name="observable_game_title_summoner_stats">Current Game</string>
     <string name="fragment_title_summoner_stats">Summoner Stats</string>

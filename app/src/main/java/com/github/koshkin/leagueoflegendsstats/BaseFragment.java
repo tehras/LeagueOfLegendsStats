@@ -90,7 +90,8 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
         super.onPause();
         if (getActivity() != null && getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).scrollToTop();
-            ((MainActivity) getActivity()).removeSwipeToRefreshListener();
+            if (getParentFragment() == null || !(getParentFragment() instanceof BaseFragment))
+                ((MainActivity) getActivity()).removeSwipeToRefreshListener();
         }
     }
 
@@ -115,11 +116,13 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
     }
 
     protected String getSummonerName() {
+        if (getParentFragment() != null && getParentFragment() instanceof BaseFragment)
+            return ((BaseFragment) getParentFragment()).getSummonerName();
         return null;
     }
 
     protected boolean showFab() {
-        return false;
+        return getParentFragment() != null && getParentFragment() instanceof BaseFragment && ((BaseFragment) getParentFragment()).showFab();
     }
 
     protected static final String ARG_SUMMONER_NAME = "summoner_name";
@@ -128,8 +131,6 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
     protected static final String ARG_MATCH_TIME = "match_time";
     protected static final String ARG_MATCH_LENGTH = "match_length";
     protected static final String ARG_SUMMONER_ICON_ID = "summoner_icon_id";
-    protected static final String ARG_SUMMONER_WINS = "ranked_wins";
-    protected static final String ARG_SUMMONER_LOSSES = "ranked_losses";
 
     protected void executeGetSummoner(Request.RequestCallback requestCallback, String summonerName) {
         new Executor(new Request(getActivity(), Request.RequestType.GET, new Summoner(summonerName.toLowerCase()), requestCallback, URIHelper.GET_SUMMONER, summonerName), getActivity()).execute();
@@ -235,6 +236,8 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
 
     @Override
     public SimpleSummoner getFavorite() {
+        if (getParentFragment() != null && getParentFragment() instanceof BaseFragment)
+            return ((BaseFragment) getParentFragment()).getFavorite();
         return null;
     }
 
@@ -274,7 +277,10 @@ public class BaseFragment extends android.support.v4.app.Fragment implements Flo
      *
      * @return toolbar name
      */
-    protected String getToolbarTitle() {
-        return getActivity().getResources().getString(R.string.app_name);
+    public String getToolbarTitle() {
+        if (getParentFragment() != null && getParentFragment() instanceof BaseFragment)
+            return ((BaseFragment) getParentFragment()).getToolbarTitle();
+        else
+            return getActivity().getResources().getString(R.string.app_name);
     }
 }

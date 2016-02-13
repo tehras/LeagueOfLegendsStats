@@ -85,7 +85,7 @@ public class LeagueRankingFragment extends BaseSimpleRecyclerViewFragment implem
     }
 
     @Override
-    protected String getToolbarTitle() {
+    public String getToolbarTitle() {
         return getActivity().getResources().getString(R.string.fragment_title_highest_ranked);
     }
 

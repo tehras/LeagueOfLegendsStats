@@ -189,6 +189,9 @@ public class StaticDataHolder {
         if (tier == null)
             return null;
 
+        if (tier == Tier.CHALLENGER || tier == Tier.DIAMOND)
+            division = "";
+
         int size = mContext.getResources().getDimensionPixelSize(R.dimen.profile_icon_size_xsmall);
         String fileName = tier.getName().toLowerCase() + (NullChecker.isNullOrEmpty(division) ? "" : "_") + division.toLowerCase() + ".png";
         return loadFromAssets(fileName, size, size);

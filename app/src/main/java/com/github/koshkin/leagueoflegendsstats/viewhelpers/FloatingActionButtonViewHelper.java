@@ -8,7 +8,7 @@ import android.view.animation.AnimationUtils;
 
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
-import com.github.koshkin.leagueoflegendsstats.fragments.summoner.SummonerStatsFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.stats.StatsTabbedFragment;
 import com.github.koshkin.leagueoflegendsstats.models.AutoCompleteAdapterHolder;
 import com.github.koshkin.leagueoflegendsstats.models.RecentSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
@@ -78,7 +78,7 @@ public class FloatingActionButtonViewHelper {
                 isSearchIcon = true;
                 closeSearch(fab, tsv);
 
-                mMainActivity.startFragment(SummonerStatsFragment.getInstance(searchName, null));
+                mMainActivity.startFragment(StatsTabbedFragment.getInstance(searchName, null));
             }
         });
         updateSearchSuggestions();

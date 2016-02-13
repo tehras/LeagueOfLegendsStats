@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
+import com.github.koshkin.leagueoflegendsstats.fragments.stats.StatsTabbedFragment;
 import com.github.koshkin.leagueoflegendsstats.fragments.summoner.SummonerStatsFragment;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
@@ -146,7 +147,7 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
             return "Last Updated Yesterday";
         }
 
-        return "Last Updated On :" + getDateOther(c);
+        return "Last Updated On: " + getDateOther(c);
     }
 
     private String getDateOther(Calendar c) {
@@ -158,13 +159,13 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
     }
 
     private void startSummonerLayout(RankedSummoner summoner, MainActivity activity) {
-        SummonerStatsFragment summonerStatsFragment = SummonerStatsFragment.getInstance(summoner.getPlayerOrTeamName(), summoner.getPlayerOrTeamId());
+        StatsTabbedFragment summonerStatsFragment = StatsTabbedFragment.getInstance(summoner.getPlayerOrTeamName(), summoner.getPlayerOrTeamId());
         summonerStatsFragment.setSummoner(summoner.getSummoner());
         activity.startFragment(summonerStatsFragment);
     }
 
     private void startSummonerLayout(SimpleSummoner simpleSummoner, MainActivity activity) {
-        activity.startFragment(SummonerStatsFragment.getInstance(simpleSummoner.getName(), simpleSummoner.getSummonerId()));
+        activity.startFragment(StatsTabbedFragment.getInstance(simpleSummoner.getName(), simpleSummoner.getSummonerId()));
     }
 
     public void updateImage(LeagueStandings leagueStandings, Context context) {
@@ -229,7 +230,7 @@ public class LeagueChampionHolder extends RecyclerView.ViewHolder {
         if (summonerId != null && summoner.getPlayerOrTeamId().equalsIgnoreCase(summonerId))
             mName.setTextColor(activity.getResources().getColor(R.color.success_green));
         else
-            mName.setTextColor(activity.getResources().getColor(R.color.colorPrimary ));
+            mName.setTextColor(activity.getResources().getColor(R.color.colorPrimary));
 
         mRank.setText(Html.fromHtml("Rank <b>" + String.valueOf(summoner.getRank()) + "</b>"));
 

@@ -26,7 +26,6 @@ import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
 import com.github.koshkin.leagueoflegendsstats.models.RecentGames;
-import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Stats;
 import com.github.koshkin.leagueoflegendsstats.models.SummonerLeagueStandings;
@@ -47,8 +46,6 @@ import static com.github.koshkin.leagueoflegendsstats.utils.Utils.getKDAColor;
  */
 public class SummonerRankedStatsFragment extends BaseFragment implements Request.RequestCallback, SwipeRefreshLayout.OnRefreshListener {
 
-    private String mWins;
-    private String mLosses;
     private PlayerRanked mRankedStats;
     private String mSummonerName, mSummonerId;
     private int mSummonerIconId;
@@ -63,23 +60,16 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
     private int mSwipeToRefresh;
     private View mDivisionLayout;
 
-    public static SummonerRankedStatsFragment getInstance(int summonerIconId, String summonerId, String summonerName, String wins, String losses) {
+    public static SummonerRankedStatsFragment getInstance(int summonerIconId, String summonerId, String summonerName) {
         Bundle args = new Bundle();
         args.putInt(ARG_SUMMONER_ICON_ID, summonerIconId);
         args.putString(ARG_SUMMONER_ID, summonerId);
         args.putString(ARG_SUMMONER_NAME, summonerName);
-        args.putString(ARG_SUMMONER_WINS, wins);
-        args.putString(ARG_SUMMONER_LOSSES, losses);
 
         SummonerRankedStatsFragment fragment = new SummonerRankedStatsFragment();
         fragment.setArguments(args);
 
         return fragment;
-    }
-
-    @Override
-    protected String getToolbarTitle() {
-        return getActivity().getResources().getString(R.string.fragment_title_ranked_stats);
     }
 
     @Override
@@ -90,11 +80,6 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
     @Override
     public String getSummonerName() {
         return mSummonerName;
-    }
-
-    @Override
-    public SimpleSummoner getFavorite() {
-        return new SimpleSummoner(mRankedStats, mSummonerId, mSummonerName, mSummonerIconId);
     }
 
     @Nullable
@@ -151,7 +136,7 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         mViewAllChamps = (MaterialRippleLayout) rootView.findViewById(R.id.champion_view_full_list);
     }
 
-    private TextView mRankedKills, mRankedDeaths, mRankedAssists, mRankedKDA, mRankedSummonerName, mRankedWins, mRankedLosses;
+    private TextView mRankedKills, mRankedDeaths, mRankedAssists, mRankedKDA, mRankedSummonerName;
     private ImageView mRankedIcon;
 
     private void initializeHeaderLayout(View rootView) {
@@ -177,8 +162,6 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
 
         mSummonerId = getArguments().getString(ARG_SUMMONER_ID);
         mSummonerName = getArguments().getString(ARG_SUMMONER_NAME);
-        mWins = getArguments().getString(ARG_SUMMONER_WINS);
-        mLosses = getArguments().getString(ARG_SUMMONER_LOSSES);
         mSummonerIconId = getArguments().getInt(ARG_SUMMONER_ICON_ID);
 
         String name = StaticDataHolder.getInstance(getActivity()).getProfileIconName(mSummonerIconId);
@@ -215,15 +198,9 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
                     if (rankedStats != null) {
                         mRankedStats = rankedStats;
 
-                        addOnSwipeToRefreshListener(this);
-
                         populateRankedHeader();
                         populateTopChampionsLayout();
-                    } else {
-                        generalException();
                     }
-                } else {
-                    generalException();
                 }
                 break;
             case GET_SUMMONER_RANKED_GAMES:
