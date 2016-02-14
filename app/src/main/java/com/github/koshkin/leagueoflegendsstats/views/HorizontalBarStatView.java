@@ -12,6 +12,7 @@ import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.utils.MatchUtils;
 import com.github.koshkin.leagueoflegendsstats.utils.NullChecker;
 import com.github.koshkin.leagueoflegendsstats.utils.NumberUtils;
+import com.github.koshkin.leagueoflegendsstats.viewhelpers.LoaderHelper;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -72,62 +73,78 @@ public class HorizontalBarStatView extends LinearLayout {
         initChart(mChart);
     }
 
-    public void setData(ArrayList<Float> allValues, float thisValue) {
-        float average;
-        float total = 0f;
-        float highest = 0f;
+    public void setData(final ArrayList<Float> allValues, final float thisValue) {
+        new LoaderHelper() {
+            private BarData mBarData;
 
-        int rank = 1;
-
-        for (Float f : allValues) {
-            if (f > highest)
-                highest = f;
-
-            if (f > thisValue)
-                rank++;
-
-            total = total + f;
-        }
-
-        average = total / allValues.size();
-
-
-        ArrayList<String> labels = new ArrayList<>();
-
-        List<BarEntry> barEntry1 = new ArrayList<>();
-        barEntry1.add(new BarEntry(average, 0));
-        barEntry1.add(new BarEntry(highest, 1));
-        barEntry1.add(new BarEntry(thisValue, 2));
-        BarDataSet barDataSet1 = new BarDataSet(barEntry1, "Highest");
-        barDataSet1.setValueFormatter(new ValueFormatter() {
             @Override
-            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                String output;
-                if (value >= 1000) {
-                    output = NumberUtils.oneDecimalSafely(value / 1000) + "k";
-                } else {
-                    output = String.valueOf(NumberUtils.oneDecimalSafely(value));
+            protected void postExecute() {
+                if (mBarData != null) {
+                    mChart.setData(mBarData);
+                    mChart.animateY(350);
+                    mChart.invalidate();
                 }
-                return output;
             }
-        });
-        barDataSet1.setColor(getResources().getColor(R.color.great));
-        barDataSet1.setValueTextSize(10f);
-        barDataSet1.setValueTextColor(getResources().getColor(R.color.elevation_background));
-        barDataSet1.setAxisDependency(YAxis.AxisDependency.LEFT);
 
-        //Labels
-        labels.add("Average");
-        labels.add("Highest");
-        labels.add("Player(" + getRankText(rank) + "/" + allValues.size() + ")");
+            @Override
+            protected void runInBackground() {
+                float average;
+                float total = 0f;
+                float highest = 0f;
 
-        barDataSet1.setColors(new int[]{R.color.average, R.color.great, MatchUtils.getColor(rank, allValues.size()).getColor()}, getContext());
+                int rank = 1;
 
-        ArrayList<BarDataSet> dataSets = new ArrayList<>();
-        dataSets.add(barDataSet1);
+                for (Float f : allValues) {
+                    if (f > highest)
+                        highest = f;
 
-        mChart.setData(new BarData(labels, dataSets));
-        mChart.invalidate();
+                    if (f > thisValue)
+                        rank++;
+
+                    total = total + f;
+                }
+
+                average = total / allValues.size();
+
+
+                ArrayList<String> labels = new ArrayList<>();
+
+                List<BarEntry> barEntry1 = new ArrayList<>();
+                barEntry1.add(new BarEntry(average, 0));
+                barEntry1.add(new BarEntry(highest, 1));
+                barEntry1.add(new BarEntry(thisValue, 2));
+                BarDataSet barDataSet1 = new BarDataSet(barEntry1, "Highest");
+                barDataSet1.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                        String output;
+                        if (value >= 1000) {
+                            output = NumberUtils.oneDecimalSafely(value / 1000) + "k";
+                        } else {
+                            output = String.valueOf(NumberUtils.oneDecimalSafely(value));
+                        }
+                        return output;
+                    }
+                });
+                barDataSet1.setColor(getResources().getColor(R.color.great));
+                barDataSet1.setValueTextSize(10f);
+                barDataSet1.setValueTextColor(getResources().getColor(R.color.elevation_background));
+                barDataSet1.setAxisDependency(YAxis.AxisDependency.LEFT);
+
+                //Labels
+                labels.add("Average");
+                labels.add("Highest");
+                labels.add("Player(" + getRankText(rank) + "/" + allValues.size() + ")");
+
+                barDataSet1.setColors(new int[]{R.color.average, R.color.great, MatchUtils.getColor(rank, allValues.size()).getColor()}, getContext());
+
+                ArrayList<BarDataSet> dataSets = new ArrayList<>();
+                dataSets.add(barDataSet1);
+
+                mBarData = new BarData(labels, dataSets);
+            }
+        }.execute();
+
     }
 
     private String getRankText(int rank) {
