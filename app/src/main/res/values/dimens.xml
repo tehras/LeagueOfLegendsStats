@@ -45,7 +45,7 @@
     <dimen name="text_size_small">13sp</dimen>
     <dimen name="background_lane_small">2dp</dimen>
     <dimen name="background_lane_radius_small">2dp</dimen>
-    <dimen name="small_corner">4dp</dimen>
+    <dimen name="small_corner">2dp</dimen>
     <dimen name="activity_horizontal_margin_negating">-16dp</dimen>
     <dimen name="indicator_height">4dp</dimen>
     <dimen name="bar_chart_height">75dp</dimen>
