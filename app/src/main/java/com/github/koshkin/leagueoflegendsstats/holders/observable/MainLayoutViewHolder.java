@@ -277,6 +277,7 @@ public class MainLayoutViewHolder {
 
         ArrayList<CharSequence> runes = getRunes(participant, activity);
 
+        runeContent.removeAllViews(); //reset
         for (CharSequence rune : runes) {
             runeContent.addView(getRuneView(rune, activity));
         }
