@@ -12,95 +12,42 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin_small"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/summoner_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tehras"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"/>
 
     </LinearLayout>
 
-    <LinearLayout
+    <include
+        layout="@layout/partial_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <com.github.koshkin.leagueoflegendsstats.views.HorizontalBarStatView
+        android:id="@+id/kda_chart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
+        android:layout_marginTop="@dimen/activity_vertical_margin_small"
+        match_per_ten:barChartTitle="KDA"/>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="30"
-            android:orientation="vertical">
+    <com.github.koshkin.leagueoflegendsstats.views.HorizontalBarStatView
+        android:id="@+id/damage_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        match_per_ten:barChartTitle="Damage"/>
 
-            <include
-                android:id="@+id/icon_set_layout"
-                layout="@layout/partial_match_individual_icons_layout"/>
-
-            <TextView
-                android:id="@+id/champion_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lines="1"
-                android:text="Wu Kong"
-                android:textSize="@dimen/text_size_medium_small"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="30">
-
-            <include layout="@layout/partial_match_individual_kda_layout"/>
-
-        </LinearLayout>
-
-        <!-- Right -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="30"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/game_champ_level"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Level 18"
-                android:textSize="@dimen/text_size_small"/>
-
-            <TextView
-                android:id="@+id/game_cs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="189 CS"
-                android:textSize="@dimen/text_size_small"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/game_wards"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bought 3 Wards"
-                android:textSize="@dimen/text_size_small"/>
-
-            <TextView
-                android:id="@+id/game_kill_part"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Kill Part. - 70%"
-                android:textSize="@dimen/text_size_small"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    <com.github.koshkin.leagueoflegendsstats.views.HorizontalBarStatView
+        android:id="@+id/gold_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        match_per_ten:barChartTitle="Gold"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -110,24 +57,11 @@
         >
 
         <com.github.koshkin.leagueoflegendsstats.views.MatchPerTenView
-            android:id="@+id/match_creep_per_ten"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            match_per_ten:matchPerTenTitle="@string/match_creep_per_ten_title"/>
-
-        <com.github.koshkin.leagueoflegendsstats.views.MatchPerTenView
             android:id="@+id/match_cs_diff_per_ten"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin_small"
             match_per_ten:matchPerTenTitle="@string/match_cs_per_ten_diff"/>
-
-        <com.github.koshkin.leagueoflegendsstats.views.MatchPerTenView
-            android:id="@+id/match_xp_diff_per_ten"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin_small"
-            match_per_ten:matchPerTenTitle="@string/match_xp_per_ten_diff"/>
 
     </LinearLayout>
 

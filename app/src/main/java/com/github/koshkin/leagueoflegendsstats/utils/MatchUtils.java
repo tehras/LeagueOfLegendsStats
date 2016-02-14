@@ -16,6 +16,7 @@ import com.github.koshkin.leagueoflegendsstats.models.match.ParticipantIdentity;
 import com.github.koshkin.leagueoflegendsstats.models.match.Stats;
 import com.github.koshkin.leagueoflegendsstats.models.match.Timeline;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.match.MiddleIndividualLayoutHolder;
+import com.github.koshkin.leagueoflegendsstats.views.MatchPerTenView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,6 +140,16 @@ public class MatchUtils {
         int assists = participant.getStats().getAssists();
 
         return String.valueOf(kills) + "/" + String.valueOf(deaths) + "/" + String.valueOf(assists);
+    }
+
+    public static float getKDAFloat(Participant participant) {
+        if (participant.getStats() == null)
+            return 0f;
+        float kills = participant.getStats().getKills();
+        float deaths = participant.getStats().getDeaths();
+        float assists = participant.getStats().getAssists();
+
+        return ((kills + assists) / deaths);
     }
 
     public static String getKDA(Participant participant, TextView kdaView, Activity activity) {
@@ -349,5 +360,20 @@ public class MatchUtils {
         }
 
         return Html.fromHtml(output);
+    }
+
+    public static MatchPerTenView.MatchColor getColor(int rank, int size) {
+        int great = size / 4;
+        int good = size / 2;
+        int average = size - (size / 3);
+
+        if (rank == 1 || rank <= great)
+            return MatchPerTenView.MatchColor.GREAT;
+        else if (rank < good)
+            return MatchPerTenView.MatchColor.GOOD;
+        else if (rank < average)
+            return MatchPerTenView.MatchColor.NEUTRAL;
+        else
+            return MatchPerTenView.MatchColor.BAD;
     }
 }
