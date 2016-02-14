@@ -149,6 +149,9 @@ public class MatchUtils {
         float deaths = participant.getStats().getDeaths();
         float assists = participant.getStats().getAssists();
 
+        if (deaths == 0)
+            deaths = 1;
+
         return ((kills + assists) / deaths);
     }
 
@@ -371,7 +374,7 @@ public class MatchUtils {
             return MatchPerTenView.MatchColor.GREAT;
         else if (rank < good)
             return MatchPerTenView.MatchColor.GOOD;
-        else if (rank < average)
+        else if (rank <= average)
             return MatchPerTenView.MatchColor.NEUTRAL;
         else
             return MatchPerTenView.MatchColor.BAD;

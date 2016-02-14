@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class LongHoldHelper implements View.OnTouchListener {
 
-    private static final long LONG_TAP_THRESHOLD = 250L;
+    private static final long LONG_TAP_THRESHOLD = 200L;
     private final View mViewGroup;
     private final Activity mActivity;
     private final Participant mParticipant;
