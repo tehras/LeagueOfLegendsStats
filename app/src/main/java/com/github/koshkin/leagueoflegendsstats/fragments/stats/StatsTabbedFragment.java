@@ -133,22 +133,6 @@ public class StatsTabbedFragment extends BaseFragment implements Request.Request
 
         //adds refresh
         addOnSwipeToRefreshListener(this);
-        mTabStrip.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                stopRefreshing();
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
     }
 
     public StatsTabbedFragment setSummoner(Summoner summoner) {
