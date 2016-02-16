@@ -44,8 +44,8 @@ public class GameHolder extends RecyclerView.ViewHolder {
         gameLengthTv = (TextView) view.findViewById(R.id.game_length);
 
         champImage = (ImageView) view.findViewById(R.id.champion_icon);
-        icon1 = (ImageView) view.findViewById(R.id.icon1); //TODO icon
-        icon2 = (ImageView) view.findViewById(R.id.icon2); //TODO icon
+        icon1 = (ImageView) view.findViewById(R.id.icon1);
+        icon2 = (ImageView) view.findViewById(R.id.icon2);
 
         champNameTv = (TextView) view.findViewById(R.id.champion_name);
 
@@ -78,14 +78,21 @@ public class GameHolder extends RecyclerView.ViewHolder {
 
             Drawable mDrawable, mIcon1Drawable, mIcon2Drawable;
 
+            @SuppressWarnings("deprecation")
             @Override
             protected void postExecute() {
                 if (mDrawable != null)
                     GameHolder.this.champImage.setImageDrawable(mDrawable);
+                else
+                    GameHolder.this.champImage.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_wallpaper_black_48dp));
                 if (mIcon1Drawable != null)
                     GameHolder.this.icon1.setImageDrawable(mIcon1Drawable);
+                else
+                    GameHolder.this.icon1.setImageDrawable(activity.getResources().getDrawable(R.color.cardview_dark_background));
                 if (mIcon2Drawable != null)
                     GameHolder.this.icon2.setImageDrawable(mIcon2Drawable);
+                else
+                    GameHolder.this.icon2.setImageDrawable(activity.getResources().getDrawable(R.color.cardview_dark_background));
 
                 mDrawable = StaticDataHolder.getInstance(activity).getChampionIcon(game.getChampionId());
 
