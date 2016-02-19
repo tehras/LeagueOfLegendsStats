@@ -8,7 +8,7 @@ import java.util.Calendar;
 
 /**
  * Created by tehras on 1/18/16.
- * <p/>
+ * <p>
  * Simple Summoner
  */
 public class SimpleSummoner extends SugarRecord {
@@ -83,7 +83,8 @@ public class SimpleSummoner extends SugarRecord {
         this.name = summonerName;
         this.iconId = summonerIconId;
 
-        populateRankedWInsLossesAssists(rankedStats.getChampions());
+        if (rankedStats != null)
+            populateRankedWInsLossesAssists(rankedStats.getChampions());
 
         this.date = Calendar.getInstance().getTimeInMillis();
     }
@@ -121,7 +122,7 @@ public class SimpleSummoner extends SugarRecord {
     }
 
     private void populateRankedWinsLossesAssists(PlayerStatSummaries playerStats) {
-        if (playerStats != null) {
+        if (playerStats != null && playerStats.getPlayerSummaries() != null && playerStats.getPlayerSummaries().size() > 0) {
             ArrayList<PlayerSummary> playerSumaries = playerStats.getPlayerSummaries();
             for (PlayerSummary playerSummary : playerSumaries) {
                 if (playerSummary.getSummaryType() == PlayerSummary.SummaryType.RANKED_SOLO_5X) {
@@ -149,10 +150,7 @@ public class SimpleSummoner extends SugarRecord {
 
         SimpleSummoner that = (SimpleSummoner) o;
 
-        if (summonerId != null ? !summonerId.equals(that.summonerId) : that.summonerId != null)
-            return false;
-        return !(name != null ? !name.equals(that.name) : that.name != null);
-
+        return !(summonerId != null ? !summonerId.equals(that.summonerId) : that.summonerId != null) && !(name != null ? !name.equals(that.name) : that.name != null);
     }
 
     @Override
