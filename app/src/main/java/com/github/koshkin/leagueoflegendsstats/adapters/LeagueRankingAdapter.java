@@ -22,14 +22,16 @@ import java.util.ArrayList;
 public abstract class LeagueRankingAdapter extends RecyclerView.Adapter<LeagueChampionHolder> {
 
     private final LeagueQueueType mLequeQueueType;
+    private final String mSummonerId;
     private ArrayList<RankedSummoner> mEntries;
     private final Activity mContext;
     private ArrayList<RankedSummoner> mArrayToExecute;
 
-    public LeagueRankingAdapter(LeagueStandings leagueStandings, Activity activity, LeagueQueueType leagueQueueType) {
+    public LeagueRankingAdapter(LeagueStandings leagueStandings, Activity activity, LeagueQueueType leagueQueueType, String summonerId) {
         mEntries = leagueStandings.getEntries();
         mContext = activity;
         mLequeQueueType = leagueQueueType;
+        mSummonerId = summonerId;
 
         if (leagueQueueType == LeagueQueueType.RANKED_SOLO_5x5)
             getItemsToExecute(mEntries, true);
@@ -95,7 +97,7 @@ public abstract class LeagueRankingAdapter extends RecyclerView.Adapter<LeagueCh
             if (mLequeQueueType == LeagueQueueType.RANKED_SOLO_5x5)
                 checkIfNeedToExecuteMore(position);
         }
-        holder.populate(summoner, (MainActivity) mContext, mLequeQueueType, true);
+        holder.populate(summoner, (MainActivity) mContext, mLequeQueueType, true, mSummonerId);
     }
 
     private void checkIfNeedToExecuteMore(int position) {

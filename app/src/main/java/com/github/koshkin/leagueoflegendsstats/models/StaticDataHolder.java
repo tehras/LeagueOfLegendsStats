@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import com.github.koshkin.leagueoflegendsstats.FirstInitialize;
 import com.github.koshkin.leagueoflegendsstats.R;
@@ -34,6 +33,8 @@ public class StaticDataHolder {
     private MasteryIcons mMasteryIcons;
     private boolean mNeedsRefresh;
 
+
+    //todo save to file for later retrieval
     public void setItemIcons(ItemIcons itemIcons) {
         mItemIcons = itemIcons;
     }
@@ -96,16 +97,18 @@ public class StaticDataHolder {
 
     public void init() {
         if (mChampionIcons == null && mProfileIcons == null && mSpellIcons == null && mRuneIcons == null) {
+            //todo add file
+
             String champResponse = SharedPrefsUtil.getSharedPrefs(AssetReaderUtil.CONSTANT_CHAMPION, mContext);
             if (NullChecker.isNullOrEmpty(champResponse)) {
                 champResponse = AssetReaderUtil.read(FILE_NAME_CHAMPIONS, mContext);
             }
             mChampionIcons = new ChampionIcons().parse(champResponse);
-            String profileRsponse = SharedPrefsUtil.getSharedPrefs(AssetReaderUtil.CONSTANT_PROFILE, mContext);
-            if (NullChecker.isNullOrEmpty(profileRsponse)) {
-                profileRsponse = AssetReaderUtil.read(FILE_NAME_PROFILE, mContext);
+            String profileResponse = SharedPrefsUtil.getSharedPrefs(AssetReaderUtil.CONSTANT_PROFILE, mContext);
+            if (NullChecker.isNullOrEmpty(profileResponse)) {
+                profileResponse = AssetReaderUtil.read(FILE_NAME_PROFILE, mContext);
             }
-            mProfileIcons = new ProfileIcons().parse(profileRsponse);
+            mProfileIcons = new ProfileIcons().parse(profileResponse);
             String spellResponse = SharedPrefsUtil.getSharedPrefs(AssetReaderUtil.CONSTANT_SUMMONER, mContext);
             if (NullChecker.isNullOrEmpty(spellResponse)) {
                 spellResponse = AssetReaderUtil.read(FILE_NAME_SUMMONER, mContext);
@@ -116,7 +119,7 @@ public class StaticDataHolder {
                 itemResponse = AssetReaderUtil.read(FILE_NAME_ITEM, mContext);
             }
             mItemIcons = new ItemIcons().parse(itemResponse);
-            String runesResponse = SharedPrefsUtil.getSharedPrefs(AssetReaderUtil.CONSTANT_ITEM, mContext);
+            String runesResponse = SharedPrefsUtil.getSharedPrefs(AssetReaderUtil.CONSTANT_RUNES, mContext);
             if (NullChecker.isNullOrEmpty(runesResponse)) {
                 runesResponse = AssetReaderUtil.read(FILE_NAME_RUNES, mContext);
             }
@@ -185,6 +188,9 @@ public class StaticDataHolder {
     public Drawable getRankTier(Tier tier, String division) {
         if (tier == null)
             return null;
+
+        if (tier == Tier.CHALLENGER || tier == Tier.DIAMOND)
+            division = "";
 
         int size = mContext.getResources().getDimensionPixelSize(R.dimen.profile_icon_size_xsmall);
         String fileName = tier.getName().toLowerCase() + (NullChecker.isNullOrEmpty(division) ? "" : "_") + division.toLowerCase() + ".png";
@@ -271,11 +277,15 @@ public class StaticDataHolder {
         }
         Drawable drawable = null;
         if (bm != null) {
-            Bitmap sprite = Bitmap.createBitmap(bm, image.getX(), image.getY(), image.getW(), image.getH());
-            sprite = Bitmap.createScaledBitmap(sprite, width, height, false);
+            try {
+                Bitmap sprite = Bitmap.createBitmap(bm, image.getX(), image.getY(), image.getW(), image.getH());
+                sprite = Bitmap.createScaledBitmap(sprite, width, height, false);
 
-            drawable = new BitmapDrawable(mContext.getResources(), sprite);
-            bm.recycle();
+                drawable = new BitmapDrawable(mContext.getResources(), sprite);
+                bm.recycle();
+            } catch (IllegalArgumentException e) {
+                //leave blank
+            }
         }
 
         if (mLoadedImages == null)

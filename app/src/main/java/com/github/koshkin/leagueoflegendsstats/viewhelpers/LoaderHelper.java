@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 
 /**
  * Created by tehras on 1/16/16.
+ * <p/>
+ * Loader Helper
  */
 public abstract class LoaderHelper extends AsyncTask<Void, Void, Void> {
 

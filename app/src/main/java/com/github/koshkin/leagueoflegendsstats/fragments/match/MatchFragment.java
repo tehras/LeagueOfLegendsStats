@@ -37,6 +37,11 @@ public class MatchFragment extends BaseFragment implements Request.RequestCallba
         return fragment;
     }
 
+    @Override
+    public String getToolbarTitle() {
+        return getActivity().getResources().getString(R.string.fragment_title_match_stats);
+    }
+
     private String mSummonerId;
     private FullMatch mFullMatch;
 

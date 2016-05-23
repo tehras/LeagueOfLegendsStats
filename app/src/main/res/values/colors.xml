@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorPrimaryLight">#993F51B5</color>
-    <color name="colorAccent">#795548</color>
+    <color name="colorPrimary">#455A64</color>
+    <color name="colorPrimaryDark">#455A64</color>
+    <color name="colorPrimaryLight">#546E7A</color>
+    <color name="colorAccent">#B26200</color>
 
     <color name="achievement_green">#0288D1</color>
     <color name="achievement_green_dark">#01579B</color>
@@ -46,5 +46,5 @@
     <color name="cunning">#1565C0</color>
     <color name="resolve">#4CAF50</color>
 
-    <color name="darkened_background">#75303F9F</color>
+    <color name="darkened_background">#75455A64</color>
 </resources>

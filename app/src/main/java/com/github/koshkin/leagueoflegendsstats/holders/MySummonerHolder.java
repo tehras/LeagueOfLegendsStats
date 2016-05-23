@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
-import com.github.koshkin.leagueoflegendsstats.fragments.summoner.SummonerStatsFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.stats.StatsTabbedFragment;
 import com.github.koshkin.leagueoflegendsstats.models.Champion;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
@@ -94,7 +94,7 @@ public class MySummonerHolder {
             mClickableView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainActivity) activity).startFragment(SummonerStatsFragment.getInstance(summoner.getSummonerInfo().getName(), summoner.getSummonerInfo().getId()).setSummoner(summoner));
+                    ((MainActivity) activity).startFragment(StatsTabbedFragment.getInstance(summoner.getSummonerInfo().getName(), summoner.getSummonerInfo().getId()).setSummoner(summoner));
                 }
             });
 
@@ -180,7 +180,7 @@ public class MySummonerHolder {
 
         //0th will be overall
 
-        return String.valueOf(champs.get(0).getStats().getTotalSessionsLost()) + "W";
+        return String.valueOf(champs.get(0).getStats().getTotalSessionsLost()) + "L";
     }
 
     private String getKdaText(TextView rankedKda, PlayerRanked playerRanked, Activity activity) {

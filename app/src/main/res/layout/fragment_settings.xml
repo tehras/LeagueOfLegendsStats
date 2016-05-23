@@ -99,7 +99,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/summoner_name"
+                        android:imeOptions="actionSearch"
                         android:lines="1"
+                        android:singleLine="true"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/text_size_small"
                         android:textStyle="bold"/>

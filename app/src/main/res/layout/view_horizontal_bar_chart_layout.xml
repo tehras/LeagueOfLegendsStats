@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/horizontal_bar_chart_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Damage"
+        android:textSize="@dimen/text_size_medium_small"
+        android:textStyle="bold"/>
+
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:id="@+id/horizontal_bar_chart"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bar_chart_height"
+        />
+
+</LinearLayout>

@@ -176,9 +176,9 @@ public class MiddleIndividualLayoutHolder {
 
     }
 
-    private void populatePlayerView(List<Participant> participants, Activity activity, Participant leftParticipant, Participant rightParticipant, ParticipantIdentity mainParticipant, List<ParticipantIdentity> participantIdentities, ViewGroup view, TeamSide leftSide, TeamSide rightSide) {
+    private void populatePlayerView(final List<Participant> participants, Activity activity, final Participant leftParticipant, Participant rightParticipant, ParticipantIdentity mainParticipant, List<ParticipantIdentity> participantIdentities, ViewGroup view, TeamSide leftSide, TeamSide rightSide) {
 
-        ParticipantIdentity leftParticipantIdentity = getParticipantIdenityFromParticipant(participantIdentities, leftParticipant);
+        final ParticipantIdentity leftParticipantIdentity = getParticipantIdenityFromParticipant(participantIdentities, leftParticipant);
         ParticipantIdentity rightParticipantIdentity = getParticipantIdenityFromParticipant(participantIdentities, rightParticipant);
 
         if (leftParticipant != null && rightParticipant != null && leftParticipantIdentity != null && rightParticipantIdentity != null) {
@@ -199,6 +199,18 @@ public class MiddleIndividualLayoutHolder {
 
             new LongHoldHelper(activity, leftView, leftParticipant, leftParticipantIdentity, participants).init();
             new LongHoldHelper(activity, rightView, rightParticipant, rightParticipantIdentity, participants).init();
+//            leftView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    clicked(leftParticipant, leftParticipantIdentity, participants);
+//                }
+//            });
+//            rightView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    clicked(leftParticipant, leftParticipantIdentity, participants);
+//                }
+//            });
 
             //POPULATES LEFT AND RIGHT SIDE
             leftSideName.setText(MatchUtils.getName(leftParticipantIdentity));

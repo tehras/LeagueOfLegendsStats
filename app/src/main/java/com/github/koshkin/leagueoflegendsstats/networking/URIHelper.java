@@ -1,7 +1,5 @@
 package com.github.koshkin.leagueoflegendsstats.networking;
 
-import android.util.Log;
-
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.API_KEY;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.FEATURED_MATCHES;
 import static com.github.koshkin.leagueoflegendsstats.networking.URIConstants.LEAGUE_BY_SUMMONERS;
@@ -55,6 +53,14 @@ public enum URIHelper {
         mRequiresApiString = b1;
     }
 
+    public static final String VERSION_FILL = "<version>";
+
+    public static String sVersion = "6.1.1";
+
+    public static void setVersion(String version) {
+        sVersion = version;
+    }
+
     public static Region sRegion = Region.NA;
 
     public static Region getCurrentRegion() {
@@ -71,7 +77,7 @@ public enum URIHelper {
         if (mBaseUri.equalsIgnoreCase(NA_BASE_URI)) {
             url = String.format(mBaseUri, getCurrentRegion().getRegionName().toLowerCase());
         } else {
-            url = mBaseUri;
+            url = mBaseUri.replaceAll(VERSION_FILL, sVersion);
         }
 
         url = url + mOperationUrl;
@@ -80,8 +86,6 @@ public enum URIHelper {
         if (url.contains("?"))
             apiKey = apiKey.replace("?", "&");
         url = url + (mRequiresApiString ? apiKey : "");
-
-        Log.e("TARAS", "url-" + url);
 
         if (mIsNonStaticContent)
             url = url.replaceFirst("%s", sRegion.getRegionName());

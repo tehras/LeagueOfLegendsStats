@@ -42,9 +42,10 @@ public class FirstInitialize implements Request.RequestCallback {
 
     public static final String CHAMPION_JSON = "champion.json";
     public static final String SPELL_JSON = "summoner.json";
+    public static final String ITEM_JSON = "item.json";
     public static final String PROFILE_JSON = "profileicon.json";
-    public static final String RUNES_JSON = "runeicon.json";
-    public static final String MASTERIES_JSON = "masteryicon.json";
+    public static final String RUNES_JSON = "rune.json";
+    public static final String MASTERIES_JSON = "mastery.json";
 
     public void initialize() {
         StaticDataHolder.getInstance(mMainActivity).init();
@@ -75,15 +76,17 @@ public class FirstInitialize implements Request.RequestCallback {
 
                 if (!spellIconVersion.equalsIgnoreCase(getFromMap(versionControl, "summoner"))) {
                     mExecuteCounter++;
+                    URIHelper.setVersion(getFromMap(versionControl, "summoner"));
                     new Executor(new Request(mMainActivity, Request.RequestType.GET, new DataParser(Type.SUMMONER, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), SPELL_JSON), mMainActivity).execute();
                     for (int i = 0; i < 15; i++) {
                         mExecuteCounter++;
                         new Executor(new Request(mMainActivity, Request.RequestType.GET_IMAGE, new SpriteHolder(Type.SUMMONER), this, URIHelper.GET_SPRITES, "spell" + String.valueOf(i) + ".png"), mMainActivity).execute();
                     }
                 }
-                if (!itemIcons.equalsIgnoreCase(getFromMap(versionControl, "profileicon"))) {
+                if (!itemIcons.equalsIgnoreCase(getFromMap(versionControl, "item"))) {
                     mExecuteCounter++;
-                    new Executor(new Request(mMainActivity, Request.RequestType.GET, new DataParser(Type.ITEM, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), SPELL_JSON), mMainActivity).execute();
+                    URIHelper.setVersion(getFromMap(versionControl, "item"));
+                    new Executor(new Request(mMainActivity, Request.RequestType.GET, new DataParser(Type.ITEM, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), ITEM_JSON), mMainActivity).execute();
                     for (int i = 0; i < 4; i++) {
                         mExecuteCounter++;
                         new Executor(new Request(mMainActivity, Request.RequestType.GET_IMAGE, new SpriteHolder(Type.ITEM), this, URIHelper.GET_SPRITES, "item" + String.valueOf(i) + ".png"), mMainActivity).execute();
@@ -91,14 +94,16 @@ public class FirstInitialize implements Request.RequestCallback {
                 }
                 if (!championIcons.equalsIgnoreCase(getFromMap(versionControl, "champion"))) {
                     mExecuteCounter++;
+                    URIHelper.setVersion(getFromMap(versionControl, "champion"));
                     new Executor(new Request(mMainActivity, Request.RequestType.GET, new DataParser(Type.CHAMPION, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), CHAMPION_JSON), mMainActivity).execute();
                     for (int i = 0; i < 5; i++) {
                         mExecuteCounter++;
                         new Executor(new Request(mMainActivity, Request.RequestType.GET_IMAGE, new SpriteHolder(Type.CHAMPION), this, URIHelper.GET_SPRITES, "champion" + String.valueOf(i) + ".png"), mMainActivity).execute();
                     }
                 }
-                if (!profileIcons.equalsIgnoreCase(getFromMap(versionControl, "item"))) {
+                if (!profileIcons.equalsIgnoreCase(getFromMap(versionControl, "profileicon"))) {
                     mExecuteCounter++;
+                    URIHelper.setVersion(getFromMap(versionControl, "profileicon"));
                     new Executor(new Request(mMainActivity, Request.RequestType.GET, new DataParser(Type.PROFILE, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), PROFILE_JSON), mMainActivity).execute();
                     for (int i = 0; i < 1; i++) {
                         mExecuteCounter++;
@@ -107,6 +112,7 @@ public class FirstInitialize implements Request.RequestCallback {
                 }
                 if (!runeIcons.equalsIgnoreCase(getFromMap(versionControl, "rune"))) {
                     mExecuteCounter++;
+                    URIHelper.setVersion(getFromMap(versionControl, "rune"));
                     new Executor(new Request(mMainActivity, Request.RequestType.GET, new DataParser(Type.RUNES, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), RUNES_JSON), mMainActivity).execute();
                     for (int i = 0; i < 1; i++) {
                         mExecuteCounter++;
@@ -115,6 +121,7 @@ public class FirstInitialize implements Request.RequestCallback {
                 }
                 if (!masteryIcons.equalsIgnoreCase(getFromMap(versionControl, "mastery"))) {
                     mExecuteCounter++;
+                    URIHelper.setVersion(getFromMap(versionControl, "mastery"));
                     new Executor(new Request(mMainActivity, Request.RequestType.GET, new DataParser(Type.MASTERIES, mMainActivity), this, URIHelper.GET_JSON, versionControl.getRegion(), MASTERIES_JSON), mMainActivity).execute();
                     for (int i = 0; i < 1; i++) {
                         mExecuteCounter++;
@@ -149,34 +156,36 @@ public class FirstInitialize implements Request.RequestCallback {
                 break;
             case GET_JSON:
                 mExecuteCounter--;
-                DataParser parser = (DataParser) response.getReturnedObject();
-                if (parser.getResponseObject() != null)
-                    switch (parser.getType()) {
-                        case CHAMPION:
-                            if (parser.getResponseObject() instanceof ChampionIcons)
-                                StaticDataHolder.getInstance(mMainActivity).setChampionIcons((ChampionIcons) parser.getResponseObject());
-                            break;
-                        case SUMMONER:
-                            if (parser.getResponseObject() instanceof SpellIcons)
-                                StaticDataHolder.getInstance(mMainActivity).setSpellIcons((SpellIcons) parser.getResponseObject());
-                            break;
-                        case PROFILE:
-                            if (parser.getResponseObject() instanceof ProfileIcons)
-                                StaticDataHolder.getInstance(mMainActivity).setProfileIcons((ProfileIcons) parser.getResponseObject());
-                            break;
-                        case ITEM:
-                            if (parser.getResponseObject() instanceof ItemIcons)
-                                StaticDataHolder.getInstance(mMainActivity).setItemIcons((ItemIcons) parser.getResponseObject());
-                            break;
-                        case RUNES:
-                            if (parser.getResponseObject() instanceof RuneIcons)
-                                StaticDataHolder.getInstance(mMainActivity).setRuneIcons((RuneIcons) parser.getResponseObject());
-                            break;
-                        case MASTERIES:
-                            if (parser.getResponseObject() instanceof MasteryIcons)
-                                StaticDataHolder.getInstance(mMainActivity).setMasteryIcons((MasteryIcons) parser.getResponseObject());
-                            break;
-                    }
+                if (response.getStatus() == Response.Status.SUCCESS) {
+                    DataParser parser = (DataParser) response.getReturnedObject();
+                    if (parser.getResponseObject() != null)
+                        switch (parser.getType()) {
+                            case CHAMPION:
+                                if (parser.getResponseObject() instanceof ChampionIcons)
+                                    StaticDataHolder.getInstance(mMainActivity).setChampionIcons((ChampionIcons) parser.getResponseObject());
+                                break;
+                            case SUMMONER:
+                                if (parser.getResponseObject() instanceof SpellIcons)
+                                    StaticDataHolder.getInstance(mMainActivity).setSpellIcons((SpellIcons) parser.getResponseObject());
+                                break;
+                            case PROFILE:
+                                if (parser.getResponseObject() instanceof ProfileIcons)
+                                    StaticDataHolder.getInstance(mMainActivity).setProfileIcons((ProfileIcons) parser.getResponseObject());
+                                break;
+                            case ITEM:
+                                if (parser.getResponseObject() instanceof ItemIcons)
+                                    StaticDataHolder.getInstance(mMainActivity).setItemIcons((ItemIcons) parser.getResponseObject());
+                                break;
+                            case RUNES:
+                                if (parser.getResponseObject() instanceof RuneIcons)
+                                    StaticDataHolder.getInstance(mMainActivity).setRuneIcons((RuneIcons) parser.getResponseObject());
+                                break;
+                            case MASTERIES:
+                                if (parser.getResponseObject() instanceof MasteryIcons)
+                                    StaticDataHolder.getInstance(mMainActivity).setMasteryIcons((MasteryIcons) parser.getResponseObject());
+                                break;
+                        }
+                }
                 break;
         }
 

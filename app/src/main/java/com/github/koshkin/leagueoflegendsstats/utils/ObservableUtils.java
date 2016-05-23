@@ -38,6 +38,8 @@ public class ObservableUtils {
     }
 
     public static CharSequence getStartedText(long currentTime, long timeStarted) {
+        if (timeStarted < (currentTime * 1000 * 60 * 60 * 60))
+            return "Game is Starting Up..";
 
         long totalTime = currentTime - timeStarted; //millis
         totalTime = totalTime / 1000; //Seconds;

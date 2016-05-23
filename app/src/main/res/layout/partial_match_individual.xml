@@ -27,6 +27,13 @@
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:text="@string/match_team_message"
+            android:textStyle="italic"/>
+
         <include
             layout="@layout/partial_divider"
             android:layout_width="match_parent"

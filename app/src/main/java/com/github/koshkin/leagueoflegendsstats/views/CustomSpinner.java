@@ -102,6 +102,7 @@ public class CustomSpinner extends LinearLayout {
 
     public CustomSpinner setSelectedOption(String option) {
         mSelectedOption = option;
+        mSpinnerText.setText(option);
         return this;
     }
 

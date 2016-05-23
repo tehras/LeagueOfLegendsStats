@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<com.github.koshkin.leagueoflegendsstats.views.BlockableNestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
-    <include layout="@layout/partial_ranked_top_header"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
 
-    <include layout="@layout/partial_ranked_most_played_champs"/>
+        <include layout="@layout/partial_ranked_top_header"/>
 
-    <include layout="@layout/partial_ranked_match_history"/>
+        <include layout="@layout/partial_ranked_division"/>
 
-</LinearLayout>
+        <include layout="@layout/partial_ranked_most_played_champs"/>
+
+        <include layout="@layout/partial_ranked_match_history"/>
+
+    </LinearLayout>
+
+</com.github.koshkin.leagueoflegendsstats.views.BlockableNestedScrollView>

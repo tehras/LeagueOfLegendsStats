@@ -64,6 +64,10 @@ public class MatchPerTenView extends LinearLayout {
         MatchColor(int color) {
             mColor = color;
         }
+
+        public int getColor() {
+            return mColor;
+        }
     }
 
     private MatchPerTenView assignText(CharSequence string, MatchColor matchColor, TextView textView) {

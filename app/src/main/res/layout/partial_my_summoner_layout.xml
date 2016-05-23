@@ -164,6 +164,7 @@
                         android:layout_marginBottom="@dimen/activity_vertical_margin_xsmall"
                         android:text="@string/my_summoner_favorite_champions"
                         android:textAlignment="center"
+                        android:textColor="@color/colorAccent"
                         android:textSize="@dimen/text_size_small"
                         android:textStyle="bold"/>
 

@@ -7,13 +7,13 @@ package com.github.koshkin.leagueoflegendsstats.networking;
  */
 public class URIConstants {
 
-    //API KEY - DEV == 10 req / 10s
-    public static final String API_KEY = "?api_key=47746efd-ea3c-4440-9c80-0f96a6797014";
+    //API KEY - PROD == 3000 req / 10s
+    public static final String API_KEY = "?api_key=bb71ca67-9e00-4bc2-9442-9e835adf4a6c";
 
     //BASE URI, diff for each region
     public static final String NA_BASE_URI = "https://%s.api.pvp.net";
-    public static String NA_STATIC_URI = "http://ddragon.leagueoflegends.com/cdn/6.1.1/img";
-    public static String NA_STATIC_DATA_URI = "http://ddragon.leagueoflegends.com/cdn/6.1.1/data";
+    public static String NA_STATIC_URI = "http://ddragon.leagueoflegends.com/cdn/" + URIHelper.VERSION_FILL + "/img";
+    public static String NA_STATIC_DATA_URI = "http://ddragon.leagueoflegends.com/cdn/" + URIHelper.VERSION_FILL + "/data";
 
     //API STATIC
     public static final String PROFILE_ICON = "/profileicon/%s";

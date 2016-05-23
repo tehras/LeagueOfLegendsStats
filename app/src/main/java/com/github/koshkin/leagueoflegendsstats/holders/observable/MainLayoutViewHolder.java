@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
-import com.github.koshkin.leagueoflegendsstats.fragments.summoner.SummonerStatsFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.stats.StatsTabbedFragment;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
 import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.MasteryIcons;
@@ -127,7 +127,7 @@ public class MainLayoutViewHolder {
             @Override
             public void onClick(View v) {
                 if (activity != null && activity instanceof MainActivity) {
-                    ((MainActivity) activity).startFragment(SummonerStatsFragment.getInstance(participant.getSummonerName(), null));
+                    ((MainActivity) activity).startFragment(StatsTabbedFragment.getInstance(participant.getSummonerName(), null));
                 }
             }
         };
@@ -277,6 +277,7 @@ public class MainLayoutViewHolder {
 
         ArrayList<CharSequence> runes = getRunes(participant, activity);
 
+        runeContent.removeAllViews(); //reset
         for (CharSequence rune : runes) {
             runeContent.addView(getRuneView(rune, activity));
         }

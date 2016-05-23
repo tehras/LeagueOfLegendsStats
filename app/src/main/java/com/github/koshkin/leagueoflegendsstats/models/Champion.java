@@ -81,7 +81,14 @@ public class Champion implements Comparable<Champion> {
         int thisSessionsPlayed = thisStats.getTotalSessionsPlayed();
         int anotherSessionsPlayed = anotherStats.getTotalSessionsPlayed();
 
-        return anotherSessionsPlayed - thisSessionsPlayed;
+        int sessionsPlayedDiff = anotherSessionsPlayed - thisSessionsPlayed;
+        if (sessionsPlayedDiff != 0)
+            return sessionsPlayedDiff;
+
+        int thisId = this.getId();
+        int anotherId = another.getId();
+
+        return thisId - anotherId;
     }
 
     public class Wins implements Comparator<Champion> {

@@ -14,8 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:background="@color/colorPrimary"
-        android:src="@drawable/ic_image_blur_on"/>
+        android:background="@drawable/splash_screen"/>
 
     <TextView
         android:id="@+id/loading_text"

@@ -26,14 +26,21 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.github.koshkin.leagueoflegendsstats.fragments.about.AboutFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.favorite.FavoritesFragment;
 import com.github.koshkin.leagueoflegendsstats.fragments.home.HomeFragment;
 import com.github.koshkin.leagueoflegendsstats.fragments.settings.SettingsFragment;
+import com.github.koshkin.leagueoflegendsstats.fragments.stats.StatsTabbedFragment;
 import com.github.koshkin.leagueoflegendsstats.fragments.summoner.SummonerStatsFragment;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummonerComparator;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Summoner;
 import com.github.koshkin.leagueoflegendsstats.networking.Manager;
+import com.github.koshkin.leagueoflegendsstats.sqlite.FavoritesSqLiteHelper;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingActionButtonViewHelper;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.FloatingFavoriteActionButtonHelper;
 import com.github.koshkin.leagueoflegendsstats.viewhelpers.LoaderHelper;
@@ -43,6 +50,8 @@ import com.github.koshkin.leagueoflegendsstats.views.RoundedImageView;
 import com.github.koshkin.leagueoflegendsstats.views.ToolbarSearchView;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -302,9 +311,6 @@ public class MainActivity extends AppCompatActivity
         if (thisActivity == null || mIsPaused)
             return;
 
-        if (isAlreadyShowing(fragmentClass))
-            return;
-
         try {
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -317,27 +323,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private boolean isAlreadyShowing(Class<? extends BaseFragment> fragmentClass) {
-        //Exceptio to the rule
-        if (fragmentClass == SummonerStatsFragment.class)
-            return false;
-
-        FragmentManager supportManager = getSupportFragmentManager();
-
-        if (supportManager != null && supportManager.getFragments() != null && supportManager.getFragments().size() > 0) {
-            Fragment fragment = supportManager.getFragments().get(supportManager.getFragments().size() - 1);
-            if (fragment != null && fragment.getClass() == fragmentClass)
-                return true;
-        }
-
-        return false;
-    }
-
     public void startFragment(BaseFragment fragment) {
         if (thisActivity == null || mIsPaused)
-            return;
-
-        if (isAlreadyShowing(fragment.getClass()))
             return;
 
         getSupportFragmentManager().beginTransaction()
@@ -405,16 +392,59 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-
         if (id == R.id.nav_home) {
             startFragment(HomeFragment.class);
         } else if (id == R.id.nav_settings) {
             startFragment(SettingsFragment.class);
+        } else if (id == R.id.nav_my_summoner) {
+            startMySummoner();
+        } else if (id == R.id.nav_my_favorites) {
+            startFavorites();
+        } else if (id == R.id.nav_about) {
+            startFragment(AboutFragment.class);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void startMySummoner() {
+        Summoner summoner = StaticDataHolder.getInstance(this).getMySummoner();
+        if (summoner != null) {
+            startFragment(StatsTabbedFragment.getInstance(summoner.getSummonerInfo().getName(), summoner.getSummonerId()));
+        } else {
+            Toast.makeText(MainActivity.this, "Go to settings to add a summoner", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void setToolbarShadow(boolean toolbarShadow) {
+        Toolbar toolbar = getToolbar();
+        if (toolbar != null)
+            ((View) toolbar.getParent()).setElevation(toolbarShadow ? this.getResources().getDimensionPixelSize(R.dimen.medium_elevation) : 0);
+
+    }
+
+    private void startFavorites() {
+        new LoaderHelper() {
+            public ArrayList<SimpleSummoner> mSimpleSummoners;
+
+            @Override
+            protected void postExecute() {
+                if (mSimpleSummoners != null && mSimpleSummoners.size() > 0) {
+                    Collections.sort(mSimpleSummoners, new SimpleSummonerComparator().new DateAddedComparator());
+                    startFragment(FavoritesFragment.getInstance(mSimpleSummoners));
+                } else {
+                    Toast.makeText(MainActivity.this, "No Favorites Found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            protected void runInBackground() {
+                mSimpleSummoners = new ArrayList<>();
+                mSimpleSummoners = (ArrayList<SimpleSummoner>) FavoritesSqLiteHelper.getAllFavorites();
+            }
+        }.execute();
     }
 
     public Toolbar getToolbar() {
@@ -466,6 +496,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public static String[] loadingText = new String[]{"Loading...", "Please Wait...", "Getting all the images...", "Clearing the table...", "Doing the dishes...", "Back to getting all the images...", "That image is cute...", "Oh wait.. no it's not...", "Please wait..."};
+    public static String[] loadingText = new String[]{"Loading.", "Loading..", "Loading...", "Please Wait...", "This will only happen on new updates...", "Thanks for your patience..."};
 
 }

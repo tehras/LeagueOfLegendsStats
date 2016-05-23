@@ -34,6 +34,11 @@ public class FavoritesFragment extends BaseSimpleRecyclerViewFragment {
     }
 
     @Override
+    public String getToolbarTitle() {
+        return getActivity().getResources().getString(R.string.fragment_title_favorites);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);

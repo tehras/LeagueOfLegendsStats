@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +18,17 @@ import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.holders.ChampionHolder;
 import com.github.koshkin.leagueoflegendsstats.holders.GameHolder;
+import com.github.koshkin.leagueoflegendsstats.holders.RankedDivisionHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Champion;
 import com.github.koshkin.leagueoflegendsstats.models.FileHandler;
 import com.github.koshkin.leagueoflegendsstats.models.Game;
+import com.github.koshkin.leagueoflegendsstats.models.LeagueQueueType;
+import com.github.koshkin.leagueoflegendsstats.models.LeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.models.PlayerRanked;
 import com.github.koshkin.leagueoflegendsstats.models.RecentGames;
-import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 import com.github.koshkin.leagueoflegendsstats.models.StaticDataHolder;
 import com.github.koshkin.leagueoflegendsstats.models.Stats;
+import com.github.koshkin.leagueoflegendsstats.models.SummonerLeagueStandings;
 import com.github.koshkin.leagueoflegendsstats.networking.Request;
 import com.github.koshkin.leagueoflegendsstats.networking.Response;
 import com.github.koshkin.leagueoflegendsstats.utils.NumberUtils;
@@ -40,10 +44,8 @@ import static com.github.koshkin.leagueoflegendsstats.utils.Utils.getKDAColor;
  * <p/>
  * This will show stats
  */
-public class SummonerRankedStatsFragment extends BaseFragment implements Request.RequestCallback {
+public class SummonerRankedStatsFragment extends BaseFragment implements Request.RequestCallback, SwipeRefreshLayout.OnRefreshListener {
 
-    private String mWins;
-    private String mLosses;
     private PlayerRanked mRankedStats;
     private String mSummonerName, mSummonerId;
     private int mSummonerIconId;
@@ -55,14 +57,14 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
     private View mNoMatchesLayout;
     private RecentGames mRecentGames;
     private FileHandler mProfFileHandler;
+    private int mSwipeToRefresh;
+    private View mDivisionLayout;
 
-    public static SummonerRankedStatsFragment getInstance(int summonerIconId, String summonerId, String summonerName, String wins, String losses) {
+    public static SummonerRankedStatsFragment getInstance(int summonerIconId, String summonerId, String summonerName) {
         Bundle args = new Bundle();
         args.putInt(ARG_SUMMONER_ICON_ID, summonerIconId);
         args.putString(ARG_SUMMONER_ID, summonerId);
         args.putString(ARG_SUMMONER_NAME, summonerName);
-        args.putString(ARG_SUMMONER_WINS, wins);
-        args.putString(ARG_SUMMONER_LOSSES, losses);
 
         SummonerRankedStatsFragment fragment = new SummonerRankedStatsFragment();
         fragment.setArguments(args);
@@ -80,11 +82,6 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         return mSummonerName;
     }
 
-    @Override
-    public SimpleSummoner getFavorite() {
-        return new SimpleSummoner(mRankedStats, mSummonerId, mSummonerName, mSummonerIconId);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,9 +89,11 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
 
         //Header Layout - Card1
         initializeHeaderLayout(rootView);
-        //Champ Layout - Card2
+        //Ranked Layout - Card2
+        initializeRankedLayout(rootView);
+        //Champ Layout - Card3
         initializeTopChampsLayout(rootView);
-        //History Layout - Card3
+        //History Layout - Card4
         initializeMatchHistoryLayout(rootView);
 
         if (mRankedStats == null)
@@ -104,11 +103,16 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
             populateTopChampionsLayout();
         }
 
+        if (mLeagueStandings != null)
+            populateLeagueLayout();
+
         if (mRecentGames != null)
             populateMatchHistory();
 
         return rootView;
     }
+
+    private LeagueStandings mLeagueStandings;
 
     /**
      * layout for the bottom match history layout
@@ -132,21 +136,24 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         mViewAllChamps = (MaterialRippleLayout) rootView.findViewById(R.id.champion_view_full_list);
     }
 
-    private TextView mRankedKills, mRankedDeaths, mRankedAssists, mRankedKDA, mRankedSummonerName, mRankedWins, mRankedLosses;
-    private ImageView mRankedIcon; //TODO later
+    private TextView mRankedKills, mRankedDeaths, mRankedAssists, mRankedKDA, mRankedSummonerName;
+    private ImageView mRankedIcon;
 
     private void initializeHeaderLayout(View rootView) {
         mRankedKills = (TextView) rootView.findViewById(R.id.ranked_kills);
         mRankedDeaths = (TextView) rootView.findViewById(R.id.ranked_deaths);
         mRankedAssists = (TextView) rootView.findViewById(R.id.ranked_assists);
         mRankedKDA = (TextView) rootView.findViewById(R.id.ranked_kda);
-        mRankedWins = (TextView) rootView.findViewById(R.id.ranked_wins);
-        mRankedLosses = (TextView) rootView.findViewById(R.id.ranked_losses);
         mRankedSummonerName = (TextView) rootView.findViewById(R.id.ranked_summoner_name);
 
         mRankedIcon = (ImageView) rootView.findViewById(R.id.ranked_logo);
 
         mRankedHeader = rootView.findViewById(R.id.ranked_header);
+    }
+
+    private void initializeRankedLayout(View rootView) {
+        mDivisionLayout = rootView.findViewById(R.id.ranked_division_layout);
+        mDivisionLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -155,16 +162,19 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
 
         mSummonerId = getArguments().getString(ARG_SUMMONER_ID);
         mSummonerName = getArguments().getString(ARG_SUMMONER_NAME);
-        mWins = getArguments().getString(ARG_SUMMONER_WINS);
-        mLosses = getArguments().getString(ARG_SUMMONER_LOSSES);
         mSummonerIconId = getArguments().getInt(ARG_SUMMONER_ICON_ID);
 
         String name = StaticDataHolder.getInstance(getActivity()).getProfileIconName(mSummonerIconId);
         if (name != null)
             executeGetProfileImage(this, name);
 
+        executeRemainingCalls();
+    }
+
+    private void executeRemainingCalls() {
         executeGetRankedStats(this, mSummonerId);
         executeGetRankeGameHistory(this, mSummonerId);
+        executeGetLeagueBySummonerIds(this, mSummonerId);
     }
 
     private int resultsReturned = 0;
@@ -181,6 +191,7 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
                 break;
             case GET_SUMMONER_RANKED:
                 resultsReturned++;
+                mSwipeToRefresh--;
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     PlayerRanked rankedStats = (PlayerRanked) response.getReturnedObject();
 
@@ -189,15 +200,12 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
 
                         populateRankedHeader();
                         populateTopChampionsLayout();
-                    } else {
-                        generalException();
                     }
-                } else {
-                    generalException();
                 }
                 break;
             case GET_SUMMONER_RANKED_GAMES:
                 resultsReturned++;
+                mSwipeToRefresh--;
                 if (response.getStatus() == Response.Status.SUCCESS) {
                     RecentGames recentGames = (RecentGames) response.getReturnedObject();
 
@@ -211,15 +219,52 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
                     populateMatchHistoryError();
                 }
                 break;
+            case GET_LEAGUE_BY_SUMMONERS:
+                resultsReturned++;
+                mSwipeToRefresh--;
+                if (response.getStatus() == Response.Status.SUCCESS) {
+                    mLeagueStandings = getLeagueStanding((SummonerLeagueStandings) response.getReturnedObject());
+
+                    if (mLeagueStandings != null)
+                        populateLeagueLayout();
+                }
+                break;
         }
         if (resultsReturned == 2)
             hideLoading();
+        if (mSwipeToRefresh <= 0)
+            stopRefreshing();
+    }
+
+    private LeagueStandings getLeagueStanding(SummonerLeagueStandings leagueStandings) {
+        if (leagueStandings == null || leagueStandings.getLeagueStandingsHashMap() == null || leagueStandings.getLeagueStandingsHashMap().size() == 0)
+            return null;
+
+        for (String key : leagueStandings.getLeagueStandingsHashMap().keySet()) {
+            if (key.equalsIgnoreCase(mSummonerId)) {
+                ArrayList<LeagueStandings> array = leagueStandings.getLeagueStandingsHashMap().get(key);
+                for (LeagueStandings standings : array) {
+                    if (standings.getQueueType() == LeagueQueueType.RANKED_SOLO_5x5)
+                        return standings;
+                }
+                break;
+            }
+        }
+
+        return null;
+    }
+
+    private void populateLeagueLayout() {
+        mDivisionLayout.setVisibility(View.VISIBLE);
+
+        new RankedDivisionHolder(mDivisionLayout).populate(getActivity(), mLeagueStandings, mSummonerId);
     }
 
     private void populateMatchHistory() {
         ArrayList<Game> games = mRecentGames.getGames();
         if (games != null && games.size() > 0) {
 
+            mRecentMatchesLayout.removeAllViews(); //remove views before populating
             int matchesShown = 0; //counter - we only want to show top 5??
             for (Game game : games) {
                 if (game.getChampionId() == 0)
@@ -253,6 +298,8 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         ArrayList<Champion> champs = mRankedStats.getChampions();
         if (champs != null && champs.size() > 0) {
             Collections.sort(champs);
+
+            mTopChampsLayout.removeAllViews();//remove views before populating
             int champInt = 0;
             for (Champion champion : champs) {
                 if (champion.getId() == 0)
@@ -309,9 +356,6 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
         mRankedDeaths.setText(NumberUtils.twoDecimalsSafely(mRankedStats.getDeaths()));
         mRankedAssists.setText(NumberUtils.twoDecimalsSafely(mRankedStats.getAssists()));
         mRankedKDA.setText(NumberUtils.twoDecimalsSafely(mRankedStats.getKDA()));
-
-        mRankedWins.setText(mWins + "W");
-        mRankedLosses.setText(mLosses + "L");
 
         mRankedKDA.setTextColor(getKDAColor(mRankedStats.getKDA(), getActivity()));
 
@@ -382,5 +426,11 @@ public class SummonerRankedStatsFragment extends BaseFragment implements Request
                 }
             }
         };
+    }
+
+    @Override
+    public void onRefresh() {
+        mSwipeToRefresh = 3;
+        executeRemainingCalls();
     }
 }

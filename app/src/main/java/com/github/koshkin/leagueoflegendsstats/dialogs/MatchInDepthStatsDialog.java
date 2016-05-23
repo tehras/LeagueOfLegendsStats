@@ -8,20 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.github.koshkin.leagueoflegendsstats.MainActivity;
 import com.github.koshkin.leagueoflegendsstats.R;
-import com.github.koshkin.leagueoflegendsstats.holders.MatchGameHolder;
 import com.github.koshkin.leagueoflegendsstats.models.match.BaseTimeLineDelta;
-import com.github.koshkin.leagueoflegendsstats.models.match.CreepsPerMinDeltas;
 import com.github.koshkin.leagueoflegendsstats.models.match.CsDiffPerMinDeltas;
 import com.github.koshkin.leagueoflegendsstats.models.match.Participant;
 import com.github.koshkin.leagueoflegendsstats.models.match.ParticipantIdentity;
-import com.github.koshkin.leagueoflegendsstats.models.match.XpDiffPerMinDeltas;
+import com.github.koshkin.leagueoflegendsstats.utils.MatchUtils;
 import com.github.koshkin.leagueoflegendsstats.utils.NumberUtils;
 import com.github.koshkin.leagueoflegendsstats.utils.Utils;
+import com.github.koshkin.leagueoflegendsstats.views.HorizontalBarStatView;
 import com.github.koshkin.leagueoflegendsstats.views.MatchPerTenView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,7 +75,37 @@ public class MatchInDepthStatsDialog extends DialogFragment {
     }
 
     private void initTopLayout(View view) {
-        new MatchGameHolder(view).populate(mParticipant, mParticipantIdentity, getActivity());
+        if (mParticipantIdentity != null && mParticipantIdentity.getPlayer() != null)
+            ((TextView) view.findViewById(R.id.summoner_name)).setText(mParticipantIdentity.getPlayer().getSummonerName());
+        else
+            ((TextView) view.findViewById(R.id.summoner_name)).setText("N/A");
+
+        HorizontalBarStatView damageChart = (HorizontalBarStatView) view.findViewById(R.id.damage_chart);
+        HorizontalBarStatView goldChart = (HorizontalBarStatView) view.findViewById(R.id.gold_chart);
+        HorizontalBarStatView kdaChart = (HorizontalBarStatView) view.findViewById(R.id.kda_chart);
+
+        ArrayList<Float> damages = new ArrayList<>();
+        ArrayList<Float> gold = new ArrayList<>();
+        ArrayList<Float> kdas = new ArrayList<>();
+        float playerDamage = 0;
+        float playerGold = 0;
+        float playerKda = 0;
+
+        for (Participant participant : mParticipants) {
+            if (participant == mParticipant) {
+                playerDamage = participant.getStats().getTotalDamageDealtToChampions();
+                playerGold = participant.getStats().getGoldEarned();
+                playerKda = MatchUtils.getKDAFloat(participant);
+            }
+
+            kdas.add(MatchUtils.getKDAFloat(participant));
+            damages.add((float) participant.getStats().getTotalDamageDealtToChampions());
+            gold.add((float) participant.getStats().getGoldEarned());
+        }
+
+        kdaChart.setData(kdas, playerKda);
+        damageChart.setData(damages, playerDamage);
+        goldChart.setData(gold, playerGold);
     }
 
     private void fixWidth() {
@@ -96,30 +127,16 @@ public class MatchInDepthStatsDialog extends DialogFragment {
     }
 
     private void initBarCharts(View view) {
-        MatchPerTenView creepsPerTenView = (MatchPerTenView) view.findViewById(R.id.match_creep_per_ten);
         MatchPerTenView creepsPerTenDiffView = (MatchPerTenView) view.findViewById(R.id.match_cs_diff_per_ten);
-        MatchPerTenView matchPerTenView = (MatchPerTenView) view.findViewById(R.id.match_xp_diff_per_ten);
-
-        CreepsPerMinDeltas creepsPerTen = mParticipant.getTimeline().getCreepsPerMinDeltas();
-        if (creepsPerTen != null)
-            creepsPerTenView.setZeroToTen(getCorrectCreepsPerTen(creepsPerTen.getZeroToTen()), matchColoCreepsPerMin(creepsPerTen.getZeroToTen(), 0))
-                    .setTenToTwenty(getCorrectCreepsPerTen(creepsPerTen.getTenToTwenty()), matchColoCreepsPerMin(creepsPerTen.getTenToTwenty(), 1))
-                    .setTwentyToThirty(getCorrectCreepsPerTen(creepsPerTen.getTwentyToThirty()), matchColoCreepsPerMin(creepsPerTen.getTwentyToThirty(), 2))
-                    .setThirtyPlus(getCorrectCreepsPerTen(creepsPerTen.getThirtyToEnd()), matchColoCreepsPerMin(creepsPerTen.getThirtyToEnd(), 3));
-        else
-            creepsPerTenView.setVisibility(View.GONE);
 
         CsDiffPerMinDeltas csDiffPerMinDeltas = mParticipant.getTimeline().getCsDiffPerMinDeltas();
-        creepsPerTenDiffView.setZeroToTen(getCorrectCreepsPerTen(csDiffPerMinDeltas.getZeroToTen()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getZeroToTen(), 0))
-                .setTenToTwenty(getCorrectCreepsPerTen(csDiffPerMinDeltas.getTenToTwenty()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getTenToTwenty(), 1))
-                .setTwentyToThirty(getCorrectCreepsPerTen(csDiffPerMinDeltas.getTwentyToThirty()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getTwentyToThirty(), 2))
-                .setThirtyPlus(getCorrectCreepsPerTen(csDiffPerMinDeltas.getThirtyToEnd()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getThirtyToEnd(), 3));
-
-        XpDiffPerMinDeltas xpDiffPerMinDeltas = mParticipant.getTimeline().getXpDiffPerMinDeltas();
-        matchPerTenView.setZeroToTen(getCorrectCreepsPerTen(xpDiffPerMinDeltas.getZeroToTen()), matchColocsXpDiffPerMinDeltas(xpDiffPerMinDeltas.getZeroToTen(), 0))
-                .setTenToTwenty(getCorrectCreepsPerTen(xpDiffPerMinDeltas.getTenToTwenty()), matchColocsXpDiffPerMinDeltas(xpDiffPerMinDeltas.getTenToTwenty(), 1))
-                .setTwentyToThirty(getCorrectCreepsPerTen(xpDiffPerMinDeltas.getTwentyToThirty()), matchColocsXpDiffPerMinDeltas(xpDiffPerMinDeltas.getTwentyToThirty(), 2))
-                .setThirtyPlus(getCorrectCreepsPerTen(xpDiffPerMinDeltas.getThirtyToEnd()), matchColocsXpDiffPerMinDeltas(xpDiffPerMinDeltas.getThirtyToEnd(), 3));
+        if (csDiffPerMinDeltas != null)
+            creepsPerTenDiffView.setZeroToTen(getCorrectCreepsPerTen(csDiffPerMinDeltas.getZeroToTen()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getZeroToTen(), 0))
+                    .setTenToTwenty(getCorrectCreepsPerTen(csDiffPerMinDeltas.getTenToTwenty()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getTenToTwenty(), 1))
+                    .setTwentyToThirty(getCorrectCreepsPerTen(csDiffPerMinDeltas.getTwentyToThirty()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getTwentyToThirty(), 2))
+                    .setThirtyPlus(getCorrectCreepsPerTen(csDiffPerMinDeltas.getThirtyToEnd()), matchColocsDiffPerMinDeltas(csDiffPerMinDeltas.getThirtyToEnd(), 3));
+        else
+            creepsPerTenDiffView.setVisibility(View.GONE);
     }
 
     //0-10 == 0, 10-20 == 1, 20-30 == 2, 30+ == 3
@@ -143,7 +160,7 @@ public class MatchInDepthStatsDialog extends DialogFragment {
                 howManybetter++;
         }
 
-        return getColor(howManybetter);
+        return MatchUtils.getColor(howManybetter, mParticipants.size());
     }
 
     //0-10 == 0, 10-20 == 1, 20-30 == 2, 30+ == 3
@@ -167,7 +184,7 @@ public class MatchInDepthStatsDialog extends DialogFragment {
                 howManybetter++;
         }
 
-        return getColor(howManybetter);
+        return MatchUtils.getColor(howManybetter, mParticipants.size());
     }
 
     //0-10 == 0, 10-20 == 1, 20-30 == 2, 30+ == 3
@@ -191,20 +208,7 @@ public class MatchInDepthStatsDialog extends DialogFragment {
                 howManybetter++;
         }
 
-        return getColor(howManybetter);
-    }
-
-    private MatchPerTenView.MatchColor getColor(int howManyBetter) {
-        if (howManyBetter == 0 || mParticipants.size() / howManyBetter == 3) {
-            return MatchPerTenView.MatchColor.GREAT;
-        } else if (mParticipants.size() / howManyBetter == 2) {
-            return MatchPerTenView.MatchColor.GOOD;
-        } else if (mParticipants.size() == howManyBetter + 1) {
-            return MatchPerTenView.MatchColor.BAD;
-        } else {
-            return MatchPerTenView.MatchColor.NEUTRAL;
-        }
-
+        return MatchUtils.getColor(howManybetter, mParticipants.size());
     }
 
     private CharSequence getCorrectCreepsPerTen(float zeroToTen) {
@@ -217,4 +221,5 @@ public class MatchInDepthStatsDialog extends DialogFragment {
     public void setParticipants(List<Participant> participants) {
         mParticipants = participants;
     }
+
 }

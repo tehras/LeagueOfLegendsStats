@@ -2,9 +2,11 @@ package com.github.koshkin.leagueoflegendsstats.fragments.observable;
 
 import android.support.v7.widget.RecyclerView;
 
+import com.github.koshkin.leagueoflegendsstats.R;
 import com.github.koshkin.leagueoflegendsstats.adapters.ObservableGameAdapter;
 import com.github.koshkin.leagueoflegendsstats.fragments.BaseSimpleRecyclerViewFragment;
 import com.github.koshkin.leagueoflegendsstats.models.ObservableGame;
+import com.github.koshkin.leagueoflegendsstats.models.SimpleSummoner;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,11 @@ public class ObservableFragment extends BaseSimpleRecyclerViewFragment {
     public ObservableFragment setObservableGames(ArrayList<ObservableGame> observableGames) {
         mObservableGames = observableGames;
         return this;
+    }
+
+    @Override
+    public String getToolbarTitle() {
+        return getActivity().getResources().getString(R.string.fragment_title_featured_games);
     }
 
     @Override
